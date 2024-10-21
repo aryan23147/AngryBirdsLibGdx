@@ -2,15 +2,15 @@ package abs;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Pig extends Character {
     private Sprite sprite;
     private Body body;
-    private World world;
 
-    public Pig(float radius, float mass, String texturePath, int hp, Vector2 position, World world) {
-        super(radius, mass, texturePath, hp, position);
+    public Pig(float radius, float mass, String texturePath, int hp, float x, float y, World world) {
+        super(world, radius, x, y, mass);
         this.world = world;
 
         // Create sprite and load texture
@@ -21,7 +21,7 @@ public class Pig extends Character {
         // Box2D body setup
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody; // Pigs don't move
-        bodyDef.position.set(position.x, position.y);
+        bodyDef.position.set(x, y);
         this.body = world.createBody(bodyDef);
 
         CircleShape shape = new CircleShape();
@@ -75,9 +75,9 @@ public class Pig extends Character {
         sprite.getTexture().dispose(); // Dispose texture
     }
 
-    public void draw(Batch batch) {
-        // Sync sprite position and size with body
-        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
-        sprite.draw(batch);
-    }
+//    public void draw(Batch batch) {
+//        // Sync sprite position and size with body
+//        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+//        sprite.draw(batch);
+//    }
 }

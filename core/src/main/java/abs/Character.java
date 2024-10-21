@@ -12,17 +12,18 @@ public abstract class Character {
     protected Body body;
     protected float radius;
     protected float mass;
-    protected int HP;
+    protected int hp;
     protected float velocity;
     protected float x, y;
     protected FixtureDef fixtureDef;
 
     // Constructor: must be called from subclasses like Bird or Pig
-    public Character(World world, float radius, float x, float y) {
+    public Character(World world, float radius, float x, float y, float mass) {
         this.world=world;
         this.radius = radius;
         this.x = x;
         this.y = y;
+        this.mass=mass;
 
         // Subclasses must define how to create the body and fixture
         createBody(world, x, y);

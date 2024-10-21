@@ -20,8 +20,8 @@ public class Bird extends Character {
     private float width;
     private float height;
 
-    public Bird(String texturePath, World world, float x, float y, float radius, Power power) {
-    super(world, radius, x, y);  // Call the Character constructor
+    public Bird(String texturePath, World world, float x, float y, float radius, Power power, float mass) {
+    super(world, radius, x, y, mass);  // Call the Character constructor
 
     // Load the texture and create the sprite
     Texture texture = new Texture(Gdx.files.internal(texturePath));

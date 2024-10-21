@@ -83,8 +83,6 @@ public class MainMenuScreen implements Screen {
         table.row().pad(5);
         table.add(musicOnOffButton);
         Gdx.input.setInputProcessor(stage);
-
-
     }
 
     @Override

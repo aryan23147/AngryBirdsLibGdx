@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,6 +34,7 @@ public class MainMenuScreen implements Screen {
     private Skin skin;
     private Table table;
     private TextButton buttonPlay ,buttonExit;
+    private BitmapFont chewyFont;
     public MainMenuScreen(Game game) {
         this.game = game;
         batch = new SpriteBatch();
@@ -41,6 +43,7 @@ public class MainMenuScreen implements Screen {
         stage =new Stage();
         skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
         table=new Table();
+        chewyFont=new BitmapFont(Gdx.files.internal("font/ChewyFnt.fnt"));
 
     }
 
@@ -60,14 +63,16 @@ public class MainMenuScreen implements Screen {
         updraw.setMinHeight(100);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up=updraw;
+        textButtonStyle.fontColor= Color.WHITE;
+        textButtonStyle.overFontColor=Color.BLACK;
 
         textButtonStyle.font=font;
         music=assetManager.get("music.mp3",Music.class);
         TextButton playButton = new TextButton("Play",textButtonStyle);
-        TextButton musicOnOffButton=new TextButton ("MusicOnOff",skin);
+        TextButton musicOnOffButton=new TextButton ("MusicOnOff",textButtonStyle);
 //        playButton.setPosition(200, 300);  // Set position
         playButton.setSize(250, 100); // Set size
-        musicOnOffButton.setSize(300,100);
+        musicOnOffButton.setSize(250,100);
 
         // Add listener to the button
         playButton.addListener(new ClickListener() {
@@ -91,7 +96,7 @@ public class MainMenuScreen implements Screen {
         table.add(playButton).padTop(250f).padRight(150f);
 //        table.row();
 //        table.row().pad(5);
-        table.add(musicOnOffButton);
+        table.add(musicOnOffButton).padTop(250f);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -105,8 +110,8 @@ public class MainMenuScreen implements Screen {
         if (backgroundTexture != null) {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
-        font.draw(batch, "Main Menu", 200, 400);  // Display main menu text
-        font.draw(batch, "Press ENTER to start", 200, 300);  // User prompt
+//        font.draw(batch, "Main Menu", 200, 400);  // Display main menu text
+//        font.draw(batch, "Press ENTER to start", 200, 300);  // User prompt
 
         // End drawing
         batch.end();

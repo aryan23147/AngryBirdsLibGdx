@@ -14,12 +14,12 @@ public class Bird extends Character {
     protected Body body;
     private boolean launched;
     private Power power;
-    private boolean hasUsedPower;
+//    private boolean hasUsedPower;
     private FixtureDef fixtureDef;
     private float width;
     private float height;
 
-    public Bird(String texturePath, World world, float x, float y, float radius, Power power, float mass) {
+    public Bird(String texturePath, World world, float x, float y, float radius, float mass) {
     super(world, radius, x, y, mass);  // Call the Character constructor
 
     // Load the texture and create the sprite
@@ -31,8 +31,8 @@ public class Bird extends Character {
 
     // Set initial state
     this.launched = false;
-    this.hasUsedPower = false;
-    this.power = power;
+//    this.hasUsedPower = false;
+//    this.power = power;
     }
 
     @Override
@@ -67,12 +67,12 @@ public class Bird extends Character {
         // Logic to check collision with pigs or blocks
     }
 
-    public void usePower() {
-        if (!hasUsedPower) {
-            // Logic to use bird's special power
-            hasUsedPower = true;
-        }
-    }
+//    public void usePower() {
+//        if (!hasUsedPower) {
+//            // Logic to use bird's special power
+//            hasUsedPower = true;
+//        }
+//    }
 
     public void draw(Batch batch) {
         // Update sprite position to match the Box2D body

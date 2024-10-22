@@ -24,79 +24,83 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenuScreen implements Screen {
     private final Game game;
-    private TextureAtlas atlas;
     private SpriteBatch batch;
-    private BitmapFont font;
     private AssetManager assetManager;
     private Texture backgroundTexture;
     private Music music;
     private Stage stage;
     private Skin skin;
     private Table table;
-    private TextButton buttonPlay ,buttonExit;
-    private BitmapFont chewyFont;
+    private BitmapFont font; // For font loaded via AssetManager
+
     public MainMenuScreen(Game game) {
         this.game = game;
         batch = new SpriteBatch();
-        font = new BitmapFont();  // You can load custom fonts here.
-        assetManager=new AssetManager();
-        stage =new Stage();
+        assetManager = new AssetManager();
+        stage = new Stage();
         skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
-        table=new Table();
-        chewyFont=new BitmapFont(Gdx.files.internal("font/ChewyFnt.fnt"));
+        table = new Table();
 
+        // Load all assets, including the font and the texture it uses
+        assetManager.load("abs/MainMenuBackground(1).png", Texture.class);
+        assetManager.load("music.mp3", Music.class);
+        assetManager.load("font/Chewy.fnt", BitmapFont.class); // Load the .fnt file
+        assetManager.finishLoading(); // Block until all assets are loaded
     }
 
     @Override
     public void show() {
-        // Setup when this screen is shown.
-        // Load the background image
-        assetManager.load("abs/MainMenuBackground(1).png", Texture.class); // Replace with your background image file path
-        assetManager.load("music.mp3", Music.class);
-        assetManager.finishLoading(); // Block until all assets are loaded
-
-        // Once loaded, retrieve the texture
+        // Once loaded, retrieve the background texture
         backgroundTexture = assetManager.get("abs/MainMenuBackground(1).png", Texture.class);
-        Texture up=new Texture("abs/ButtonBackground.png");
-        Drawable updraw=new TextureRegionDrawable(up);
+        music = assetManager.get("music.mp3", Music.class);
+
+        // Retrieve the font from AssetManager
+        font = assetManager.get("font/Chewy.fnt", BitmapFont.class);
+
+        // Create button style and apply font from AssetManager
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        Texture up = new Texture("abs/ButtonBackground.png");
+        Drawable updraw = new TextureRegionDrawable(up);
         updraw.setMinWidth(250);
         updraw.setMinHeight(100);
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up=updraw;
-        textButtonStyle.fontColor= Color.WHITE;
-        textButtonStyle.overFontColor=Color.BLACK;
 
-        textButtonStyle.font=font;
-        music=assetManager.get("music.mp3",Music.class);
-        TextButton playButton = new TextButton("Play",textButtonStyle);
-        TextButton musicOnOffButton=new TextButton ("MusicOnOff",textButtonStyle);
-//        playButton.setPosition(200, 300);  // Set position
+        textButtonStyle.up = updraw;
+        textButtonStyle.fontColor = Color.WHITE;
+        textButtonStyle.overFontColor = Color.BLACK;
+        textButtonStyle.font = font; // Use the loaded font here
+
+        // Create buttons and add them to the stage
+        TextButton playButton = new TextButton("Play", textButtonStyle);
+        TextButton musicOnOffButton = new TextButton("MusicOnOff", textButtonStyle);
         playButton.setSize(250, 100); // Set size
-        musicOnOffButton.setSize(250,100);
+        musicOnOffButton.setSize(250, 100);
 
-        // Add listener to the button
+        // Add listeners to buttons
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelSelectionScreen(game));  // Switch to level selection screen
             }
         });
-        musicOnOffButton.addListener(new ClickListener(){
-            public void clicked(InputEvent event,float x,float y){
-                if(music.isPlaying()){
+
+        musicOnOffButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (music.isPlaying()) {
                     music.stop();
-                }
-                else{
+                } else {
                     music.play();
                 }
             }
         });
-        stage.addActor(table);
+
+        // Add buttons to the table and stage
         table.setFillParent(true);
         table.add(playButton).padTop(250f).padRight(150f);
-//        table.row();
-//        table.row().pad(5);
         table.add(musicOnOffButton).padTop(250f);
+        stage.addActor(table);
+
+        // Set the input processor to handle user inputs for this stage
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -105,18 +109,14 @@ public class MainMenuScreen implements Screen {
         // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Begin drawing
+        // Begin drawing the background texture
         batch.begin();
         if (backgroundTexture != null) {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
-//        font.draw(batch, "Main Menu", 200, 400);  // Display main menu text
-//        font.draw(batch, "Press ENTER to start", 200, 300);  // User prompt
-
-        // End drawing
         batch.end();
 
-        // Check for user input to switch screens
+        // Update and draw the stage (for buttons)
         stage.act(delta);
         stage.draw();
     }
@@ -136,7 +136,7 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         // Cleanup resources
         batch.dispose();
-        font.dispose();
+        assetManager.dispose();
+        stage.dispose();
     }
 }
-

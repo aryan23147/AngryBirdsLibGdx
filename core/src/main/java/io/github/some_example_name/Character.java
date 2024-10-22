@@ -1,5 +1,4 @@
-package abs;
-import io.github.some_example_name.*;
+package io.github.some_example_name;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;

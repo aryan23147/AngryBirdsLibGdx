@@ -1,4 +1,4 @@
-package abs;
+package io.github.some_example_name;
 
 public interface Power {
     boolean hasUsedPower = false;  // Default value

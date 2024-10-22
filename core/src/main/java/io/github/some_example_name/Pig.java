@@ -2,6 +2,7 @@ package io.github.some_example_name;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Pig extends Character {
@@ -74,9 +75,9 @@ public class Pig extends Character {
         sprite.getTexture().dispose(); // Dispose texture
     }
 
-//    public void draw(Batch batch) {
-//        // Sync sprite position and size with body
-//        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
-//        sprite.draw(batch);
-//    }
+    public void draw(Batch batch) {
+        // Sync sprite position and size with body
+        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+        sprite.draw(batch);
+    }
 }

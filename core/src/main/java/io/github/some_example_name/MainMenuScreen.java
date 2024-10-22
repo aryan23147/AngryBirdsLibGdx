@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenuScreen implements Screen {
@@ -46,17 +48,25 @@ public class MainMenuScreen implements Screen {
     public void show() {
         // Setup when this screen is shown.
         // Load the background image
-        assetManager.load("background.png", Texture.class); // Replace with your background image file path
+        assetManager.load("abs/MainMenuBackground(1).png", Texture.class); // Replace with your background image file path
         assetManager.load("music.mp3", Music.class);
         assetManager.finishLoading(); // Block until all assets are loaded
 
         // Once loaded, retrieve the texture
-        backgroundTexture = assetManager.get("background.png", Texture.class);
+        backgroundTexture = assetManager.get("abs/MainMenuBackground(1).png", Texture.class);
+        Texture up=new Texture("abs/ButtonBackground.png");
+        Drawable updraw=new TextureRegionDrawable(up);
+        updraw.setMinWidth(250);
+        updraw.setMinHeight(100);
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up=updraw;
+
+        textButtonStyle.font=font;
         music=assetManager.get("music.mp3",Music.class);
-        TextButton playButton = new TextButton("Play",skin);
+        TextButton playButton = new TextButton("Play",textButtonStyle);
         TextButton musicOnOffButton=new TextButton ("MusicOnOff",skin);
 //        playButton.setPosition(200, 300);  // Set position
-        playButton.setSize(300, 100); // Set size
+        playButton.setSize(250, 100); // Set size
         musicOnOffButton.setSize(300,100);
 
         // Add listener to the button
@@ -78,9 +88,9 @@ public class MainMenuScreen implements Screen {
         });
         stage.addActor(table);
         table.setFillParent(true);
-        table.add(playButton).center();
-        table.row();
-        table.row().pad(5);
+        table.add(playButton).padTop(250f).padRight(150f);
+//        table.row();
+//        table.row().pad(5);
         table.add(musicOnOffButton);
         Gdx.input.setInputProcessor(stage);
     }

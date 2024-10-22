@@ -17,6 +17,7 @@ public class LevelSelectionScreen implements Screen {
     private final Game game;
     private SpriteBatch batch;
     private BitmapFont font;
+    private Texture backgroundTexture;
 
     public LevelSelectionScreen(Game game) {
         this.game = game;
@@ -27,6 +28,7 @@ public class LevelSelectionScreen implements Screen {
 
     @Override
     public void show() {
+        backgroundTexture=new Texture("abs/LevelSelectionScreenBackground.png");
         System.out.println("Level Selection Screen");
     }
 
@@ -35,6 +37,9 @@ public class LevelSelectionScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
+        if(backgroundTexture!=null){
+            batch.draw(backgroundTexture,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
         font.draw(batch, "Level Selection", 200, 400);
         font.draw(batch, "Press 1, 2, 3... to select a level", 200, 300);
 

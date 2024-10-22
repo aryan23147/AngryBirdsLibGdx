@@ -25,13 +25,16 @@ public class LevelSelectionScreen implements Screen {
     private Texture backgroundTexture;
     private Stage stage;
     private Table table;
-
-    public LevelSelectionScreen(Game game) {
+    private BitmapFont chewyfont;
+    private MainMenuScreen mainMenu;
+    public LevelSelectionScreen(Game game,MainMenuScreen mainMenu) {
         this.game = game;
         batch = new SpriteBatch();
         font = new BitmapFont();
         stage = new Stage();
         table = new Table();
+        chewyfont=new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
+        this.mainMenu=mainMenu;
     }
 
     @Override
@@ -42,21 +45,31 @@ public class LevelSelectionScreen implements Screen {
         backgroundTexture = new Texture("abs/LevelSelectionScreen(1).png");
 
         // Create a basic style for the buttons
-        Texture up=new Texture("abs/ButtonBackground.png");
+        Texture up=new Texture("abs/LevelButtonBackground.png");
         Drawable updraw=new TextureRegionDrawable(up);
         updraw.setMinWidth(200);
         updraw.setMinHeight(200);
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.up=updraw;
-        buttonStyle.font = font;
+        buttonStyle.font = chewyfont;
         buttonStyle.fontColor = Color.WHITE;
         buttonStyle.overFontColor = Color.BLACK;  // Change color on hover
+        Texture exitTexture=new Texture("abs/BackButton.png");
+        updraw=new TextureRegionDrawable(exitTexture);
+        updraw.setMinHeight(100);
+        updraw.setMinWidth(100);
+        TextButtonStyle buttonStyle2 = new TextButtonStyle();
+        buttonStyle2.up=updraw;
+        buttonStyle2.font = chewyfont;
+        buttonStyle2.fontColor = Color.WHITE;
+        buttonStyle2.overFontColor = Color.BLACK;  // Change color on hover
+
 
         // Create buttons for levels
         TextButton level1Button = new TextButton("Level 1", buttonStyle);
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
-
+        TextButton exitButton =new TextButton("Exit",buttonStyle2);
         // Add listeners to the buttons
         level1Button.addListener(new ClickListener() {
             @Override
@@ -77,6 +90,12 @@ public class LevelSelectionScreen implements Screen {
             }
         });
 
+        exitButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x,float y){
+                game.setScreen(mainMenu);
+            }
+        });
+
         // Add buttons to the table with padding
         table.setFillParent(true);
         table.add(level1Button).pad(10);
@@ -84,7 +103,10 @@ public class LevelSelectionScreen implements Screen {
         table.add(level2Button).pad(10);
 //        table.row();
         table.add(level3Button).pad(10);
-
+        table.row();
+        table.add().padBottom(50);
+        table.row();
+        table.add(exitButton).padBottom(5);
         // Add the table to the stage
         stage.addActor(table);
     }
@@ -99,7 +121,7 @@ public class LevelSelectionScreen implements Screen {
         if (backgroundTexture != null) {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
-        font.draw(batch, "Level Selection", 200, 400);
+//        font.draw(batch, "Level Selection", 200, 400);
         batch.end();
 
         // Draw the stage (buttons)

@@ -38,13 +38,17 @@ public class GameScreen implements Screen {
         this.level = level;  // Save the level number
         batch = new SpriteBatch();
         font = new BitmapFont();
+        float w=Gdx.graphics.getWidth();
+        float h=Gdx.graphics.getHeight();
+        cam=new OrthographicCamera();
+        cam.setToOrtho(false,w,h);
 //        stage =new Stage();
 //        skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
 //        table=new Table();
         // Make sure RedBird extends Bird
 
         assetManager=new AssetManager();
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -9.8f), false);
         debugRenderer = new Box2DDebugRenderer();
         redBird = new RedBird(world,5,100);
 //        ground=new Ground(world);
@@ -106,5 +110,6 @@ public class GameScreen implements Screen {
         // Dispose of resources
         batch.dispose();
         font.dispose();
+        debugRenderer.dispose();
     }
 }

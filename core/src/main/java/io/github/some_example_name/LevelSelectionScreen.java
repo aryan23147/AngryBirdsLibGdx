@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -27,6 +29,7 @@ public class LevelSelectionScreen implements Screen {
     private Table table;
     private BitmapFont chewyfont;
     private MainMenuScreen mainMenu;
+    private Window pauseWindow;
     public LevelSelectionScreen(Game game,MainMenuScreen mainMenu) {
         this.game = game;
         batch = new SpriteBatch();
@@ -63,7 +66,26 @@ public class LevelSelectionScreen implements Screen {
         buttonStyle2.font = chewyfont;
         buttonStyle2.fontColor = Color.WHITE;
         buttonStyle2.overFontColor = Color.BLACK;  // Change color on hover
-
+//        public void createPauseWindow(){
+//            Texture windowBackgroundTexture = new Texture("path/to/windowBackground.png");
+//            Drawable windowBackground = new TextureRegionDrawable(new TextureRegion(windowBackgroundTexture));
+//
+//// Create a font for the window title
+//            BitmapFont windowFont = new BitmapFont(Gdx.files.internal("path/to/font.fnt"));
+//
+//// Set up the window style
+//            Window.WindowStyle windowStyle = new Window.WindowStyle();
+//            windowStyle.titleFont = windowFont;  // Font for the title
+//            windowStyle.background = windowBackground;  // Background for the window
+//
+//// Create the window with the custom style
+//            Window customWindow = new Window("My Window Title", windowStyle);
+//
+//// Set window size, position, etc.
+//            customWindow.setSize(400, 300);
+//            customWindow.setPosition(100, 100);
+////            pauseWindow=new Window("Pause Window")
+//        };
 
         // Create buttons for levels
         TextButton level1Button = new TextButton("Level 1", buttonStyle);

@@ -61,7 +61,7 @@ public class Bird extends Character {
 
     public void draw(Batch batch) {
         // Update sprite position to match the Box2D body and convert meters to pixels
-        sprite.setPosition((body.getPosition().x * ppm) - width / 2, (body.getPosition().y * ppm) - height / 2);
+        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);
         sprite.draw(batch);  // Draw the bird
     }
 

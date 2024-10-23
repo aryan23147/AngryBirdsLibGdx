@@ -33,6 +33,10 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private Ground ground;
     private OrthographicCamera cam;
+    private Pig pig;
+    private Box box1;
+    private Box box2;
+    private Box box3;
     public GameScreen(Game game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
@@ -50,8 +54,12 @@ public class GameScreen implements Screen {
         assetManager=new AssetManager();
         world = new World(new Vector2(0, -9.8f), false);
         debugRenderer = new Box2DDebugRenderer();
-        redBird = new RedBird(world,25,150);
+        redBird = new RedBird(world,80,150);
         ground=new Ground(world);
+        pig=new MediumPig(650,200,world);
+        box1=new Box(550,82,world,64,64);
+        box2=new Box(550,50,world,64,64);
+        box3=new Box(500,50,world,64,64);
 //        cam=new OrthographicCamera(30,30*(Gdx.gr))
 
 
@@ -82,8 +90,12 @@ public class GameScreen implements Screen {
         font.draw(batch, "Playing Level: " + level, 200, 400);
         font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
 //        ground.draw(batch);
+        pig.draw(batch);
         redBird.draw(batch);
         ground.draw(batch);
+        box1.draw(batch);
+        box2.draw(batch);
+        box3.draw(batch);
         batch.end();
 
         // Return to Main Menu if ESC is pressed

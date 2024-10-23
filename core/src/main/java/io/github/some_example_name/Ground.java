@@ -16,7 +16,7 @@ public class Ground {
     public Ground(World world) {
         // Create the sprite for the ground
         this.sprite = new Sprite(new Texture("abs/ground.png"));
-        sprite.setSize(Gdx.graphics.getWidth(), 150);  // Set sprite size in pixels
+        sprite.setSize(Gdx.graphics.getWidth(), 130);  // Set sprite size in pixels
 
         // Create the body definition
         groundBodyDef = new BodyDef();
@@ -29,10 +29,10 @@ public class Ground {
         // Define the shape of the ground
         PolygonShape groundBox = new PolygonShape();
         float worldWidth = Gdx.graphics.getWidth() / PIXELS_PER_METER;  // Convert screen width to world units (meters)
-        groundBox.setAsBox(worldWidth / 2, (75)/PIXELS_PER_METER);  // Set width and height in meters
+        groundBox.setAsBox(worldWidth , (65)/PIXELS_PER_METER);  // Set width and height in meters
 
         // Create fixture and attach it to the body
-        groundBody.createFixture(groundBox, 0.0f);
+        groundBody.createFixture(groundBox, 1.0f);
 
         // Clean up the shape
         groundBox.dispose();

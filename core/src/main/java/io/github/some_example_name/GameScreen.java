@@ -50,17 +50,16 @@ public class GameScreen implements Screen {
 //        stage =new Stage();
 //        skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
 //        table=new Table();
-        // Make sure RedBird extends Bird
 
         assetManager=new AssetManager();
         world = new World(new Vector2(0, -9.8f), false);
         debugRenderer = new Box2DDebugRenderer();
-        redBird = new RedBird(world,80,150);
         ground=new Ground(world);
+        redBird = new RedBird(world,80,150);
         pig=new MediumPig(650,200,world);
-        box1=new Box(550,82,world,64,64);
-        box2=new Box(550,50,world,64,64);
-        box3=new Box(500,50,world,64,64);
+        box1=new Box(550,90,world,64,64);
+        box2=new Box(550,55,world,64,64);
+        box3=new Box(500,55,world,64,64);
 //        cam=new OrthographicCamera(30,30*(Gdx.gr))
 
 

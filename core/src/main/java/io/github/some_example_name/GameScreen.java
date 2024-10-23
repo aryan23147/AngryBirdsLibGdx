@@ -16,16 +16,17 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GameScreen implements Screen {
     private final Game game;
     private int level;
     private SpriteBatch batch;
     private BitmapFont font;
-//    private Stage stage;
+    private Stage stage;
 //    private Skin skin;
 //    private Table table;
-    private TextureAtlas atlas;
+    private TextButton back;
     private Bird redBird;
     private AssetManager assetManager;
     private Texture backgroundTexture;
@@ -41,7 +42,7 @@ public class GameScreen implements Screen {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
         float w=Gdx.graphics.getWidth();
         float h=Gdx.graphics.getHeight();
         cam=new OrthographicCamera();
@@ -88,7 +89,7 @@ public class GameScreen implements Screen {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
         font.draw(batch, "Playing Level: " + level, 200, 400);
-        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
+//        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
 //        ground.draw(batch);
         pig.draw(batch);
         redBird.draw(batch);

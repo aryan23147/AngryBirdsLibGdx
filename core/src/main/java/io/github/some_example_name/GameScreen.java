@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
     private Texture backgroundTexture;
     private World world;
     private Box2DDebugRenderer debugRenderer;
-//    private Ground ground;
+    private Ground ground;
     private OrthographicCamera cam;
     public GameScreen(Game game, int level) {
         this.game = game;  // Save the reference to the main game object
@@ -50,8 +50,8 @@ public class GameScreen implements Screen {
         assetManager=new AssetManager();
         world = new World(new Vector2(0, -9.8f), false);
         debugRenderer = new Box2DDebugRenderer();
-        redBird = new RedBird(world,5,100);
-//        ground=new Ground(world);
+        redBird = new RedBird(world,25,150);
+        ground=new Ground(world);
 //        cam=new OrthographicCamera(30,30*(Gdx.gr))
 
 
@@ -83,6 +83,7 @@ public class GameScreen implements Screen {
         font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
 //        ground.draw(batch);
         redBird.draw(batch);
+        ground.draw(batch);
         batch.end();
 
         // Return to Main Menu if ESC is pressed
@@ -92,7 +93,7 @@ public class GameScreen implements Screen {
 //        stage.act(delta);
 //        stage.draw();
         world.step(1/60f, 6, 2);
-        debugRenderer.render(world, batch.getProjectionMatrix());
+        debugRenderer.render(world, cam.combined);
 
         // Add the game logic for this level here (e.g., enemy spawning, player movement)
     }

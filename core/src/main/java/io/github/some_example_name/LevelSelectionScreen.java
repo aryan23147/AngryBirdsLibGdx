@@ -114,7 +114,7 @@ public class LevelSelectionScreen implements Screen {
 
         exitButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x,float y){
-                game.setScreen(mainMenu);
+                game.setScreen(new MainMenuScreen(game));
             }
         });
 

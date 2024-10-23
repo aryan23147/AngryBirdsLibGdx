@@ -13,14 +13,15 @@ public class Bird extends Character {
     protected Sprite sprite;
     protected boolean launched;
     private FixtureDef fixtureDef;
+    public static float ppm = 32;  // Pixels per meter conversion factor
 
     public Bird(String texturePath, World world, float x, float y, float radius, float mass) {
-        super(world, radius, x, y, mass, 50, 50);  // Call the Character constructor
+        super(world, radius, x, y, mass, radius * 2*ppm, radius * 2*ppm );  // Convert radius to pixel size for sprite
 
         // Load the texture and create the sprite
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(width, height);  // Set bird size
+        this.sprite.setSize(width, height);  // Set bird size in pixels
 
         // Set initial state
         this.launched = false;
@@ -30,13 +31,13 @@ public class Bird extends Character {
     protected void createBody(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(x / ppm, y / ppm);  // Convert x, y from pixels to meters
 
         this.body = world.createBody(bodyDef);
 
         // Create a circle shape for the bird's body
         CircleShape shape = new CircleShape();
-        shape.setRadius(radius);  // Use the radius passed to the constructor
+        shape.setRadius(radius);  // Convert radius from pixels to meters
 
         // Define the fixture
         this.fixtureDef = new FixtureDef();
@@ -59,8 +60,8 @@ public class Bird extends Character {
     }
 
     public void draw(Batch batch) {
-        // Update sprite position to match the Box2D body
-        sprite.setPosition(body.getPosition().x - width / 2, body.getPosition().y - height / 2);
+        // Update sprite position to match the Box2D body and convert meters to pixels
+        sprite.setPosition((body.getPosition().x * ppm) - width / 2, (body.getPosition().y * ppm) - height / 2);
         sprite.draw(batch);  // Draw the bird
     }
 

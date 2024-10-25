@@ -1,11 +1,17 @@
 package io.github.some_example_name;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStylepause;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,12 +31,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import org.w3c.dom.Text;
+
 public class GameScreen implements Screen {
+    private boolean IsPaused=false;
     private final Game game;
     private int level;
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
+    private Music music;
 //    private Skin skin;
     private Table table;
     private TextButton back;
@@ -46,9 +56,15 @@ public class GameScreen implements Screen {
     private Box box2;
     private Box box3;
     private Window Pausewindow;
+    private TextButton pauseButton;
+    private boolean isMusicPlaying;
     public GameScreen(Game game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
+        this.music=Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        this.music.play();
+        music.setLooping(true);
+        isMusicPlaying=true;
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
         float w=Gdx.graphics.getWidth();
@@ -60,19 +76,60 @@ public class GameScreen implements Screen {
         table=new Table();
         // Make sure RedBird extends Bird
         System.out.println("bdw");
+        createWindow();
         back=new TextButton("Exit",TextButtonStyleback);
+        pauseButton=new TextButton("Pause",TextButtonStylepause);
         System.out.println("wb");
         assetManager=new AssetManager();
         world = new World(new Vector2(0, -9.8f), false);
-        stage.addActor(table); table.top().left();
 
+        stage.addActor(table);
+        table.top().left();
         table.setFillParent(true);
-        table.add(back).padTop(10f).padLeft(10f).expand().top().left();
+        table.add(back).padTop(5f).padLeft(5f).top().left();
+        table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
+        table.add(Pausewindow).center();
         back.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x,float y){
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(new LevelSelectionScreen(game));
             }
         });
+        pauseButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event,float x,float y){
+                if(!IsPaused){
+                Pausewindow.setVisible(true);
+                pauseButton.setText("Resume");
+                IsPaused=true;}
+                else{
+                    Pausewindow.setVisible(false);
+                    pauseButton.setText("Pause");
+                    IsPaused=false;
+                }
+            }
+        });
+        TextButton musiconoffButton =new TextButton("", TextButtonStyleMusic);
+        TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
+        TextButton restartButton= new TextButton("",TextButtonStyleRestart);
+        musiconoffButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                if(!isMusicPlaying){
+                    music.play();
+                    isMusicPlaying=true;
+                    musiconoffButton.setStyle(TextButtonStyleMusic);
+                }
+                else{
+                    musiconoffButton.setStyle(TextButtonStyleMute);
+                    isMusicPlaying=false;
+                    music.stop();
+                }
+            }
+        });
+        Pausewindow.add().padBottom(300);
+        Pausewindow.row();
+        Pausewindow.add(musiconoffButton);
+        Pausewindow.add(saveGameButton);
+        Pausewindow.add(restartButton);
         debugRenderer = new Box2DDebugRenderer();
         redBird = new RedBird(world,80,150);
         ground=new Ground(world);
@@ -99,7 +156,7 @@ public class GameScreen implements Screen {
 //        table.add(redBird);
     }
     public void createWindow(){
-        Texture backgroundTexture = new Texture("PauseWindowBackground.png");
+        Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
         // Define custom style
@@ -109,7 +166,7 @@ public class GameScreen implements Screen {
         windowStyle.background = backgroundDrawable;
 
         // Create and style the window
-        Pausewindow = new Window("Pause Window", windowStyle);
+        Pausewindow = new Window("", windowStyle);
         Pausewindow.setVisible(false);
 
     }
@@ -151,12 +208,16 @@ public class GameScreen implements Screen {
     @Override
     public void resume() {}
     @Override
-    public void hide() {}
+    public void hide() {
+        dispose();
+    }
     @Override
     public void dispose() {
         // Dispose of resources
         batch.dispose();
         font.dispose();
         debugRenderer.dispose();
+        music.dispose();
+        music.stop();
     }
 }

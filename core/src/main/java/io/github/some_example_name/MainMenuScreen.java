@@ -53,7 +53,8 @@ public class MainMenuScreen implements Screen {
         // Once loaded, retrieve the background texture
         backgroundTexture = assetManager.get("abs/MainMenuBackground(1).png", Texture.class);
         music = assetManager.get("music.mp3", Music.class);
-
+        music.play();
+        music.setLooping(true);
         // Retrieve the font from AssetManager
         font = assetManager.get("font/Chewy.fnt", BitmapFont.class);
 
@@ -79,7 +80,7 @@ public class MainMenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelSelectionScreen(game,MainMenuScreen.this));  // Switch to level selection screen
+                game.setScreen(new LevelSelectionScreen(game));  // Switch to level selection screen
             }
         });
 
@@ -131,12 +132,16 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resume() {}
     @Override
-    public void hide() {}
+    public void hide() {
+        dispose();
+    }
     @Override
     public void dispose() {
         // Cleanup resources
         batch.dispose();
         assetManager.dispose();
         stage.dispose();
+        music.dispose();
+        music.stop();
     }
 }

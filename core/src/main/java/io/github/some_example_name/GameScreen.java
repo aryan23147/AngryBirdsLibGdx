@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class GameScreen implements Screen {
     private final Game game;
@@ -42,6 +45,7 @@ public class GameScreen implements Screen {
     private Box box1;
     private Box box2;
     private Box box3;
+    private Window Pausewindow;
     public GameScreen(Game game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
@@ -94,7 +98,21 @@ public class GameScreen implements Screen {
 //        table.setFillParent(true);
 //        table.add(redBird);
     }
+    public void createWindow(){
+        Texture backgroundTexture = new Texture("PauseWindowBackground.png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
+        // Define custom style
+        Window.WindowStyle windowStyle = new Window.WindowStyle();
+        windowStyle.titleFont = font;
+        windowStyle.titleFontColor = Color.WHITE;
+        windowStyle.background = backgroundDrawable;
+
+        // Create and style the window
+        Pausewindow = new Window("Pause Window", windowStyle);
+        Pausewindow.setVisible(false);
+
+    }
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

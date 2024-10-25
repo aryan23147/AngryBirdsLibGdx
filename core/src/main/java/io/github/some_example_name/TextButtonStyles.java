@@ -36,6 +36,14 @@ public class TextButtonStyles {
         TextButtonStyleback.fontColor = Color.WHITE;
         TextButtonStyleback.overFontColor = Color.BLACK;
 
-        Texture PauseTexture =new Texture(Gdx.files.internal(("PauseButton.png")));
+        Texture PauseTexture =new Texture(Gdx.files.internal(("abs/PauseButton.png")));
+        Drawable pauseBt = new TextureRegionDrawable(exitTexture);
+        pauseBt.setMinHeight(100);
+        pauseBt.setMinWidth(100);
+
+        TextButtonStyleback.up = pauseBt;
+        TextButtonStyleback.font = font;
+        TextButtonStyleback.fontColor = Color.WHITE;
+        TextButtonStyleback.overFontColor = Color.BLACK;
     }
 }

@@ -16,7 +16,7 @@ public class Ground {
     public Ground(World world) {
         // Create the sprite for the ground
         this.sprite = new Sprite(new Texture("abs/ground.png"));
-        sprite.setSize(Gdx.graphics.getWidth(), 130);  // Set sprite size in pixels
+        sprite.setSize(Gdx.graphics.getWidth(), 97);  // Set sprite size in pixels
 
         // Create the body definition
         groundBodyDef = new BodyDef();

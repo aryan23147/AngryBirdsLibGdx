@@ -7,34 +7,26 @@ import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStylepause;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
-import org.w3c.dom.Text;
-
-import java.nio.file.attribute.UserPrincipalLookupService;
 
 public class GameScreen implements Screen {
     private boolean IsPaused=false;
@@ -43,9 +35,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
-//    private Skin skin;
     private Table table;
-    private TextButton back;
+    private TextButton backButton;
     private Bird redBird;
     private AssetManager assetManager;
     private Texture backgroundTexture;
@@ -57,18 +48,18 @@ public class GameScreen implements Screen {
     private Box box1;
     private Box box2;
     private Box box3;
-    private Window Pausewindow;
+    private Window pauseWindow;
     private TextButton pauseButton;
     private TextButton winButton;
-    private TextButton looseButton;
+    private Window winWindow;
+    private TextButton nextLevelButton;
+    private Window loseWindow;
+    private TextButton loseButton;
     private boolean isMusicPlaying;
     private TextButton musiconoffButton;
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
-//        this.music=Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-//        this.music.play();
-//        music.setLooping(true);
         isMusicPlaying = game.isMusicPlaying();
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
@@ -77,32 +68,31 @@ public class GameScreen implements Screen {
         cam=new OrthographicCamera();
         cam.setToOrtho(false,w,h);
         winButton=new TextButton("Win",TextButtonStyleDummy);
-        looseButton=new TextButton("Loose",TextButtonStyleDummy);
+        loseButton =new TextButton("Lose",TextButtonStyleDummy);
 
         stage =new Stage();
-//        skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
         table=new Table();
-        // Make sure RedBird extends Bird
-        System.out.println("bdw");
-        createWindow();
-        back=new TextButton("Exit",TextButtonStyleback);
-        pauseButton=new TextButton("Pause",TextButtonStylepause);
-        System.out.println("wb");
+//        System.out.println("bdw");
+        createPauseWindow();
+        createWinWindow();
+
+        backButton =new TextButton("",TextButtonStyleback);
+        pauseButton=new TextButton("",TextButtonStylepause);
+//        System.out.println("wb");
         assetManager=new AssetManager();
         world = new World(new Vector2(0, -9.8f), false);
 
         stage.addActor(table);
         table.top().left();
         table.setFillParent(true);
-        table.add(back).padTop(5f).padLeft(5f).top().left();
+        table.add(backButton).padTop(5f).padLeft(5f).top().left();
         table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
-
-        table.add(Pausewindow).center();
+        table.add(pauseWindow).center();
         table.add(winButton);
-        table.add(looseButton);
+        table.add(loseButton);
 //        table.row();
 
-        back.addListener(new ClickListener(){
+        backButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x,float y){
                 game.setScreen(new LevelSelectionScreen(game));
             }
@@ -110,13 +100,14 @@ public class GameScreen implements Screen {
         pauseButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x,float y){
                 if(!IsPaused){
-                Pausewindow.setVisible(true);
-                pauseButton.setText("Resume");
-                pause();
-                IsPaused=true;}
+                    pauseWindow.setVisible(true);
+                    pauseButton.setText("");
+                    pause();
+                    IsPaused=true;
+                }
                 else{
-                    Pausewindow.setVisible(false);
-                    pauseButton.setText("Pause");
+                    pauseWindow.setVisible(false);
+                    pauseButton.setText("");
                     resume();
                     IsPaused=false;
                 }
@@ -134,11 +125,19 @@ public class GameScreen implements Screen {
             }
         });
 
-        Pausewindow.add().padBottom(300);
-        Pausewindow.row();
-        Pausewindow.add(musiconoffButton);
-        Pausewindow.add(saveGameButton);
-        Pausewindow.add(restartButton);
+        winButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                winWindow.setVisible(true);
+            }
+        });
+
+        pauseWindow.add().padBottom(300);
+        pauseWindow.row();
+        pauseWindow.add(musiconoffButton);
+        pauseWindow.add(saveGameButton);
+        pauseWindow.add(restartButton);
+
         debugRenderer = new Box2DDebugRenderer();
         redBird = new RedBird(world,100,150);
         ground=new Ground(world);
@@ -148,9 +147,102 @@ public class GameScreen implements Screen {
         box3=new Box(500,50,world,64,64);
 //        cam=new OrthographicCamera(30,30*(Gdx.gr))
         Gdx.input.setInputProcessor(stage);
+    }
+    public void createPauseWindow(){
+        Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
+        // Define custom style
+        Window.WindowStyle windowStyle = new Window.WindowStyle();
+        windowStyle.titleFont = font;
+        windowStyle.titleFontColor = Color.WHITE;
+        windowStyle.background = backgroundDrawable;
 
+        // Create and style the window
+        pauseWindow = new Window("", windowStyle);
+        pauseWindow.setVisible(false);
 
+    }
+    private void createWinWindow() {
+        Texture backgroundTexture = new Texture("abs/WinWindowBackground.png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
+
+        Window.WindowStyle winWindowStyle = new Window.WindowStyle();
+        winWindowStyle.titleFont = font;
+        winWindowStyle.titleFontColor = Color.WHITE;
+        winWindowStyle.background = backgroundDrawable;
+
+        winWindow = new Window("", winWindowStyle);
+        winWindow.setVisible(false);
+
+        nextLevelButton = new TextButton("", createButtonStyle("abs/NextButton.png"));
+        backButton = new TextButton("", createButtonStyle("abs/BackButton.png"));
+
+        // Set button sizes
+        nextLevelButton.setSize(100, 100); // Set width and height of the nextLevelButton
+        backButton.setSize(100, 150); // Set width and height of the backButton
+
+        // Position the buttons manually within the winWindow
+        nextLevelButton.setPosition(280, 60); // Adjust x and y for placement
+        backButton.setPosition(55, 30); // Adjust x and y for placement
+
+        // Add buttons to the winWindow without using table positioning
+        winWindow.addActor(nextLevelButton);
+        winWindow.addActor(backButton);
+
+        // Set the window size and position to center it on the screen
+        winWindow.setSize(470, 500);
+        winWindow.setPosition(
+            Gdx.graphics.getWidth() / 2f - winWindow.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f - winWindow.getHeight() / 2f
+        );
+
+        nextLevelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (level<3){
+                    game.setScreen(new GameScreen(game, level + 1));
+                }
+                else {
+                    game.setScreen(new LevelSelectionScreen(game));
+                }
+            }
+        });
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
+
+//        winWindow.add(nextLevelButton).padTop(10).padBottom(10).row();
+//        winWindow.add(backButton).padTop(10);
+//
+//        winWindow.setSize(400, 300);
+//        winWindow.setPosition(
+//            Gdx.graphics.getWidth() / 2f - winWindow.getWidth() / 2f,
+//            Gdx.graphics.getHeight() / 2f - winWindow.getHeight() / 2f
+//        );
+
+        stage.addActor(winWindow);
+    }
+    private TextButton.TextButtonStyle createButtonStyle(String buttonName) {
+        // Load the button textures
+        Texture buttonUpTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path
+        Texture buttonDownTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path
+
+        // Create a Drawable for each button state
+        TextureRegionDrawable upDrawable = new TextureRegionDrawable(buttonUpTexture);
+        TextureRegionDrawable downDrawable = new TextureRegionDrawable(buttonDownTexture);
+
+        // Create and style the button style
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.up = upDrawable;
+        buttonStyle.down = downDrawable;
+        buttonStyle.font = font; // Set your font
+
+        return buttonStyle;
     }
 
     private void updateMusicButtonStyle() {
@@ -173,21 +265,7 @@ public class GameScreen implements Screen {
 //        table.setFillParent(true);
 //        table.add(redBird);
     }
-    public void createWindow(){
-        Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
-        // Define custom style
-        Window.WindowStyle windowStyle = new Window.WindowStyle();
-        windowStyle.titleFont = font;
-        windowStyle.titleFontColor = Color.WHITE;
-        windowStyle.background = backgroundDrawable;
-
-        // Create and style the window
-        Pausewindow = new Window("", windowStyle);
-        Pausewindow.setVisible(false);
-
-    }
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

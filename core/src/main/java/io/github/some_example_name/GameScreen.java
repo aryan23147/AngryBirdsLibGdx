@@ -1,4 +1,6 @@
 package io.github.some_example_name;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,10 +15,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class GameScreen implements Screen {
     private final Game game;
@@ -25,7 +29,7 @@ public class GameScreen implements Screen {
     private BitmapFont font;
     private Stage stage;
 //    private Skin skin;
-//    private Table table;
+    private Table table;
     private TextButton back;
     private Bird redBird;
     private AssetManager assetManager;
@@ -47,13 +51,24 @@ public class GameScreen implements Screen {
         float h=Gdx.graphics.getHeight();
         cam=new OrthographicCamera();
         cam.setToOrtho(false,w,h);
-//        stage =new Stage();
+        stage =new Stage();
 //        skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
-//        table=new Table();
+        table=new Table();
         // Make sure RedBird extends Bird
-
+        System.out.println("bdw");
+        back=new TextButton("Exit",TextButtonStyleback);
+        System.out.println("wb");
         assetManager=new AssetManager();
         world = new World(new Vector2(0, -9.8f), false);
+        stage.addActor(table); table.top().left();
+
+        table.setFillParent(true);
+        table.add(back).padTop(10f).padLeft(10f).expand().top().left();
+        back.addListener(new ClickListener(){
+            public void clicked(InputEvent event,float x,float y){
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
         debugRenderer = new Box2DDebugRenderer();
         redBird = new RedBird(world,80,150);
         ground=new Ground(world);
@@ -62,7 +77,7 @@ public class GameScreen implements Screen {
         box2=new Box(550,50,world,64,64);
         box3=new Box(500,50,world,64,64);
 //        cam=new OrthographicCamera(30,30*(Gdx.gr))
-
+        Gdx.input.setInputProcessor(stage);
 
 
 
@@ -103,8 +118,8 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
         }
-//        stage.act(delta);
-//        stage.draw();
+        stage.act(delta);
+        stage.draw();
         world.step(1/60f, 6, 2);
         debugRenderer.render(world, cam.combined);
 

@@ -1,5 +1,7 @@
 package io.github.some_example_name;
 
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -57,15 +59,7 @@ public class LevelSelectionScreen implements Screen {
         buttonStyle.font = chewyfont;
         buttonStyle.fontColor = Color.WHITE;
         buttonStyle.overFontColor = Color.BLACK;  // Change color on hover
-        Texture exitTexture=new Texture("abs/BackButton.png");
-        updraw=new TextureRegionDrawable(exitTexture);
-        updraw.setMinHeight(100);
-        updraw.setMinWidth(100);
-        TextButtonStyle buttonStyle2 = new TextButtonStyle();
-        buttonStyle2.up=updraw;
-        buttonStyle2.font = chewyfont;
-        buttonStyle2.fontColor = Color.WHITE;
-        buttonStyle2.overFontColor = Color.BLACK;  // Change color on hover
+          // Change color on hover
 //        public void createPauseWindow(){
 //            Texture windowBackgroundTexture = new Texture("path/to/windowBackground.png");
 //            Drawable windowBackground = new TextureRegionDrawable(new TextureRegion(windowBackgroundTexture));
@@ -91,7 +85,7 @@ public class LevelSelectionScreen implements Screen {
         TextButton level1Button = new TextButton("Level 1", buttonStyle);
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
-        TextButton exitButton =new TextButton("Exit",buttonStyle2);
+        TextButton exitButton =new TextButton("Exit",TextButtonStyleback);
         // Add listeners to the buttons
         level1Button.addListener(new ClickListener() {
             @Override

@@ -78,7 +78,7 @@ public class LevelSelectionScreen implements Screen {
         TextButton level1Button = new TextButton("Level 1", buttonStyle);
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
-        TextButton exitButton = new TextButton("Exit", TextButtonStyleback);
+        TextButton exitButton = new TextButton("", TextButtonStyleback);
 
         // Add listeners to buttons
         level1Button.addListener(new ClickListener() {

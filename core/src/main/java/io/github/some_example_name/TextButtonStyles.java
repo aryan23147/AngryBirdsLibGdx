@@ -16,6 +16,7 @@ public class TextButtonStyles {
     public static TextButton.TextButtonStyle TextButtonStyleSave = new TextButton.TextButtonStyle();
     public static TextButton.TextButtonStyle TextButtonStyleMusic = new TextButton.TextButtonStyle();
     public static TextButton.TextButtonStyle TextButtonStyleMute=new TextButton.TextButtonStyle();
+    public static TextButton.TextButtonStyle TextButtonStyleDummy=new TextButton.TextButtonStyle();
 
     static {
         Texture up = new Texture("abs/ButtonBackground.png");
@@ -87,5 +88,13 @@ public class TextButtonStyles {
         TextButtonStyleMute.up = muteDraw;
         TextButtonStyleMute.font = font;
         TextButtonStyleMute.fontColor = Color.YELLOW;
+        Texture dummyTexture = new Texture(Gdx.files.internal("abs/ButtonBackground.png"));
+        Drawable dummyDraw = new TextureRegionDrawable(dummyTexture);
+        dummyDraw.setMinHeight(100);
+        dummyDraw.setMinWidth(100);
+        TextButtonStyleDummy.up = dummyDraw;
+        TextButtonStyleDummy.font = font;
+        TextButtonStyleDummy.fontColor = Color.WHITE;
+        TextButtonStyleDummy.overFontColor=Color.BLACK;
     }
 }

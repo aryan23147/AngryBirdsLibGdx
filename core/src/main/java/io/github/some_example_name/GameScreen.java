@@ -1,4 +1,5 @@
 package io.github.some_example_name;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleDummy;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
@@ -33,6 +34,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import org.w3c.dom.Text;
 
+import java.nio.file.attribute.UserPrincipalLookupService;
+
 public class GameScreen implements Screen {
     private boolean IsPaused=false;
     private final Game game;
@@ -57,6 +60,8 @@ public class GameScreen implements Screen {
     private Box box3;
     private Window Pausewindow;
     private TextButton pauseButton;
+    private TextButton winButton;
+    private TextButton looseButton;
     private boolean isMusicPlaying;
     public GameScreen(Game game, int level) {
         this.game = game;  // Save the reference to the main game object
@@ -71,6 +76,9 @@ public class GameScreen implements Screen {
         float h=Gdx.graphics.getHeight();
         cam=new OrthographicCamera();
         cam.setToOrtho(false,w,h);
+        winButton=new TextButton("Win",TextButtonStyleDummy);
+        looseButton=new TextButton("Loose",TextButtonStyleDummy);
+
         stage =new Stage();
 //        skin = new Skin(Gdx.files.internal("Skin/uiskin.json"));
         table=new Table();
@@ -88,7 +96,12 @@ public class GameScreen implements Screen {
         table.setFillParent(true);
         table.add(back).padTop(5f).padLeft(5f).top().left();
         table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
+
         table.add(Pausewindow).center();
+        table.add(winButton);
+        table.add(looseButton);
+//        table.row();
+
         back.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x,float y){
                 game.setScreen(new LevelSelectionScreen(game));
@@ -99,10 +112,12 @@ public class GameScreen implements Screen {
                 if(!IsPaused){
                 Pausewindow.setVisible(true);
                 pauseButton.setText("Resume");
+                pause();
                 IsPaused=true;}
                 else{
                     Pausewindow.setVisible(false);
                     pauseButton.setText("Pause");
+                    resume();
                     IsPaused=false;
                 }
             }
@@ -131,7 +146,7 @@ public class GameScreen implements Screen {
         Pausewindow.add(saveGameButton);
         Pausewindow.add(restartButton);
         debugRenderer = new Box2DDebugRenderer();
-        redBird = new RedBird(world,80,150);
+        redBird = new RedBird(world,100,150);
         ground=new Ground(world);
         pig=new MediumPig(650,200,world);
         box1=new Box(550,82,world,64,64);
@@ -204,9 +219,13 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {}
     @Override
-    public void pause() {}
+    public void pause() {
+
+    }
     @Override
-    public void resume() {}
+    public void resume() {
+
+    }
     @Override
     public void hide() {
         dispose();

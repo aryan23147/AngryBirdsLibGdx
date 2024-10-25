@@ -23,17 +23,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenuScreen implements Screen {
-    private final Game game;
+    private final Main game;
     private SpriteBatch batch;
     private AssetManager assetManager;
     private Texture backgroundTexture;
-    private Music music;
     private Stage stage;
     private Skin skin;
     private Table table;
     private BitmapFont font; // For font loaded via AssetManager
+    private TextButton musicOnOffButton;
 
-    public MainMenuScreen(Game game) {
+    public MainMenuScreen(Main game) {
         this.game = game;
         batch = new SpriteBatch();
         assetManager = new AssetManager();
@@ -43,7 +43,6 @@ public class MainMenuScreen implements Screen {
 
         // Load all assets, including the font and the texture it uses
         assetManager.load("abs/MainMenuBackground(1).png", Texture.class);
-        assetManager.load("music.mp3", Music.class);
         assetManager.load("font/Chewy.fnt", BitmapFont.class); // Load the .fnt file
         assetManager.finishLoading(); // Block until all assets are loaded
     }
@@ -52,9 +51,6 @@ public class MainMenuScreen implements Screen {
     public void show() {
         // Once loaded, retrieve the background texture
         backgroundTexture = assetManager.get("abs/MainMenuBackground(1).png", Texture.class);
-        music = assetManager.get("music.mp3", Music.class);
-        music.play();
-        music.setLooping(true);
         // Retrieve the font from AssetManager
         font = assetManager.get("font/Chewy.fnt", BitmapFont.class);
 
@@ -72,7 +68,7 @@ public class MainMenuScreen implements Screen {
 
         // Create buttons and add them to the stage
         TextButton playButton = new TextButton("Play", textButtonStyle);
-        TextButton musicOnOffButton = new TextButton("MusicOnOff", textButtonStyle);
+        musicOnOffButton = new TextButton("Music On/Off", textButtonStyle);
         playButton.setSize(250, 100); // Set size
         musicOnOffButton.setSize(250, 100);
 
@@ -87,11 +83,8 @@ public class MainMenuScreen implements Screen {
         musicOnOffButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (music.isPlaying()) {
-                    music.stop();
-                } else {
-                    music.play();
-                }
+                game.toggleMusic();  // Toggle music via Main class
+                updateMusicButtonLabel();
             }
         });
 
@@ -103,6 +96,14 @@ public class MainMenuScreen implements Screen {
 
         // Set the input processor to handle user inputs for this stage
         Gdx.input.setInputProcessor(stage);
+    }
+
+    private void updateMusicButtonLabel() {
+        if (game.isMusicPlaying()) {
+            musicOnOffButton.setText("Turn Music Off");
+        } else {
+            musicOnOffButton.setText("Turn Music On");
+        }
     }
 
     @Override
@@ -141,7 +142,5 @@ public class MainMenuScreen implements Screen {
         batch.dispose();
         assetManager.dispose();
         stage.dispose();
-        music.dispose();
-        music.stop();
     }
 }

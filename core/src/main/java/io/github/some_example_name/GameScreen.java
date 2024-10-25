@@ -38,12 +38,11 @@ import java.nio.file.attribute.UserPrincipalLookupService;
 
 public class GameScreen implements Screen {
     private boolean IsPaused=false;
-    private final Game game;
+    private final Main game;
     private int level;
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
-    private Music music;
 //    private Skin skin;
     private Table table;
     private TextButton back;
@@ -63,13 +62,14 @@ public class GameScreen implements Screen {
     private TextButton winButton;
     private TextButton looseButton;
     private boolean isMusicPlaying;
-    public GameScreen(Game game, int level) {
+    private TextButton musiconoffButton;
+    public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
-        this.music=Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-        this.music.play();
-        music.setLooping(true);
-        isMusicPlaying=true;
+//        this.music=Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+//        this.music.play();
+//        music.setLooping(true);
+        isMusicPlaying = game.isMusicPlaying();
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
         float w=Gdx.graphics.getWidth();
@@ -122,24 +122,18 @@ public class GameScreen implements Screen {
                 }
             }
         });
-        TextButton musiconoffButton =new TextButton("", TextButtonStyleMusic);
+        musiconoffButton =new TextButton("", TextButtonStyleMusic);
         TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
         TextButton restartButton= new TextButton("",TextButtonStyleRestart);
+
         musiconoffButton.addListener(new ClickListener(){
             @Override
-            public void clicked(InputEvent event,float x,float y){
-                if(!isMusicPlaying){
-                    music.play();
-                    isMusicPlaying=true;
-                    musiconoffButton.setStyle(TextButtonStyleMusic);
-                }
-                else{
-                    musiconoffButton.setStyle(TextButtonStyleMute);
-                    isMusicPlaying=false;
-                    music.stop();
-                }
+            public void clicked(InputEvent event, float x, float y) {
+                game.toggleMusic();  // Toggle music in Main class
+                musiconoffButton.setStyle(game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
             }
         });
+
         Pausewindow.add().padBottom(300);
         Pausewindow.row();
         Pausewindow.add(musiconoffButton);
@@ -159,11 +153,20 @@ public class GameScreen implements Screen {
 
     }
 
+    private void updateMusicButtonStyle() {
+        if (isMusicPlaying) {
+            musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMusic);
+        } else {
+            musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMute);
+        }
+    }
+
     @Override
     public void show() {
         assetManager.load("GameBackground.png",Texture.class);
         assetManager.finishLoading();
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
+        updateMusicButtonStyle();
         // Initialize resources and setup the game for the given level
         System.out.println("Starting level: " + level);
 //        stage.addActor(table);
@@ -236,7 +239,5 @@ public class GameScreen implements Screen {
         batch.dispose();
         font.dispose();
         debugRenderer.dispose();
-        music.dispose();
-        music.stop();
     }
 }

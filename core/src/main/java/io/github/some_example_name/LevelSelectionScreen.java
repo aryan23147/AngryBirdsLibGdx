@@ -26,129 +26,103 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class LevelSelectionScreen implements Screen {
-    private final Game game;
+    private final Main game;
     private SpriteBatch batch;
-    private BitmapFont font;
     private Texture backgroundTexture;
     private Stage stage;
     private Table table;
-    private BitmapFont chewyfont;
-    private MainMenuScreen mainMenu;
-    private boolean isMusicPlaying;
-    private Music music;
+    private BitmapFont chewyFont;
     private TextButton musicOnOffButton;
-    public LevelSelectionScreen(Game game) {
+
+    public LevelSelectionScreen(Main game) {
         this.game = game;
         batch = new SpriteBatch();
-        font = new BitmapFont();
         stage = new Stage();
         table = new Table();
-        chewyfont=new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
-        musicOnOffButton=new TextButton("",TextButtonStyleMusic);
-        this.music=Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-        this.music.play();
-        this.music.setLooping(true);
-        isMusicPlaying=true;
 
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-
-        // Load background texture
+        // Load assets for the screen
+        chewyFont = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
         backgroundTexture = new Texture("abs/LevelSelectionScreen(1).png");
 
-        // Create a basic style for the buttons
-        Texture up=new Texture("abs/LevelButtonBackground.png");
-        Drawable updraw=new TextureRegionDrawable(up);
-        updraw.setMinWidth(200);
-        updraw.setMinHeight(200);
-        TextButtonStyle buttonStyle = new TextButtonStyle();
-        buttonStyle.up=updraw;
-        buttonStyle.font = chewyfont;
-        buttonStyle.fontColor = Color.WHITE;
-        buttonStyle.overFontColor = Color.BLACK;  // Change color on hover
-          // Change color on hover
-//        public void createPauseWindow(){
-//            Texture windowBackgroundTexture = new Texture("path/to/windowBackground.png");
-//            Drawable windowBackground = new TextureRegionDrawable(new TextureRegion(windowBackgroundTexture));
-//
-//// Create a font for the window title
-//            BitmapFont windowFont = new BitmapFont(Gdx.files.internal("path/to/font.fnt"));
-//
-//// Set up the window style
-//            Window.WindowStyle windowStyle = new Window.WindowStyle();
-//            windowStyle.titleFont = windowFont;  // Font for the title
-//            windowStyle.background = windowBackground;  // Background for the window
-//
-//// Create the window with the custom style
-//            Window customWindow = new Window("My Window Title", windowStyle);
-//
-//// Set window size, position, etc.
-//            customWindow.setSize(400, 300);
-//            customWindow.setPosition(100, 100);
-////            pauseWindow=new Window("Pause Window")
-//        };
-        musicOnOffButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event,float x,float y){
-                if(!isMusicPlaying){
-                    music.play();
+        // Set up music toggle button with initial style based on current music state
+        musicOnOffButton = new TextButton("", game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
+        setupMusicToggleButton();
 
-                    isMusicPlaying=true;
-                    musicOnOffButton.setStyle(TextButtonStyleMusic);
-                }
-                else{
-                    musicOnOffButton.setStyle(TextButtonStyleMute);
-                    isMusicPlaying=false;
-                    music.stop();
-                }
+        // Create button style for level selection buttons
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        Texture buttonTexture = new Texture("abs/LevelButtonBackground.png");
+        Drawable buttonDrawable = new TextureRegionDrawable(buttonTexture);
+        buttonDrawable.setMinWidth(200);
+        buttonDrawable.setMinHeight(200);
+        buttonStyle.up = buttonDrawable;
+        buttonStyle.font = chewyFont;
+        buttonStyle.fontColor = Color.WHITE;
+        buttonStyle.overFontColor = Color.BLACK;
+
+        // Create and set up buttons
+        createLevelButtons(buttonStyle);
+    }
+
+    private void setupMusicToggleButton() {
+        musicOnOffButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.toggleMusic();
+                musicOnOffButton.setStyle(game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
             }
         });
-        // Create buttons for levels
+    }
+
+    private void createLevelButtons(TextButton.TextButtonStyle buttonStyle) {
+        // Level selection buttons
         TextButton level1Button = new TextButton("Level 1", buttonStyle);
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
-        TextButton exitButton =new TextButton("Exit",TextButtonStyleback);
-        // Add listeners to the buttons
+        TextButton exitButton = new TextButton("Exit", TextButtonStyleback);
+
+        // Add listeners to buttons
         level1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, 1));  // Start Level 1
+                game.setScreen(new GameScreen(game, 1));
             }
         });
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, 2));  // Start Level 2
+                game.setScreen(new GameScreen(game, 2));
             }
         });
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, 3));  // Start Level 3
+                game.setScreen(new GameScreen(game, 3));
             }
         });
-
-        exitButton.addListener(new ClickListener(){
-            public void clicked(InputEvent event, float x,float y){
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
 
-        // Add buttons to the table with padding
+        // Add buttons to table
         table.setFillParent(true);
         table.add(level1Button).pad(10);
-//        table.row();
         table.add(level2Button).pad(10);
-//        table.row();
         table.add(level3Button).pad(10);
         table.row();
         table.add(exitButton).bottom().left().padBottom(10).padRight(10);
         table.add(musicOnOffButton).bottom().left().padBottom(10);
+
         // Add the table to the stage
         stage.addActor(table);
+    }
+
+    @Override
+    public void show() {
+        // Set input processor to handle stage inputs
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -156,15 +130,14 @@ public class LevelSelectionScreen implements Screen {
         // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Begin drawing
+        // Draw background texture
         batch.begin();
         if (backgroundTexture != null) {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
-//        font.draw(batch, "Level Selection", 200, 400);
         batch.end();
 
-        // Draw the stage (buttons)
+        // Draw stage
         stage.act(delta);
         stage.draw();
     }
@@ -182,12 +155,13 @@ public class LevelSelectionScreen implements Screen {
     public void hide() {
         dispose();
     }
+
     @Override
     public void dispose() {
+        // Dispose resources
         batch.dispose();
-        font.dispose();
+        chewyFont.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        music.dispose();
     }
 }

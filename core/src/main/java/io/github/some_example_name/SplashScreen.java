@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class SplashScreen implements Screen {
-    private final Game game;
+    private final Main game;
     private Stage stage;
     private Texture splashTexture;
     private Image splashImage;
@@ -20,7 +20,7 @@ public class SplashScreen implements Screen {
     private Texture BackgroundTexture;
     private Batch batch;
 
-    public SplashScreen(Game game) {
+    public SplashScreen(Main game) {
         this.game = game;
         batch=new SpriteBatch();
     }

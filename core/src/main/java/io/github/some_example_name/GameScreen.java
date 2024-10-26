@@ -85,12 +85,16 @@ public class GameScreen implements Screen {
         stage.addActor(table);
         table.top().left();
         table.setFillParent(true);
-        table.add(backButton).padTop(5f).padLeft(5f).top().left();
+//        table.add(backButton).padTop(5f).padLeft(5f).top().left();
         table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
         table.add(pauseWindow).center();
         table.add(winButton);
         table.add(loseButton);
 //        table.row();
+
+        backButton.setSize(100,150);
+        backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
+        stage.addActor(backButton);
 
         backButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x,float y){

@@ -31,6 +31,7 @@ public class LevelSelectionScreen implements Screen {
     private Texture backgroundTexture;
     private Stage stage;
     private Table table;
+    private Window loadWindow;
     private BitmapFont chewyFont;
     private TextButton musicOnOffButton;
 
@@ -58,6 +59,7 @@ public class LevelSelectionScreen implements Screen {
         buttonStyle.font = chewyFont;
         buttonStyle.fontColor = Color.WHITE;
         buttonStyle.overFontColor = Color.BLACK;
+        createLoadWindow();
 
         // Create and set up buttons
         createLevelButtons(buttonStyle);
@@ -79,6 +81,11 @@ public class LevelSelectionScreen implements Screen {
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
         TextButton exitButton = new TextButton("", TextButtonStyleback);
+
+        TextButton loadButton = new TextButton("", createButtonStyle("abs/LoadGameButton.png"));
+        loadButton.setSize(100,100);
+        loadButton.setPosition(55,5);
+        stage.addActor(loadButton);
 
         // Add listeners to buttons
         level1Button.addListener(new ClickListener() {
@@ -105,6 +112,13 @@ public class LevelSelectionScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
+        loadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                loadWindow.setVisible(!loadWindow.isVisible()); // Toggle visibility
+                loadWindow.toFront(); // Bring the loadWindow to the topmost layer
+            }
+        });
 
         // Add buttons to table
         table.setFillParent(true);
@@ -127,6 +141,45 @@ public class LevelSelectionScreen implements Screen {
 
         // Add the table to the stage
         stage.addActor(table);
+    }
+
+    private TextButton.TextButtonStyle createButtonStyle(String buttonName) {
+        // Load the button textures
+        Texture buttonUpTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path
+        Texture buttonDownTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path
+
+        // Create a Drawable for each button state
+        TextureRegionDrawable upDrawable = new TextureRegionDrawable(buttonUpTexture);
+        TextureRegionDrawable downDrawable = new TextureRegionDrawable(buttonDownTexture);
+
+        // Create and style the button style
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.up = upDrawable;
+        buttonStyle.down = downDrawable;
+        buttonStyle.font = chewyFont; // Set your font
+
+        return buttonStyle;
+    }
+
+    public void createLoadWindow() {
+        Texture backgroundTexture = new Texture("abs/LoadGameWindowBackground.png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
+
+        // Define custom style for the window
+        Window.WindowStyle windowStyle = new Window.WindowStyle();
+        windowStyle.titleFont = chewyFont;
+        windowStyle.titleFontColor = Color.WHITE;
+        windowStyle.background = backgroundDrawable;
+
+        // Initialize the load window
+        loadWindow = new Window("", windowStyle);
+        loadWindow.setSize(400, 450); // Set a size for the window
+        loadWindow.setPosition((Gdx.graphics.getWidth() - loadWindow.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - loadWindow.getHeight()) / 2);
+        loadWindow.setVisible(false); // Initially hidden
+
+        // Add the loadWindow to the stage
+        stage.addActor(loadWindow);
     }
 
     @Override

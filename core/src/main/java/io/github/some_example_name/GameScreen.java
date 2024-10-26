@@ -75,6 +75,7 @@ public class GameScreen implements Screen {
 //        System.out.println("bdw");
         createPauseWindow();
         createWinWindow();
+        createLoseWindow();
 
         backButton =new TextButton("",TextButtonStyleback);
         pauseButton=new TextButton("",TextButtonStylepause);
@@ -105,6 +106,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event,float x,float y){
                 if(!IsPaused){
                     pauseWindow.setVisible(true);
+                    pauseWindow.toFront();
                     pauseButton.setText("");
                     pause();
                     IsPaused=true;
@@ -133,6 +135,15 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 winWindow.setVisible(true);
+                winWindow.toFront();
+            }
+        });
+
+        loseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                loseWindow.setVisible(true);
+                loseWindow.toFront();
             }
         });
 
@@ -220,17 +231,60 @@ public class GameScreen implements Screen {
             }
         });
 
-//        winWindow.add(nextLevelButton).padTop(10).padBottom(10).row();
-//        winWindow.add(backButton).padTop(10);
-//
-//        winWindow.setSize(400, 300);
-//        winWindow.setPosition(
-//            Gdx.graphics.getWidth() / 2f - winWindow.getWidth() / 2f,
-//            Gdx.graphics.getHeight() / 2f - winWindow.getHeight() / 2f
-//        );
-
         stage.addActor(winWindow);
     }
+
+    private void createLoseWindow() {
+        Texture backgroundTexture = new Texture("abs/LoseWindowBackground.png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
+
+        Window.WindowStyle loseWindowStyle = new Window.WindowStyle();
+        loseWindowStyle.titleFont = font;
+        loseWindowStyle.titleFontColor = Color.WHITE;
+        loseWindowStyle.background = backgroundDrawable;
+
+        loseWindow = new Window("", loseWindowStyle);
+        loseWindow.setVisible(false);
+
+        TextButton restartButton = new TextButton("", createButtonStyle("abs/RestartButton.png"));
+        backButton = new TextButton("", createButtonStyle("abs/BackButton.png"));
+
+        // Set button sizes
+        restartButton.setSize(100, 100); // Set width and height of the nextLevelButton
+        backButton.setSize(100, 150); // Set width and height of the backButton
+
+        // Position the buttons manually within the winWindow
+        restartButton.setPosition(280, 60); // Adjust x and y for placement
+        backButton.setPosition(55, 30); // Adjust x and y for placement
+
+        // Add buttons to the winWindow without using table positioning
+        loseWindow.addActor(restartButton);
+        loseWindow.addActor(backButton);
+
+        // Set the window size and position to center it on the screen
+        loseWindow.setSize(470, 500);
+        loseWindow.setPosition(
+            Gdx.graphics.getWidth() / 2f - loseWindow.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f - loseWindow.getHeight() / 2f
+        );
+
+        restartButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, level));
+            }
+        });
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
+
+        stage.addActor(loseWindow);
+    }
+
     private TextButton.TextButtonStyle createButtonStyle(String buttonName) {
         // Load the button textures
         Texture buttonUpTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path

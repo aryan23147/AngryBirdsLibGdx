@@ -112,8 +112,18 @@ public class LevelSelectionScreen implements Screen {
         table.add(level2Button).pad(10);
         table.add(level3Button).pad(10);
         table.row();
-        table.add(exitButton).bottom().left().padBottom(10).padRight(10);
-        table.add(musicOnOffButton).bottom().left().padBottom(10);
+//        table.add(exitButton).bottom().left().padBottom(10).padRight(10);
+//        table.add(musicOnOffButton).bottom().left().padBottom(10);
+
+        exitButton.setSize(100,150);
+        musicOnOffButton.setSize(100,100);
+
+        exitButton.setPosition(40, stage.getHeight()-150); // Adjust x and y for placement
+        musicOnOffButton.setPosition(stage.getWidth()-100,stage.getHeight()-120); // Adjust x and y for placement
+
+        // Add buttons to the winWindow without using table positioning
+        stage.addActor(exitButton);
+        stage.addActor(musicOnOffButton);
 
         // Add the table to the stage
         stage.addActor(table);

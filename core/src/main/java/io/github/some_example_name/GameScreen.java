@@ -57,6 +57,7 @@ public class GameScreen implements Screen {
     private TextButton loseButton;
     private boolean isMusicPlaying;
     private TextButton musiconoffButton;
+    private Slingshot slingshot;
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
@@ -69,6 +70,7 @@ public class GameScreen implements Screen {
         cam.setToOrtho(false,w,h);
         winButton=new TextButton("Win",TextButtonStyleDummy);
         loseButton =new TextButton("Lose",TextButtonStyleDummy);
+        slingshot=new Slingshot(35,50);
 
         stage =new Stage();
         table=new Table();
@@ -335,6 +337,7 @@ public class GameScreen implements Screen {
         font.draw(batch, "Playing Level: " + level, 200, 400);
 //        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
 //        ground.draw(batch);
+        slingshot.draw(batch);
         pig.draw(batch);
         redBird.draw(batch);
         ground.draw(batch);

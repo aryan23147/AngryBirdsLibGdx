@@ -10,7 +10,7 @@ Aditya Verma (2023051)
 ## Contribution
 We have worked together for most of the project hence we contributed equally
 ## Link for updated UML
-[(https://miro.com/welcomeonboard/bDMyeHV3Z0dUQ2tZR0J5aUdJZzg1YjFsOHBZSFczODFUNjkxenN5cUJ1MVE3SjZNNGVnQlpBOVAwbTExbGRyeXwzNDU4NzY0NTYyOTQ0Nzc0MTQ4fDI=?share_link_id=910498626900)]
+https://miro.com/welcomeonboard/bDMyeHV3Z0dUQ2tZR0J5aUdJZzg1YjFsOHBZSFczODFUNjkxenN5cUJ1MVE3SjZNNGVnQlpBOVAwbTExbGRyeXwzNDU4NzY0NTYyOTQ0Nzc0MTQ4fDI=?share_link_id=910498626900
 
 ## Platforms
 

@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class GameScreen implements Screen {
     private boolean IsPaused=false;
     private final Main game;
@@ -66,6 +67,8 @@ public class GameScreen implements Screen {
     private Slingshot slingshot;
     private Queue<Bird> birdQueue;
     private List<Bird> allBirds;
+    private static final float PIXELS_TO_METERS = 100f;
+
 
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
@@ -333,21 +336,12 @@ public class GameScreen implements Screen {
         }
     }
 
-//    private void checkAndLoadBird() {
-//        if (slingshot.isEmpty() && !birdQueue.isEmpty()) {
-//            Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
-//            slingshot.loadBird(bird);  // Load it into the slingshot
-//            bird.setPosition(slingshot.x+10, slingshot.y+50);  // Set bird's position relative to slingshot
-//            System.out.println("Bird loaded into slingshot at position: " + slingshot.x + ", " + slingshot.y);
-//        }
-//    }
-
     private void checkAndLoadBird() {
         if (slingshot.isEmpty() && !birdQueue.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
             slingshot.loadBird(bird);  // Load it into the slingshot
             bird.setInSlingshot(true);  // Disable gravity for the bird in the slingshot
-            bird.setPosition(slingshot.x + 100, slingshot.y + 50);  // Set bird's position relative to slingshot
+            bird.getBody().setTransform(520 / PIXELS_TO_METERS, 420 / PIXELS_TO_METERS, 0);
             System.out.println("Bird loaded into slingshot at position: " + bird.x + ", " + bird.y);
         }
 
@@ -398,6 +392,8 @@ public class GameScreen implements Screen {
         checkAndLoadBird();
 
 
+
+
         //this is deletable but i wanted to see how to do something
         stage.addListener(new ClickListener() {
             @Override
@@ -413,6 +409,11 @@ public class GameScreen implements Screen {
             game.setScreen(new MainMenuScreen(game));
         }
         world.step(1/60f, 6, 2);
+        for (Bird bird : allBirds) {
+            Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
+            bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
+        }
+
         debugRenderer.render(world, cam.combined);
         stage.act(delta);
         stage.draw();

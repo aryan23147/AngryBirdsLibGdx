@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class Bird extends Character {
     protected Sprite sprite;
@@ -74,13 +71,18 @@ public class Bird extends Character {
         this.inSlingshot = inSlingshot;
         body.setActive(!inSlingshot);  // Disable physics when in slingshot
     }
+//    public void setInSlingshot(boolean inSlingshot) {
+//        if (inSlingshot) {
+//            this.body.setGravityScale(0); // Disable gravity
+//        } else {
+//            this.body.setGravityScale(1); // Enable gravity after launch
+//        }
+//    }
+
 
     public void update() {
-        if (!inSlingshot) {
-            setPosition(x, y);
-        }
+        setPosition(x, y);
     }
-
 
     public void draw(Batch batch) {
         // Update sprite position to match the Box2D body and convert meters to pixels
@@ -96,5 +98,9 @@ public class Bird extends Character {
 
     public void dispose() {
         sprite.getTexture().dispose();  // Free the texture memory
+    }
+
+    public Body getBody() {
+        return this.body;
     }
 }

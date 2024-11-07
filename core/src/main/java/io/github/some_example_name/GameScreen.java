@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
     private TextButton backButton;
     private Bird redBird;
     private Bird blackBird;
+    private Bird blueBird;
     private AssetManager assetManager;
     private Texture backgroundTexture;
     private World world;
@@ -167,12 +168,15 @@ public class GameScreen implements Screen {
         birdQueue = new Queue<>();
         allBirds = new ArrayList<>();
         debugRenderer = new Box2DDebugRenderer();
-        redBird = new RedBird(world,100,150);
-        blackBird = new BlackBird(world,50,150);
+        redBird = new RedBird(world,125,150);
+        blackBird = new BlackBird(world,80,150);
+        blueBird = new BlueBird(world, 20, 150);
         birdQueue.addFirst(redBird);
         birdQueue.addLast(blackBird);
+        birdQueue.addLast(blueBird);
         allBirds.add(redBird);
         allBirds.add(blackBird);
+        allBirds.add(blueBird);
         ground=new Ground(world);
         pig=new MediumPig(650,200,world);
         box1=new Box(550,82,world,64,64);
@@ -343,13 +347,13 @@ public class GameScreen implements Screen {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
             slingshot.loadBird(bird);  // Load it into the slingshot
             bird.setInSlingshot(true);  // Disable gravity for the bird in the slingshot
-            bird.setPosition(slingshot.x + 10, slingshot.y + 50);  // Set bird's position relative to slingshot
-            System.out.println("Bird loaded into slingshot at position: " + slingshot.x + ", " + slingshot.y);
+            bird.setPosition(slingshot.x + 100, slingshot.y + 50);  // Set bird's position relative to slingshot
+            System.out.println("Bird loaded into slingshot at position: " + bird.x + ", " + bird.y);
         }
 
         // Any bird left in the queue should fall due to gravity
-        for (Bird bird : birdQueue) {
-            bird.setInSlingshot(false);  // Enable gravity for birds not in the slingshot
+        for (Bird b : birdQueue) {
+            b.setInSlingshot(false);  // Enable gravity for birds not in the slingshot
         }
     }
 
@@ -392,6 +396,17 @@ public class GameScreen implements Screen {
         batch.end();
 
         checkAndLoadBird();
+
+
+        //this is deletable but i wanted to see how to do something
+        stage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                slingshot.releaseBird();
+            }
+        });
+
+
 
         // Return to Main Menu if ESC is pressed
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

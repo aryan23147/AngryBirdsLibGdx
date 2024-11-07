@@ -32,6 +32,7 @@ public class Slingshot {
     public void releaseBird() {
         if (this.bird != null) {
             // Logic to release the bird (launch the bird, reset slingshot)
+            this.bird.dispose(); //this line is deletable
             this.bird = null;
         }
     }

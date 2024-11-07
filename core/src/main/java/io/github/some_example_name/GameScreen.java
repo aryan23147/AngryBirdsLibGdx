@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -27,6 +28,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameScreen implements Screen {
     private boolean IsPaused=false;
@@ -38,6 +42,7 @@ public class GameScreen implements Screen {
     private Table table;
     private TextButton backButton;
     private Bird redBird;
+    private Bird blackBird;
     private AssetManager assetManager;
     private Texture backgroundTexture;
     private World world;
@@ -58,6 +63,9 @@ public class GameScreen implements Screen {
     private boolean isMusicPlaying;
     private TextButton musiconoffButton;
     private Slingshot slingshot;
+    private Queue<Bird> birdQueue;
+    private List<Bird> allBirds;
+
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
@@ -70,7 +78,7 @@ public class GameScreen implements Screen {
         cam.setToOrtho(false,w,h);
         winButton=new TextButton("Win",TextButtonStyleDummy);
         loseButton =new TextButton("Lose",TextButtonStyleDummy);
-        slingshot=new Slingshot(35,50);
+        slingshot=new Slingshot(130,50);
 
         stage =new Stage();
         table=new Table();
@@ -155,8 +163,16 @@ public class GameScreen implements Screen {
         pauseWindow.add(saveGameButton);
         pauseWindow.add(restartButton);
 
+
+        birdQueue = new Queue<>();
+        allBirds = new ArrayList<>();
         debugRenderer = new Box2DDebugRenderer();
         redBird = new RedBird(world,100,150);
+        blackBird = new BlackBird(world,50,150);
+        birdQueue.addFirst(redBird);
+        birdQueue.addLast(blackBird);
+        allBirds.add(redBird);
+        allBirds.add(blackBird);
         ground=new Ground(world);
         pig=new MediumPig(650,200,world);
         box1=new Box(550,82,world,64,64);
@@ -313,6 +329,30 @@ public class GameScreen implements Screen {
         }
     }
 
+//    private void checkAndLoadBird() {
+//        if (slingshot.isEmpty() && !birdQueue.isEmpty()) {
+//            Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
+//            slingshot.loadBird(bird);  // Load it into the slingshot
+//            bird.setPosition(slingshot.x+10, slingshot.y+50);  // Set bird's position relative to slingshot
+//            System.out.println("Bird loaded into slingshot at position: " + slingshot.x + ", " + slingshot.y);
+//        }
+//    }
+
+    private void checkAndLoadBird() {
+        if (slingshot.isEmpty() && !birdQueue.isEmpty()) {
+            Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
+            slingshot.loadBird(bird);  // Load it into the slingshot
+            bird.setInSlingshot(true);  // Disable gravity for the bird in the slingshot
+            bird.setPosition(slingshot.x + 10, slingshot.y + 50);  // Set bird's position relative to slingshot
+            System.out.println("Bird loaded into slingshot at position: " + slingshot.x + ", " + slingshot.y);
+        }
+
+        // Any bird left in the queue should fall due to gravity
+        for (Bird bird : birdQueue) {
+            bird.setInSlingshot(false);  // Enable gravity for birds not in the slingshot
+        }
+    }
+
     @Override
     public void show() {
         assetManager.load("GameBackground.png",Texture.class);
@@ -337,23 +377,30 @@ public class GameScreen implements Screen {
         font.draw(batch, "Playing Level: " + level, 200, 400);
 //        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
 //        ground.draw(batch);
-        slingshot.draw(batch);
         pig.draw(batch);
-        redBird.draw(batch);
+//        redBird.draw(batch);
+//        blackBird.draw(batch);
+        // Draw all birds in the birdQueue (they'll fall if not in slingshot)
+        for (Bird bird : allBirds) {
+            bird.draw(batch);
+        }
+        slingshot.draw(batch);
         ground.draw(batch);
         box1.draw(batch);
         box2.draw(batch);
         box3.draw(batch);
         batch.end();
 
+        checkAndLoadBird();
+
         // Return to Main Menu if ESC is pressed
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));
         }
-        stage.act(delta);
-        stage.draw();
         world.step(1/60f, 6, 2);
         debugRenderer.render(world, cam.combined);
+        stage.act(delta);
+        stage.draw();
 
         // Add the game logic for this level here (e.g., enemy spawning, player movement)
     }

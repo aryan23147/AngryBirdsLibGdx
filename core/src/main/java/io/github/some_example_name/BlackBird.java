@@ -2,10 +2,10 @@ package io.github.some_example_name;
 
 import com.badlogic.gdx.physics.box2d.World;
 
-public class RedBird extends Bird {
+public class BlackBird extends Bird {
 
-    public RedBird(World world, float X, float Y) {
-        super("abs/Red.png", world, X, Y, 1.0f, 10);
+    public BlackBird(World world, float X, float Y) {
+        super("abs/Blackbird.png", world, X, Y, 1.0f, 10);
     }
 
 

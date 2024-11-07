@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -14,6 +15,7 @@ public class Bird extends Character {
     protected boolean launched;
     private FixtureDef fixtureDef;
     public static float ppm = 32;  // Pixels per meter conversion factor
+    private boolean inSlingshot = true;
 
     public Bird(String texturePath, World world, float x, float y, float radius, float mass) {
         super(world, radius, x, y, mass, radius * 2*ppm, radius * 2*ppm );  // Convert radius to pixel size for sprite
@@ -59,10 +61,36 @@ public class Bird extends Character {
         fixtureDef.density = density;
     }
 
+    public void setPosition(float x, float y){
+        this.x=x;
+        this.y=y;
+    }
+//    public void update() {
+//        // Update graphical position based on Box2D body position
+//        Vector2 bodyPosition = body.getPosition();
+//        this.setPosition(bodyPosition.x, bodyPosition.y); // Or a specific offset if needed
+//    }
+    public void setInSlingshot(boolean inSlingshot) {
+        this.inSlingshot = inSlingshot;
+        body.setActive(!inSlingshot);  // Disable physics when in slingshot
+    }
+
+    public void update() {
+        if (!inSlingshot) {
+            setPosition(x, y);
+        }
+    }
+
+
+    //    public void draw(Batch batch) {
+//        // Update sprite position to match the Box2D body and convert meters to pixels
+//        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);
+//        sprite.draw(batch);  // Draw the bird
+//    }
     public void draw(Batch batch) {
-        // Update sprite position to match the Box2D body and convert meters to pixels
-        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);
-        sprite.draw(batch);  // Draw the bird
+        update();
+        sprite.setPosition(x, y);  // Set the bird's position
+        sprite.draw(batch);  // Draw the bird sprite
     }
 
     @Override

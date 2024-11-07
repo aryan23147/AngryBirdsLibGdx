@@ -13,7 +13,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Pig {
     protected Sprite sprite;
-    protected boolean launched;
     private FixtureDef fixtureDef;
     public static float ppm = 32;  // Pixels per meter conversion factor
     private float x;

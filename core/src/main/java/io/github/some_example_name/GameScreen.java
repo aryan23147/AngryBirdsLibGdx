@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -254,7 +255,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(!click[0]) {
-                    slingshot.releaseBird();
+                    slingshot.releaseBird(x,y);
                     click[0]=false;
                 }
             }
@@ -419,9 +420,17 @@ public class GameScreen implements Screen {
     }
 
     private void checkAndLoadBird() {
+        Timer timer = new Timer();
         if(birdQueue.isEmpty() && slingshot.isEmpty() && !allPigs.isEmpty()){
-            loseWindow.setVisible(true);
-            loseWindow.toFront();
+
+            timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    // Code to execute after 2 seconds
+                    loseWindow.setVisible(true);
+                    loseWindow.toFront();
+                }
+            }, 2f);
         }
         else if (slingshot.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue

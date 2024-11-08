@@ -12,7 +12,7 @@ public class Slingshot {
     private Bird bird;
     private Vector2 pullStartPosition; // Where pulling starts
     private float maxPullDistance = 100f; // Maximum pull distance
-    private float forceScale = 5.0f; // Scale for launch force
+    private float forceScale = 0.1f; // Scale for launch force
 
     public Slingshot(float x, float y) {
         Texture texture = new Texture(Gdx.files.internal("abs/Slingshot.png"));
@@ -61,10 +61,10 @@ public class Slingshot {
         }
     }
 
-    public void releaseBird() {
+    public void releaseBird(float x, float y) {
         if (bird != null) {
             Vector2 releasePoint = new Vector2(bird.getX(), bird.getY());
-            Vector2 launchDirection = new Vector2(x, y).sub(releasePoint);
+            Vector2 launchDirection = new Vector2(x, y);
             float pullDistance = launchDirection.len();
 
             // Calculate the launch force based on pullback distance and scale

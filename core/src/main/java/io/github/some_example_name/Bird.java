@@ -111,4 +111,8 @@ public class Bird extends Character {
     public float getY() {
         return y;
     }
+
+    public Vector2 getPosition() {
+        return new Vector2(x,y);
+    }
 }

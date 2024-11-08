@@ -374,10 +374,7 @@ public class GameScreen implements Screen {
         }
         font.draw(batch, "Playing Level: " + level, 200, 400);
 //        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
-//        ground.draw(batch);
         pig.draw(batch);
-//        redBird.draw(batch);
-//        blackBird.draw(batch);
         // Draw all birds in the birdQueue (they'll fall if not in slingshot)
         for (Bird bird : allBirds) {
             bird.draw(batch);

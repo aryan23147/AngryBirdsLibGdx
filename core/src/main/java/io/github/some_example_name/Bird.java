@@ -103,4 +103,12 @@ public class Bird extends Character {
     public Body getBody() {
         return this.body;
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }

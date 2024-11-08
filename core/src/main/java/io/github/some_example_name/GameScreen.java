@@ -34,9 +34,9 @@ import java.util.List;
 
 
 public class GameScreen implements Screen {
-    private boolean IsPaused=false;
+    private boolean isPaused=false;
     private final Main game;
-    private int level;
+    private final int level;
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
@@ -52,9 +52,7 @@ public class GameScreen implements Screen {
     private Ground ground;
     private OrthographicCamera cam;
     private Pig pig;
-    private Box box1;
-    private Box box2;
-    private Box box3;
+    private Box box1, box2, box3;
     private Window pauseWindow;
     private TextButton pauseButton;
     private TextButton winButton;
@@ -62,7 +60,7 @@ public class GameScreen implements Screen {
     private TextButton nextLevelButton;
     private Window loseWindow;
     private TextButton loseButton;
-    private boolean isMusicPlaying;
+    private final boolean isMusicPlaying;
     private TextButton musiconoffButton;
     private Slingshot slingshot;
     private Queue<Bird> birdQueue;
@@ -74,74 +72,106 @@ public class GameScreen implements Screen {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
         isMusicPlaying = game.isMusicPlaying();
-        batch = new SpriteBatch();
-        font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
+        initializeGameComponents();
+        setupUIComponents();
+        show();
+        setupWorldObjects();
+        setupListeners();
+
         float w=Gdx.graphics.getWidth();
         float h=Gdx.graphics.getHeight();
-        cam=new OrthographicCamera();
-        cam.setToOrtho(false,w,h);
-        winButton=new TextButton("Win",TextButtonStyleDummy);
-        loseButton =new TextButton("Lose",TextButtonStyleDummy);
-        slingshot=new Slingshot(130,50);
 
-        stage =new Stage();
-        table=new Table();
-//        System.out.println("bdw");
-        createPauseWindow();
-        createWinWindow();
-        createLoseWindow();
-
-        backButton =new TextButton("",TextButtonStyleback);
-        pauseButton=new TextButton("",TextButtonStylepause);
-//        System.out.println("wb");
-        assetManager=new AssetManager();
-        world = new World(new Vector2(0, -9.8f), false);
-
-        stage.addActor(table);
-        table.top().left();
-        table.setFillParent(true);
-//        table.add(backButton).padTop(5f).padLeft(5f).top().left();
-        table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
         table.add(pauseWindow).center();
         table.add(winButton);
         table.add(loseButton);
-//        table.row();
 
+        backButton =new TextButton("",TextButtonStyleback);
         backButton.setSize(100,150);
         backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
         stage.addActor(backButton);
 
-        backButton.addListener(new ClickListener(){
-            public void clicked(InputEvent event,float x,float y){
-                game.setScreen(new LevelSelectionScreen(game));
-            }
-        });
-        pauseButton.addListener(new ClickListener(){
-            public void clicked(InputEvent event,float x,float y){
-                if(!IsPaused){
-                    pauseWindow.setVisible(true);
-                    pauseWindow.toFront();
-                    pauseButton.setText("");
-                    pause();
-                    IsPaused=true;
-                }
-                else{
-                    pauseWindow.setVisible(false);
-                    pauseButton.setText("");
-                    resume();
-                    IsPaused=false;
-                }
-            }
-        });
-        musiconoffButton =new TextButton("", TextButtonStyleMusic);
         TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
         TextButton restartButton= new TextButton("",TextButtonStyleRestart);
 
-        musiconoffButton.addListener(new ClickListener(){
+        pauseWindow.add().padBottom(300);
+        pauseWindow.row();
+        pauseWindow.add(musiconoffButton);
+        pauseWindow.add(saveGameButton);
+        pauseWindow.add(restartButton);
+    }
+
+    private void initializeGameComponents() {
+        batch = new SpriteBatch();
+        font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
+        cam = new OrthographicCamera();
+        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage();
+        world = new World(new Vector2(0, -9.8f), false);
+        debugRenderer = new Box2DDebugRenderer();
+        slingshot = new Slingshot(130, 50);
+        birdQueue = new Queue<>();
+        allBirds = new ArrayList<>();
+    }
+
+    private void setupUIComponents() {
+        // Create the UI buttons, windows, and table layout
+        pauseButton = new TextButton("", TextButtonStylepause);
+        winButton = new TextButton("Win", TextButtonStyleDummy);
+        loseButton = new TextButton("Lose", TextButtonStyleDummy);
+        musiconoffButton = new TextButton("", TextButtonStyleMusic);
+        nextLevelButton = new TextButton("", createButtonStyle("abs/NextButton.png"));
+
+        // Set up pause, win, and lose windows
+        createPauseWindow();
+        createWinWindow();
+        createLoseWindow();
+
+        // Configure table layout
+        table = new Table();
+        table.top().left().setFillParent(true);
+        table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
+        stage.addActor(table);
+    }
+
+    private void setupWorldObjects() {
+        // Initialize game objects
+        redBird = new RedBird(world, 125, 150);
+        blackBird = new BlackBird(world, 80, 150);
+        blueBird = new BlueBird(world, 20, 150);
+        birdQueue.addFirst(redBird);
+        birdQueue.addLast(blackBird);
+        birdQueue.addLast(blueBird);
+        allBirds.add(redBird);
+        allBirds.add(blackBird);
+        allBirds.add(blueBird);
+
+        ground = new Ground(world);
+        pig = new MediumPig(650, 200, world);
+        box1 = new Box(550, 82, world, 64, 64);
+        box2 = new Box(550, 50, world, 64, 64);
+        box3 = new Box(500, 50, world, 64, 64);
+    }
+
+    private void setupListeners() {
+        Gdx.input.setInputProcessor(stage);
+        pauseButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                togglePause();
+            }
+        });
+
+        musiconoffButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.toggleMusic();  // Toggle music in Main class
-                musiconoffButton.setStyle(game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
+                game.toggleMusic();
+                updateMusicButtonStyle();
+            }
+        });
+
+        stage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                slingshot.releaseBird();
             }
         });
 
@@ -160,34 +190,18 @@ public class GameScreen implements Screen {
                 loseWindow.toFront();
             }
         });
-
-        pauseWindow.add().padBottom(300);
-        pauseWindow.row();
-        pauseWindow.add(musiconoffButton);
-        pauseWindow.add(saveGameButton);
-        pauseWindow.add(restartButton);
-
-
-        birdQueue = new Queue<>();
-        allBirds = new ArrayList<>();
-        debugRenderer = new Box2DDebugRenderer();
-        redBird = new RedBird(world,125,150);
-        blackBird = new BlackBird(world,80,150);
-        blueBird = new BlueBird(world, 20, 150);
-        birdQueue.addFirst(redBird);
-        birdQueue.addLast(blackBird);
-        birdQueue.addLast(blueBird);
-        allBirds.add(redBird);
-        allBirds.add(blackBird);
-        allBirds.add(blueBird);
-        ground=new Ground(world);
-        pig=new MediumPig(650,200,world);
-        box1=new Box(550,82,world,64,64);
-        box2=new Box(550,50,world,64,64);
-        box3=new Box(500,50,world,64,64);
-//        cam=new OrthographicCamera(30,30*(Gdx.gr))
-        Gdx.input.setInputProcessor(stage);
     }
+
+    private void togglePause() {
+        isPaused = !isPaused;
+        pauseWindow.setVisible(isPaused);
+        if (isPaused) {
+            pause();
+        } else {
+            resume();
+        }
+    }
+
     public void createPauseWindow(){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
@@ -215,7 +229,6 @@ public class GameScreen implements Screen {
         winWindow = new Window("", winWindowStyle);
         winWindow.setVisible(false);
 
-        nextLevelButton = new TextButton("", createButtonStyle("abs/NextButton.png"));
         backButton = new TextButton("", createButtonStyle("abs/BackButton.png"));
 
         // Set button sizes
@@ -342,7 +355,6 @@ public class GameScreen implements Screen {
             slingshot.loadBird(bird);  // Load it into the slingshot
             bird.setInSlingshot(true);  // Disable gravity for the bird in the slingshot
             bird.getBody().setTransform(520 / PIXELS_TO_METERS, 420 / PIXELS_TO_METERS, 0);
-            System.out.println("Bird loaded into slingshot at position: " + bird.x + ", " + bird.y);
         }
 
         // Any bird left in the queue should fall due to gravity
@@ -353,6 +365,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        assetManager = new AssetManager();
         assetManager.load("GameBackground.png",Texture.class);
         assetManager.finishLoading();
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
@@ -386,26 +399,6 @@ public class GameScreen implements Screen {
         box3.draw(batch);
         batch.end();
 
-        checkAndLoadBird();
-
-
-
-
-        //this is deletable but i wanted to see how to do something
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                slingshot.releaseBird();
-            }
-        });
-
-
-
-        // Return to Main Menu if ESC is pressed
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new MainMenuScreen(game));
-        }
-        world.step(1/60f, 6, 2);
         for (Bird bird : allBirds) {
             Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
             bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
@@ -414,8 +407,15 @@ public class GameScreen implements Screen {
         debugRenderer.render(world, cam.combined);
         stage.act(delta);
         stage.draw();
-
+        if (!isPaused) world.step(1 / 60f, 6, 2);
+        checkAndLoadBird();
+        checkForEscapeKey();
         // Add the game logic for this level here (e.g., enemy spawning, player movement)
+    }
+    private void checkForEscapeKey() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new MainMenuScreen(game));
+        }
     }
 
     @Override

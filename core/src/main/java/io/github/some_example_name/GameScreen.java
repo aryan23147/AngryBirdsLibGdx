@@ -1,7 +1,6 @@
 package io.github.some_example_name;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleDummy;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
@@ -67,7 +66,6 @@ public class GameScreen implements Screen {
     private List<Box> allBoxes;
     private List<Pig> allPigs;
     private static final float PIXELS_TO_METERS = 100f;
-
 
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
@@ -226,9 +224,11 @@ public class GameScreen implements Screen {
 
     private void setupListeners() {
         Gdx.input.setInputProcessor(stage);
+        final boolean[] click = {false};
         pauseButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 togglePause();
+                click[0] =true;
             }
         });
 
@@ -237,13 +237,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 game.toggleMusic();
                 updateMusicButtonStyle();
-            }
-        });
-
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                slingshot.releaseBird();
+                click[0] =true;
             }
         });
 
@@ -252,6 +246,17 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 winWindow.setVisible(true);
                 winWindow.toFront();
+                click[0] =true;
+            }
+        });
+
+        stage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(!click[0]) {
+                    slingshot.releaseBird();
+                    click[0]=false;
+                }
             }
         });
     }
@@ -451,8 +456,7 @@ public class GameScreen implements Screen {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
         font.draw(batch, "Playing Level: " + level, 200, 400);
-//        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
-        // Draw all birds in the birdQueue (they'll fall if not in slingshot)
+
         for (Bird bird : allBirds) {
             bird.draw(batch);
         }
@@ -462,6 +466,7 @@ public class GameScreen implements Screen {
         for (Box box : allBoxes){
             box.draw(batch);
         }
+
         slingshot.draw(batch);
         ground.draw(batch);
         batch.end();

@@ -17,9 +17,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Queue;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -52,7 +51,7 @@ public class GameScreen implements Screen {
     private Ground ground;
     private OrthographicCamera cam;
     private Pig pig1, pig2, pig3;
-    private Box box1, box2, box3, box4, box5, box6, box7, box8;
+    private Block block1, block2, block3, block4, block5, block6, block7, block8;
     private Window pauseWindow;
     private TextButton pauseButton;
     private TextButton winButton;
@@ -64,7 +63,7 @@ public class GameScreen implements Screen {
     private Slingshot slingshot;
     private Queue<Bird> birdQueue;
     private List<Bird> allBirds;
-    private List<Box> allBoxes;
+    private List<Block> allBlocks;
     private List<Pig> allPigs;
     private static final float PIXELS_TO_METERS = 100f;
 
@@ -111,7 +110,7 @@ public class GameScreen implements Screen {
         slingshot = new Slingshot(130, 50);
         birdQueue = new Queue<>();
         allBirds = new ArrayList<>();
-        allBoxes = new ArrayList<>();
+        allBlocks = new ArrayList<>();
         allPigs = new ArrayList<>();
     }
 
@@ -156,12 +155,12 @@ public class GameScreen implements Screen {
 
         pig1 = new MediumPig(650, 200, world);
         allPigs.add(pig1);
-        box1 = new Box(560, 200, world, 64, 64);
-        box2 = new Box(560, 100, world, 64, 64);
-        box3 = new Box(490, 100, world, 64, 64);
-        allBoxes.add(box1);
-        allBoxes.add(box2);
-        allBoxes.add(box3);
+        block1 = new Block(560, 200, world, 64, 64);
+        block2 = new Block(560, 100, world, 64, 64);
+        block3 = new Block(490, 100, world, 64, 64);
+        allBlocks.add(block1);
+        allBlocks.add(block2);
+        allBlocks.add(block3);
     }
     private void setupWorldObjectsLevel2() {
         // Initialize game objects
@@ -180,12 +179,12 @@ public class GameScreen implements Screen {
         pig2 = new KidPig(640, 180, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
-        box1 = new Box(600, 200, world, 250, 50);
-        box2 = new Box(700, 100, world, 50, 80);
-        box3 = new Box(500, 100, world, 50, 80);
-        allBoxes.add(box1);
-        allBoxes.add(box2);
-        allBoxes.add(box3);
+        block1 = new Block(600, 200, world, 250, 50);
+        block2 = new Block(700, 100, world, 50, 80);
+        block3 = new Block(500, 100, world, 50, 80);
+        allBlocks.add(block1);
+        allBlocks.add(block2);
+        allBlocks.add(block3);
     }
     private void setupWorldObjectsLevel3() {
         // Initialize game objects
@@ -204,23 +203,23 @@ public class GameScreen implements Screen {
         pig2 = new MediumPig(535, 600, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
-        box1 = new Box(610, 150, world, 50, 50);
-        box2 = new Box(610, 70, world, 50, 50);
-        box3 = new Box(530, 70, world, 50, 50);
-        box4 = new Box(475, 75, world, 50, 150);
-        box5 = new Box(470, 260, world, 50, 50);
-        box6 = new Box(590, 230, world, 50, 100);
-        box7 = new Box(520, 320, world, 175, 50);
-        box8 = new Box(460, 400, world, 50, 50);
+        block1 = new Block(610, 150, world, 50, 50);
+        block2 = new Block(610, 70, world, 50, 50);
+        block3 = new Block(530, 70, world, 50, 50);
+        block4 = new Block(475, 75, world, 50, 150);
+        block5 = new Block(470, 260, world, 50, 50);
+        block6 = new Block(590, 230, world, 50, 100);
+        block7 = new Block(520, 320, world, 175, 50);
+        block8 = new Block(460, 400, world, 50, 50);
 
-        allBoxes.add(box1);
-        allBoxes.add(box2);
-        allBoxes.add(box3);
-        allBoxes.add(box4);
-        allBoxes.add(box5);
-        allBoxes.add(box6);
-        allBoxes.add(box7);
-        allBoxes.add(box8);
+        allBlocks.add(block1);
+        allBlocks.add(block2);
+        allBlocks.add(block3);
+        allBlocks.add(block4);
+        allBlocks.add(block5);
+        allBlocks.add(block6);
+        allBlocks.add(block7);
+        allBlocks.add(block8);
     }
 
     private void setupListeners() {
@@ -430,7 +429,7 @@ public class GameScreen implements Screen {
                     loseWindow.setVisible(true);
                     loseWindow.toFront();
                 }
-            }, 2f);
+            }, 5f);
         }
         else if (slingshot.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
@@ -455,6 +454,19 @@ public class GameScreen implements Screen {
         // Initialize resources and setup the game for the given level
         System.out.println("Starting level: " + level);
     }
+    private void update(float deltaTime) {
+        // Assume birds is a list of active birds
+        List<Bird> birdsToRemove = new ArrayList<>();
+        for (Bird bird : allBirds) {
+            if (bird.isLaunched() && bird.getBody().getLinearVelocity().len2() < 0.001f) { // Velocity close to zero
+                birdsToRemove.add(bird);
+            }
+        }
+        for(Bird bird :birdsToRemove){
+            world.destroyBody(bird.getBody()); // Destroy the physics body in Box2D
+            allBirds.remove(bird); // Remove from active list
+        }
+    }
 
     @Override
     public void render(float delta) {
@@ -472,14 +484,15 @@ public class GameScreen implements Screen {
         for (Pig pig : allPigs){
             pig.draw(batch);
         }
-        for (Box box : allBoxes){
-            box.draw(batch);
+        for (Block block : allBlocks){
+            block.draw(batch);
         }
 
         slingshot.draw(batch);
         ground.draw(batch);
         batch.end();
 
+        update(delta);
         for (Bird bird : allBirds) {
             Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
             bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
@@ -489,8 +502,8 @@ public class GameScreen implements Screen {
         stage.act(delta);
         stage.draw();
         if (!isPaused) world.step(1 / 60f, 6, 2);
-        for (Box box : allBoxes) {
-            box.update();
+        for (Block block : allBlocks) {
+            block.update();
         }
         checkAndLoadBird();
         checkForEscapeKey();
@@ -522,8 +535,8 @@ public class GameScreen implements Screen {
         batch.dispose();
         font.dispose();
         debugRenderer.dispose();
-        for (Box box : allBoxes) {
-            box.dispose();
+        for (Block block : allBlocks) {
+            block.dispose();
         }
     }
 }

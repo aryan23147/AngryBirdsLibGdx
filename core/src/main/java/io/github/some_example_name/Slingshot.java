@@ -63,7 +63,6 @@ public class Slingshot {
 
     public void releaseBird(float x, float y) {
         if (bird != null) {
-            Vector2 releasePoint = new Vector2(bird.getX(), bird.getY());
             Vector2 launchDirection = new Vector2(x, y);
             float pullDistance = launchDirection.len();
 
@@ -72,6 +71,7 @@ public class Slingshot {
 
             // Call the launch method with the calculated force
             launch(bird, launchForce);
+            bird.launched=true;
 
             // Reset the bird in the slingshot after release
             bird = null;

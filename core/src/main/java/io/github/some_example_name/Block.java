@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Box {
+public class Block {
     private Body body;
     private BodyDef bodyDef;
     private FixtureDef fixtureDef;
@@ -21,7 +21,7 @@ public class Box {
     private float height;
     private SpriteBatch batch;
     private Sprite sprite;
-    public Box(float x,float y, World world,float width,float height) {
+    public Block(float x, float y, World world, float width, float height) {
         this.X=x;
         this.Y=y;
         this.width = width;

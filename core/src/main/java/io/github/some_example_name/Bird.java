@@ -26,6 +26,9 @@ public class Bird extends Character {
         this.launched = false;
     }
 
+    public boolean isLaunched(){
+        return launched;
+    }
     @Override
     protected void createBody(World world, float x, float y) {
         BodyDef bodyDef = new BodyDef();

@@ -45,7 +45,7 @@ public class Box {
         fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 0.5f;  // Adjust density for mass
-        fixtureDef.friction = 0.4f;  // Adjust friction for surface interaction
+        fixtureDef.friction = 1f;  // Adjust friction for surface interaction
         fixtureDef.restitution = 0.1f;  // Adjust restitution for bounciness
 
         // Attach the fixture to the body

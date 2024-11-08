@@ -59,13 +59,13 @@ public class GameScreen implements Screen {
     private Window winWindow;
     private TextButton nextLevelButton;
     private Window loseWindow;
-    private TextButton loseButton;
     private final boolean isMusicPlaying;
     private TextButton musiconoffButton;
     private Slingshot slingshot;
     private Queue<Bird> birdQueue;
     private List<Bird> allBirds;
     private List<Box> allBoxes;
+    private List<Pig> allPigs;
     private static final float PIXELS_TO_METERS = 100f;
 
 
@@ -113,13 +113,13 @@ public class GameScreen implements Screen {
         birdQueue = new Queue<>();
         allBirds = new ArrayList<>();
         allBoxes = new ArrayList<>();
+        allPigs = new ArrayList<>();
     }
 
     private void setupUIComponents() {
         // Create the UI buttons, windows, and table layout
         pauseButton = new TextButton("", TextButtonStylepause);
         winButton = new TextButton("Win", TextButtonStyleDummy);
-        loseButton = new TextButton("Lose", TextButtonStyleDummy);
         musiconoffButton = new TextButton("", TextButtonStyleMusic);
         nextLevelButton = new TextButton("", createButtonStyle("abs/NextButton.png"));
 
@@ -128,18 +128,12 @@ public class GameScreen implements Screen {
         createWinWindow();
         createLoseWindow();
 
-        // Manually set size and position for winButton and loseButton
+        // Manually set size and position for winButton
         winButton.setSize(100, 100); // Set the size of the win button
-        winButton.setPosition(Gdx.graphics.getWidth() / 2f +100, Gdx.graphics.getHeight() / 2f + 60); // Set position in the center
-//        winButton.setVisible(true);  // Initially hidden
-
-        loseButton.setSize(100, 100); // Set the size of the lose button
-        loseButton.setPosition(Gdx.graphics.getWidth() / 2f +200, Gdx.graphics.getHeight() / 2f +60); // Set position below win button
-//        loseButton.setVisible(false);  // Initially hidden
+        winButton.setPosition(Gdx.graphics.getWidth() / 2f +100, Gdx.graphics.getHeight() / 2f + 160); // Set position in the center
 
         // Add buttons to the stage directly
         stage.addActor(winButton);
-        stage.addActor(loseButton);
 
         // Configure table layout
         table = new Table();
@@ -162,9 +156,10 @@ public class GameScreen implements Screen {
         ground = new Ground(world);
 
         pig1 = new MediumPig(650, 200, world);
-        box1 = new Box(550, 82, world, 64, 64);
-        box2 = new Box(550, 50, world, 64, 64);
-        box3 = new Box(500, 50, world, 64, 64);
+        allPigs.add(pig1);
+        box1 = new Box(560, 200, world, 64, 64);
+        box2 = new Box(560, 100, world, 64, 64);
+        box3 = new Box(490, 100, world, 64, 64);
         allBoxes.add(box1);
         allBoxes.add(box2);
         allBoxes.add(box3);
@@ -182,10 +177,13 @@ public class GameScreen implements Screen {
         allBirds.add(blueBird);
         ground = new Ground(world);
 
-        pig1 = new MediumPig(650, 200, world);
-        box1 = new Box(550, 82, world, 64, 64);
-        box2 = new Box(550, 50, world, 64, 64);
-        box3 = new Box(500, 50, world, 64, 64);
+        pig1 = new MediumPig(570, 180, world);
+        pig2 = new KidPig(640, 180, world);
+        allPigs.add(pig1);
+        allPigs.add(pig2);
+        box1 = new Box(600, 200, world, 250, 50);
+        box2 = new Box(700, 100, world, 50, 80);
+        box3 = new Box(500, 100, world, 50, 80);
         allBoxes.add(box1);
         allBoxes.add(box2);
         allBoxes.add(box3);
@@ -203,14 +201,18 @@ public class GameScreen implements Screen {
         allBirds.add(blueBird);
         ground = new Ground(world);
 
-        pig1 = new MediumPig(535, 200, world);
-        box1 = new Box(583, 90, world, 50, 50);
-        box2 = new Box(583, 50, world, 50, 50);
-        box3 = new Box(525, 50, world, 50, 50);
-        box4 = new Box(475, 30, world, 50, 150);
-        box5 = new Box(470, 180, world, 50, 50);
-        box6 = new Box(578, 180, world, 50, 100);
-        box7 = new Box(520, 240, world, 180, 50);
+        pig1 = new KingPig(535, 200, world);
+        pig2 = new MediumPig(535, 600, world);
+        allPigs.add(pig1);
+        allPigs.add(pig2);
+        box1 = new Box(610, 150, world, 50, 50);
+        box2 = new Box(610, 70, world, 50, 50);
+        box3 = new Box(530, 70, world, 50, 50);
+        box4 = new Box(475, 75, world, 50, 150);
+        box5 = new Box(470, 260, world, 50, 50);
+        box6 = new Box(590, 230, world, 50, 100);
+        box7 = new Box(520, 320, world, 175, 50);
+        box8 = new Box(460, 400, world, 50, 50);
 
         allBoxes.add(box1);
         allBoxes.add(box2);
@@ -219,7 +221,7 @@ public class GameScreen implements Screen {
         allBoxes.add(box5);
         allBoxes.add(box6);
         allBoxes.add(box7);
-//        allBoxes.add(box8);
+        allBoxes.add(box8);
     }
 
     private void setupListeners() {
@@ -250,14 +252,6 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 winWindow.setVisible(true);
                 winWindow.toFront();
-            }
-        });
-
-        loseButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                loseWindow.setVisible(true);
-                loseWindow.toFront();
             }
         });
     }
@@ -420,7 +414,11 @@ public class GameScreen implements Screen {
     }
 
     private void checkAndLoadBird() {
-        if (slingshot.isEmpty() && !birdQueue.isEmpty()) {
+        if(birdQueue.isEmpty() && slingshot.isEmpty() && !allPigs.isEmpty()){
+            loseWindow.setVisible(true);
+            loseWindow.toFront();
+        }
+        else if (slingshot.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
             slingshot.loadBird(bird);  // Load it into the slingshot
             bird.setInSlingshot(true);  // Disable gravity for the bird in the slingshot
@@ -442,9 +440,6 @@ public class GameScreen implements Screen {
         updateMusicButtonStyle();
         // Initialize resources and setup the game for the given level
         System.out.println("Starting level: " + level);
-//        stage.addActor(table);
-//        table.setFillParent(true);
-//        table.add(redBird);
     }
 
     @Override
@@ -457,10 +452,12 @@ public class GameScreen implements Screen {
         }
         font.draw(batch, "Playing Level: " + level, 200, 400);
 //        font.draw(batch, "Press ESC to return to Main Menu", 200, 300);
-        pig1.draw(batch);
         // Draw all birds in the birdQueue (they'll fall if not in slingshot)
         for (Bird bird : allBirds) {
             bird.draw(batch);
+        }
+        for (Pig pig : allPigs){
+            pig.draw(batch);
         }
         for (Box box : allBoxes){
             box.draw(batch);

@@ -119,12 +119,12 @@ public class GameScreen implements Screen {
         pauseButton = new TextButton("", TextButtonStylepause);
         winButton = new TextButton("Win", TextButtonStyleDummy);
         musiconoffButton = new TextButton("", TextButtonStyleMusic);
-        nextLevelButton = new TextButton("", createButtonStyle("abs/NextButton.png"));
+        nextLevelButton = new TextButton("", WindowCreator.createButtonStyle("abs/NextButton.png", font));
 
         // Set up pause, win, and lose windows
-        createPauseWindow();
-        createWinWindow();
-        createLoseWindow();
+        pauseWindow = WindowCreator.createPauseWindow(pauseWindow, font);
+        winWindow = WindowCreator.createWinWindow(winWindow, backButton, nextLevelButton, level, game, stage, font);
+        loseWindow = WindowCreator.createLoseWindow(loseWindow, backButton, level, game, stage, font);
 
         // Manually set size and position for winButton
         winButton.setSize(100, 100); // Set the size of the win button
@@ -271,145 +271,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void createPauseWindow(){
-        Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
-
-        // Define custom style
-        Window.WindowStyle windowStyle = new Window.WindowStyle();
-        windowStyle.titleFont = font;
-        windowStyle.titleFontColor = Color.WHITE;
-        windowStyle.background = backgroundDrawable;
-
-        // Create and style the window
-        pauseWindow = new Window("", windowStyle);
-        pauseWindow.setVisible(false);
-
-    }
-    private void createWinWindow() {
-        Texture backgroundTexture = new Texture("abs/WinWindowBackground.png");
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
-
-        Window.WindowStyle winWindowStyle = new Window.WindowStyle();
-        winWindowStyle.titleFont = font;
-        winWindowStyle.titleFontColor = Color.WHITE;
-        winWindowStyle.background = backgroundDrawable;
-
-        winWindow = new Window("", winWindowStyle);
-        winWindow.setVisible(false);
-
-        backButton = new TextButton("", createButtonStyle("abs/BackButton.png"));
-
-        // Set button sizes
-        nextLevelButton.setSize(100, 100); // Set width and height of the nextLevelButton
-        backButton.setSize(100, 150); // Set width and height of the backButton
-
-        // Position the buttons manually within the winWindow
-        nextLevelButton.setPosition(280, 60); // Adjust x and y for placement
-        backButton.setPosition(55, 30); // Adjust x and y for placement
-
-        // Add buttons to the winWindow without using table positioning
-        winWindow.addActor(nextLevelButton);
-        winWindow.addActor(backButton);
-
-        // Set the window size and position to center it on the screen
-        winWindow.setSize(470, 500);
-        winWindow.setPosition(
-            Gdx.graphics.getWidth() / 2f - winWindow.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 2f - winWindow.getHeight() / 2f
-        );
-
-        nextLevelButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (level<3){
-                    game.setScreen(new GameScreen(game, level + 1));
-                }
-                else {
-                    game.setScreen(new LevelSelectionScreen(game));
-                }
-            }
-        });
-
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game));
-            }
-        });
-
-        stage.addActor(winWindow);
-    }
-
-    private void createLoseWindow() {
-        Texture backgroundTexture = new Texture("abs/LoseWindowBackground.png");
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
-
-        Window.WindowStyle loseWindowStyle = new Window.WindowStyle();
-        loseWindowStyle.titleFont = font;
-        loseWindowStyle.titleFontColor = Color.WHITE;
-        loseWindowStyle.background = backgroundDrawable;
-
-        loseWindow = new Window("", loseWindowStyle);
-        loseWindow.setVisible(false);
-
-        TextButton restartButton = new TextButton("", createButtonStyle("abs/RestartButton.png"));
-        backButton = new TextButton("", createButtonStyle("abs/BackButton.png"));
-
-        // Set button sizes
-        restartButton.setSize(100, 100); // Set width and height of the nextLevelButton
-        backButton.setSize(100, 150); // Set width and height of the backButton
-
-        // Position the buttons manually within the winWindow
-        restartButton.setPosition(280, 60); // Adjust x and y for placement
-        backButton.setPosition(55, 30); // Adjust x and y for placement
-
-        // Add buttons to the winWindow without using table positioning
-        loseWindow.addActor(restartButton);
-        loseWindow.addActor(backButton);
-
-        // Set the window size and position to center it on the screen
-        loseWindow.setSize(470, 500);
-        loseWindow.setPosition(
-            Gdx.graphics.getWidth() / 2f - loseWindow.getWidth() / 2f,
-            Gdx.graphics.getHeight() / 2f - loseWindow.getHeight() / 2f
-        );
-
-        restartButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, level));
-            }
-        });
-
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game));
-            }
-        });
-
-        stage.addActor(loseWindow);
-    }
-
-    private TextButton.TextButtonStyle createButtonStyle(String buttonName) {
-        // Load the button textures
-        Texture buttonUpTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path
-        Texture buttonDownTexture = new Texture(Gdx.files.internal(buttonName)); // Replace with your actual texture path
-
-        // Create a Drawable for each button state
-        TextureRegionDrawable upDrawable = new TextureRegionDrawable(buttonUpTexture);
-        TextureRegionDrawable downDrawable = new TextureRegionDrawable(buttonDownTexture);
-
-        // Create and style the button style
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
-        buttonStyle.up = upDrawable;
-        buttonStyle.down = downDrawable;
-        buttonStyle.font = font; // Set your font
-
-        return buttonStyle;
-    }
-
     private void updateMusicButtonStyle() {
         if (isMusicPlaying) {
             musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMusic);
@@ -507,7 +368,6 @@ public class GameScreen implements Screen {
         }
         checkAndLoadBird();
         checkForEscapeKey();
-        // Add the game logic for this level here (e.g., enemy spawning, player movement)
     }
     private void checkForEscapeKey() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

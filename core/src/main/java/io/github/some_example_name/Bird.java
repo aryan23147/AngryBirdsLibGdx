@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class Bird extends Character {
     protected Sprite sprite;
-    protected boolean launched;
+    private boolean launched;
     private FixtureDef fixtureDef;
     public static float ppm = 32;  // Pixels per meter conversion factor
     private boolean inSlingshot = true;
@@ -28,6 +28,9 @@ public class Bird extends Character {
 
     public boolean isLaunched(){
         return launched;
+    }
+    public void setLaunched(boolean launched){
+        this.launched=launched;
     }
     @Override
     protected void createBody(World world, float x, float y) {

@@ -71,7 +71,7 @@ public class Slingshot {
 
             // Call the launch method with the calculated force
             launch(bird, launchForce);
-            bird.launched=true;
+            bird.setLaunched(true);
 
             // Reset the bird in the slingshot after release
             bird = null;

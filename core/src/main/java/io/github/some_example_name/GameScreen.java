@@ -33,6 +33,7 @@ import java.util.List;
 
 
 public class GameScreen implements Screen {
+    private static final float PPM = 1;
     private boolean isPaused=false;
     private final Main game;
     private final int level;
@@ -153,11 +154,11 @@ public class GameScreen implements Screen {
         allBirds.add(blueBird);
         ground = new Ground(world);
 
-        pig1 = new MediumPig(650, 200, world);
+        pig1 = new MediumPig(1050, 200, world);
         allPigs.add(pig1);
-        block1 = new Block(560, 200, world, 64, 64);
-        block2 = new Block(560, 100, world, 64, 64);
-        block3 = new Block(490, 100, world, 64, 64);
+        block1 = new Block(960, 200, world, 64, 64);
+        block2 = new Block(960, 100, world, 64, 64);
+        block3 = new Block(890, 100, world, 64, 64);
         allBlocks.add(block1);
         allBlocks.add(block2);
         allBlocks.add(block3);
@@ -175,13 +176,13 @@ public class GameScreen implements Screen {
         allBirds.add(blueBird);
         ground = new Ground(world);
 
-        pig1 = new MediumPig(570, 180, world);
-        pig2 = new KidPig(640, 180, world);
+        pig1 = new MediumPig(970, 180, world);
+        pig2 = new KidPig(1040, 180, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
-        block1 = new Block(600, 200, world, 250, 50);
-        block2 = new Block(700, 100, world, 50, 80);
-        block3 = new Block(500, 100, world, 50, 80);
+        block1 = new Block(1000, 200, world, 250, 50);
+        block2 = new Block(1100, 100, world, 50, 80);
+        block3 = new Block(900, 100, world, 50, 80);
         allBlocks.add(block1);
         allBlocks.add(block2);
         allBlocks.add(block3);
@@ -199,18 +200,18 @@ public class GameScreen implements Screen {
         allBirds.add(blueBird);
         ground = new Ground(world);
 
-        pig1 = new KingPig(535, 200, world);
-        pig2 = new MediumPig(535, 600, world);
+        pig1 = new KingPig(935, 200, world);
+        pig2 = new MediumPig(935, 600, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
-        block1 = new Block(610, 150, world, 50, 50);
-        block2 = new Block(610, 70, world, 50, 50);
-        block3 = new Block(530, 70, world, 50, 50);
-        block4 = new Block(475, 75, world, 50, 150);
-        block5 = new Block(470, 260, world, 50, 50);
-        block6 = new Block(590, 230, world, 50, 100);
-        block7 = new Block(520, 320, world, 175, 50);
-        block8 = new Block(460, 400, world, 50, 50);
+        block1 = new Block(1010, 150, world, 50, 50);
+        block2 = new Block(1010, 70, world, 50, 50);
+        block3 = new Block(930, 70, world, 50, 50);
+        block4 = new Block(875, 75, world, 50, 150);
+        block5 = new Block(870, 260, world, 50, 50);
+        block6 = new Block(990, 230, world, 50, 100);
+        block7 = new Block(920, 320, world, 175, 50);
+        block8 = new Block(860, 400, world, 50, 50);
 
         allBlocks.add(block1);
         allBlocks.add(block2);
@@ -225,6 +226,7 @@ public class GameScreen implements Screen {
     private void setupListeners() {
         Gdx.input.setInputProcessor(stage);
         final boolean[] click = {false};
+
         pauseButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 togglePause();
@@ -319,7 +321,7 @@ public class GameScreen implements Screen {
         // Assume birds is a list of active birds
         List<Bird> birdsToRemove = new ArrayList<>();
         for (Bird bird : allBirds) {
-            if (bird.isLaunched() && bird.getBody().getLinearVelocity().len2() < 0.001f) { // Velocity close to zero
+            if (bird.isLaunched() && bird.getBody().getLinearVelocity().len2() < 0.005f) { // Velocity close to zero
                 birdsToRemove.add(bird);
             }
         }
@@ -368,6 +370,8 @@ public class GameScreen implements Screen {
         }
         checkAndLoadBird();
         checkForEscapeKey();
+//        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
+
     }
     private void checkForEscapeKey() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {

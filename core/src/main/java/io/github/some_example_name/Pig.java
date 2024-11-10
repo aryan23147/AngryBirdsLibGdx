@@ -50,8 +50,8 @@ public class Pig {
         this.fixtureDef = new FixtureDef();
         this.fixtureDef.shape = shape;
         this.fixtureDef.density = 1f;
-        this.fixtureDef.friction = 1f;
-        this.fixtureDef.restitution = 0.6f;  // Bird bounces a bit
+        this.fixtureDef.friction = 5f;
+        this.fixtureDef.restitution = 0.6f;  // Pig bounces a bit
 
         // Attach the fixture to the body
         body.createFixture(fixtureDef);

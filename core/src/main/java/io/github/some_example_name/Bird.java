@@ -85,6 +85,12 @@ public class Bird extends Character {
 //        }
 //    }
 
+    public void resetLaunchState() {
+        this.launched = false; // Reset the launch status
+        this.getBody().setLinearVelocity(0, 0); // Stop any velocity the bird might have
+        this.getBody().setAngularVelocity(0); // Stop rotation, if applicable
+        this.getBody().setTransform(x, y, 0); // Move bird back to start position
+    }
 
     public void update() {
         setPosition(x, y);

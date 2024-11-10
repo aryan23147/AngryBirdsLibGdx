@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Ground {
-    private BodyDef groundBodyDef;
     private Body groundBody;
     private Sprite sprite;
     final float PIXELS_PER_METER = 32f;  // Conversion factor
@@ -18,10 +17,10 @@ public class Ground {
         this.sprite = new Sprite(new Texture("abs/ground.png"));
         sprite.setSize(Gdx.graphics.getWidth(), 97);  // Set sprite size in pixels
 
-        // Create the body definition
-        groundBodyDef = new BodyDef();
-        groundBodyDef.type=BodyDef.BodyType.StaticBody;
-        groundBodyDef.position.set(new Vector2(0, 0 ));  // Place ground in meters
+        // Create the body definition for ground
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+        groundBodyDef.position.set(new Vector2(0, 0));  // Place ground in meters
 
         // Create the body in the world
         groundBody = world.createBody(groundBodyDef);
@@ -29,10 +28,17 @@ public class Ground {
         // Define the shape of the ground
         PolygonShape groundBox = new PolygonShape();
         float worldWidth = Gdx.graphics.getWidth() / PIXELS_PER_METER;  // Convert screen width to world units (meters)
-        groundBox.setAsBox(worldWidth , (65)/PIXELS_PER_METER);  // Set width and height in meters
+        groundBox.setAsBox(worldWidth, 65 / PIXELS_PER_METER);  // Set width and height in meters
 
-        // Create fixture and attach it to the body
-        groundBody.createFixture(groundBox, 1.0f);
+        // Create fixture definition and set properties
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = groundBox;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 5f;
+        fixtureDef.restitution = 0f;
+
+        // Attach fixture to the body
+        groundBody.createFixture(fixtureDef);
 
         // Clean up the shape
         groundBox.dispose();

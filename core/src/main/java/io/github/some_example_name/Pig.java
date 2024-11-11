@@ -29,11 +29,12 @@ public class Pig {
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
         this.sprite.setSize(radius*2*ppm, radius*2*ppm);  // Set bird size in pixels
+//        sprite.setRotation(float());
         createBody(world,x,y,radius);
+        body.setLinearDamping(0.2f);  // Damping slows down sliding
         // Set initial state
 //        this.launched = false;
     }
-
 
     protected void createBody(World world, float x, float y,float radius) {
         BodyDef bodyDef = new BodyDef();

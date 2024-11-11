@@ -39,6 +39,7 @@ public class Bird extends Character {
         bodyDef.position.set(x / ppm, y / ppm);  // Convert x, y from pixels to meters
 
         this.body = world.createBody(bodyDef);
+        body.setLinearDamping(0.2f);  // Damping slows down sliding
 
         // Create a circle shape for the bird's body
         CircleShape shape = new CircleShape();
@@ -48,7 +49,7 @@ public class Bird extends Character {
         this.fixtureDef = new FixtureDef();
         this.fixtureDef.shape = shape;
         this.fixtureDef.density = 1f;
-        this.fixtureDef.friction = 0.5f;
+        this.fixtureDef.friction = 5f;
         this.fixtureDef.restitution = 0.6f;  // Bird bounces a bit
 
         // Attach the fixture to the body
@@ -92,8 +93,12 @@ public class Bird extends Character {
         this.getBody().setTransform(x, y, 0); // Move bird back to start position
     }
 
+//    public void update() {
+//        setPosition(x, y);
+//    }
     public void update() {
-        setPosition(x, y);
+        // Only update sprite position to follow Box2D body's position in world coordinates
+        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);
     }
 
     public void draw(Batch batch) {

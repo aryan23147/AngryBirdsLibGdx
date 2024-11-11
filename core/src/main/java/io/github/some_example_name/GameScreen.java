@@ -42,17 +42,12 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Table table;
     private TextButton backButton;
-    private Bird redBird;
-    private Bird blackBird;
-    private Bird blueBird;
     private AssetManager assetManager;
     private Texture backgroundTexture;
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private Ground ground;
     private OrthographicCamera cam;
-    private Pig pig1, pig2, pig3;
-    private Block block1, block2, block3, block4, block5, block6, block7, block8;
     private Window pauseWindow;
     private TextButton pauseButton;
     private TextButton winButton;
@@ -75,10 +70,19 @@ public class GameScreen implements Screen {
         initializeGameComponents();
         setupUIComponents();
         show();
-        if(level==1) setupWorldObjectsLevel1();
-        else if(level == 2) setupWorldObjectsLevel2();
-        else if (level == 3) setupWorldObjectsLevel3();
+        ReturnStruct returnStruct = null;
+        if(level==1) returnStruct=LevelCreator.setupWorldObjectsLevel1(world);
+        else if(level == 2) returnStruct=LevelCreator.setupWorldObjectsLevel2(world);
+        else if (level == 3) returnStruct=LevelCreator.setupWorldObjectsLevel3(world);
         setupListeners();
+
+        if(returnStruct!=null) {
+            this.birdQueue = returnStruct.birdQueue;
+            this.allBirds = returnStruct.birds;
+            this.allPigs = returnStruct.pigs;
+            this.allBlocks = returnStruct.blocks;
+            this.ground = returnStruct.ground;
+        }
 
         float w=Gdx.graphics.getWidth();
         float h=Gdx.graphics.getHeight();
@@ -141,88 +145,6 @@ public class GameScreen implements Screen {
         stage.addActor(table);
     }
 
-    private void setupWorldObjectsLevel1() {
-        // Initialize game objects
-        redBird = new RedBird(world, 125, 150);
-        blackBird = new BlackBird(world, 80, 150);
-        blueBird = new BlueBird(world, 20, 150);
-        birdQueue.addFirst(redBird);
-        birdQueue.addLast(blackBird);
-        birdQueue.addLast(blueBird);
-        allBirds.add(redBird);
-        allBirds.add(blackBird);
-        allBirds.add(blueBird);
-        ground = new Ground(world);
-
-        pig1 = new MediumPig(1050, 200, world);
-        allPigs.add(pig1);
-        block1 = new Block(960, 200, world, 64, 64);
-        block2 = new Block(960, 100, world, 64, 64);
-        block3 = new Block(890, 100, world, 64, 64);
-        allBlocks.add(block1);
-        allBlocks.add(block2);
-        allBlocks.add(block3);
-    }
-    private void setupWorldObjectsLevel2() {
-        // Initialize game objects
-        redBird = new RedBird(world, 125, 150);
-        blackBird = new BlackBird(world, 80, 150);
-        blueBird = new BlueBird(world, 20, 150);
-        birdQueue.addFirst(redBird);
-        birdQueue.addLast(blackBird);
-        birdQueue.addLast(blueBird);
-        allBirds.add(redBird);
-        allBirds.add(blackBird);
-        allBirds.add(blueBird);
-        ground = new Ground(world);
-
-        pig1 = new MediumPig(970, 180, world);
-        pig2 = new KidPig(1040, 180, world);
-        allPigs.add(pig1);
-        allPigs.add(pig2);
-        block1 = new Block(1000, 200, world, 250, 50);
-        block2 = new Block(1100, 100, world, 50, 80);
-        block3 = new Block(900, 100, world, 50, 80);
-        allBlocks.add(block1);
-        allBlocks.add(block2);
-        allBlocks.add(block3);
-    }
-    private void setupWorldObjectsLevel3() {
-        // Initialize game objects
-        redBird = new RedBird(world, 125, 150);
-        blackBird = new BlackBird(world, 80, 150);
-        blueBird = new BlueBird(world, 20, 150);
-        birdQueue.addFirst(redBird);
-        birdQueue.addLast(blackBird);
-        birdQueue.addLast(blueBird);
-        allBirds.add(redBird);
-        allBirds.add(blackBird);
-        allBirds.add(blueBird);
-        ground = new Ground(world);
-
-        pig1 = new KingPig(935, 200, world);
-        pig2 = new MediumPig(935, 600, world);
-        allPigs.add(pig1);
-        allPigs.add(pig2);
-        block1 = new Block(1010, 150, world, 50, 50);
-        block2 = new Block(1010, 70, world, 50, 50);
-        block3 = new Block(930, 70, world, 50, 50);
-        block4 = new Block(875, 75, world, 50, 150);
-        block5 = new Block(870, 260, world, 50, 50);
-        block6 = new Block(990, 230, world, 50, 100);
-        block7 = new Block(920, 320, world, 175, 50);
-        block8 = new Block(860, 400, world, 50, 50);
-
-        allBlocks.add(block1);
-        allBlocks.add(block2);
-        allBlocks.add(block3);
-        allBlocks.add(block4);
-        allBlocks.add(block5);
-        allBlocks.add(block6);
-        allBlocks.add(block7);
-        allBlocks.add(block8);
-    }
-
     private void setupListeners() {
         Gdx.input.setInputProcessor(stage);
         final boolean[] click = {false};
@@ -275,7 +197,7 @@ public class GameScreen implements Screen {
 
     private void updateMusicButtonStyle() {
         if (isMusicPlaying) {
-            musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMusic);
+            musiconoffButton.setStyle(TextButtonStyleMusic);
         } else {
             musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMute);
         }
@@ -383,11 +305,9 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {}
     @Override
     public void pause() {
-
     }
     @Override
     public void resume() {
-
     }
     @Override
     public void hide() {

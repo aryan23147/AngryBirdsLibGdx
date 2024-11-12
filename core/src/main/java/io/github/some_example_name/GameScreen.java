@@ -10,7 +10,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
@@ -84,11 +82,6 @@ public class GameScreen implements Screen {
             this.ground = returnStruct.ground;
         }
 
-        float w=Gdx.graphics.getWidth();
-        float h=Gdx.graphics.getHeight();
-
-        table.add(pauseWindow).center();
-
         backButton =new TextButton("",TextButtonStyleback);
         backButton.setSize(100,150);
         backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
@@ -97,11 +90,22 @@ public class GameScreen implements Screen {
         TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
         TextButton restartButton= new TextButton("",TextButtonStyleRestart);
 
-        pauseWindow.add().padBottom(300);
-        pauseWindow.row();
-        pauseWindow.add(musiconoffButton);
-        pauseWindow.add(saveGameButton);
-        pauseWindow.add(restartButton);
+        pauseWindow.setSize(450, 540); // Width and height in pixels
+
+        pauseWindow.setPosition(
+            (stage.getWidth() - pauseWindow.getWidth()) / 2,  // Center horizontally
+            (stage.getHeight() - pauseWindow.getHeight()) / 2  // Center vertically
+        );
+
+        pauseWindow.addActor(musiconoffButton);
+        pauseWindow.addActor(saveGameButton);
+        pauseWindow.addActor(restartButton);
+
+        musiconoffButton.setPosition(50, 80);  // Adjust based on desired layout
+        saveGameButton.setPosition(175, 80);
+        restartButton.setPosition(300, 80);
+
+        stage.addActor(pauseWindow);
     }
 
     private void initializeGameComponents() {
@@ -113,10 +117,6 @@ public class GameScreen implements Screen {
         world = new World(new Vector2(0, -9.8f), false);
         debugRenderer = new Box2DDebugRenderer();
         slingshot = new Slingshot(130, 50);
-        birdQueue = new Queue<>();
-        allBirds = new ArrayList<>();
-        allBlocks = new ArrayList<>();
-        allPigs = new ArrayList<>();
     }
 
     private void setupUIComponents() {
@@ -127,9 +127,9 @@ public class GameScreen implements Screen {
         nextLevelButton = new TextButton("", WindowCreator.createButtonStyle("abs/NextButton.png", font));
 
         // Set up pause, win, and lose windows
-        pauseWindow = WindowCreator.createPauseWindow(pauseWindow, font);
-        winWindow = WindowCreator.createWinWindow(winWindow, backButton, nextLevelButton, level, game, stage, font);
-        loseWindow = WindowCreator.createLoseWindow(loseWindow, backButton, level, game, stage, font);
+        pauseWindow = WindowCreator.createPauseWindow(font);
+        winWindow = WindowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
+        loseWindow = WindowCreator.createLoseWindow(level, game, stage, font);
 
         // Manually set size and position for winButton
         winButton.setSize(100, 100); // Set the size of the win button
@@ -239,6 +239,7 @@ public class GameScreen implements Screen {
         // Initialize resources and setup the game for the given level
         System.out.println("Starting level: " + level);
     }
+
     private void update(float deltaTime) {
         // Assume birds is a list of active birds
         List<Bird> birdsToRemove = new ArrayList<>();
@@ -294,6 +295,7 @@ public class GameScreen implements Screen {
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(30,30 , 0));
 
     }
+
     private void checkForEscapeKey() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new MainMenuScreen(game));

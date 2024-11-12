@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class WindowCreator {
     public WindowCreator(){}
 
-    public static Window createPauseWindow(Window pauseWindow, BitmapFont font){
+    public static Window createPauseWindow(BitmapFont font){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -25,12 +25,12 @@ public class WindowCreator {
         windowStyle.background = backgroundDrawable;
 
         // Create and style the window
-        pauseWindow = new Window("", windowStyle);
+        Window pauseWindow = new Window("", windowStyle);
         pauseWindow.setVisible(false);
 
         return pauseWindow;
     }
-    public static Window createWinWindow(Window winWindow, TextButton backButton, TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
+    public static Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/WinWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -39,10 +39,10 @@ public class WindowCreator {
         winWindowStyle.titleFontColor = Color.WHITE;
         winWindowStyle.background = backgroundDrawable;
 
-        winWindow = new Window("", winWindowStyle);
+        Window winWindow = new Window("", winWindowStyle);
         winWindow.setVisible(false);
 
-        backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
+        TextButton backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
 
         // Set button sizes
         nextLevelButton.setSize(100, 100); // Set width and height of the nextLevelButton
@@ -86,7 +86,7 @@ public class WindowCreator {
         return winWindow;
     }
 
-    public static Window createLoseWindow(Window loseWindow, TextButton backButton, int level, Main game, Stage stage, BitmapFont font) {
+    public static Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/LoseWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -95,11 +95,11 @@ public class WindowCreator {
         loseWindowStyle.titleFontColor = Color.WHITE;
         loseWindowStyle.background = backgroundDrawable;
 
-        loseWindow = new Window("", loseWindowStyle);
+        Window loseWindow = new Window("", loseWindowStyle);
         loseWindow.setVisible(false);
 
         TextButton restartButton = new TextButton("", createButtonStyle("abs/RestartButton.png", font));
-        backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
+        TextButton backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
 
         // Set button sizes
         restartButton.setSize(100, 100); // Set width and height of the nextLevelButton

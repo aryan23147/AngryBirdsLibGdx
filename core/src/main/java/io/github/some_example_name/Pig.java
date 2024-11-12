@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+
+import static io.github.some_example_name.Bird.PPM;
 
 public class Pig {
     protected Sprite sprite;
@@ -47,18 +45,39 @@ public class Pig {
         CircleShape shape = new CircleShape();
         shape.setRadius(radius);  // Convert radius from pixels to meters
 
-        // Define the fixture
-        this.fixtureDef = new FixtureDef();
-        this.fixtureDef.shape = shape;
-        this.fixtureDef.density = 1f;
-        this.fixtureDef.friction = 5f;
-        this.fixtureDef.restitution = 0.6f;  // Pig bounces a bit
+//        // Define the fixture
+//        this.fixtureDef = new FixtureDef();
+//        this.fixtureDef.shape = shape;
+//        this.fixtureDef.density = 1f;
+//        this.fixtureDef.friction = 5f;
+//        this.fixtureDef.restitution = 0.6f;  // Pig bounces a bit
+
+        // Create and attach the fixture
+        fixtureDef = createFixture(sprite.getWidth(), sprite.getHeight());
 
         // Attach the fixture to the body
         body.createFixture(fixtureDef);
 
         // Dispose of the shape after use
         shape.dispose();
+    }
+
+    private FixtureDef createFixture(float width, float height) {
+        FixtureDef fixtureDef = new FixtureDef();
+
+        float scaledWidth = width;
+        float scaledHeight = height;
+
+        Shape shape;
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius((scaledWidth / 2) / PPM); // Convert to meters
+        shape = circleShape;
+
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 5f;
+        fixtureDef.restitution = 0.6f;  // Slight bounce
+        return fixtureDef;
     }
 
     public void setDensity(float density) {

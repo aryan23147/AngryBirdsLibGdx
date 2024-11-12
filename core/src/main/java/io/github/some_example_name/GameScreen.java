@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
     private void initializeGameComponents() {
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
-        cam = new OrthographicCamera();
+        cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage();
         world = new World(new Vector2(0, -9.8f), false);
@@ -283,7 +283,6 @@ public class GameScreen implements Screen {
             bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
         }
 
-        debugRenderer.render(world, cam.combined);
         stage.act(delta);
         stage.draw();
         if (!isPaused) world.step(1 / 60f, 6, 2);
@@ -292,7 +291,7 @@ public class GameScreen implements Screen {
         }
         checkAndLoadBird();
         checkForEscapeKey();
-//        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
+        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(30,30 , 0));
 
     }
     private void checkForEscapeKey() {
@@ -302,7 +301,10 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        cam.setToOrtho(false, width, height);
+        cam.update();
+    }
     @Override
     public void pause() {
     }

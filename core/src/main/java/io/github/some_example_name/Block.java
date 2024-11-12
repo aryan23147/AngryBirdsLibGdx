@@ -1,15 +1,11 @@
 package io.github.some_example_name;
 
-import static io.github.some_example_name.Bird.ppm;
+import static io.github.some_example_name.Bird.PPM;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class Block {
     private Body body;
@@ -33,20 +29,22 @@ public class Block {
 
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x / ppm, y / ppm);  // Convert x, y from pixels to meters
+        bodyDef.position.set(x / PPM, y / PPM);  // Convert x, y from pixels to meters
 
         this.body = world.createBody(bodyDef);
 
         // Create a circle shape for the bird's body
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2/ppm,height/2/ppm);  // Convert radius from pixels to meters
+        shape.setAsBox(width/2/PPM,height/2/PPM);  // Convert radius from pixels to meters
 
         // Define the fixture
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 0.5f;  // Adjust density for mass
-        fixtureDef.friction = 1f;  // Adjust friction for surface interaction
-        fixtureDef.restitution = 0.1f;  // Adjust restitution for bounciness
+//        fixtureDef = new FixtureDef();
+//        fixtureDef.shape = shape;
+//        fixtureDef.density = 0.5f;  // Adjust density for mass
+//        fixtureDef.friction = 1f;  // Adjust friction for surface interaction
+//        fixtureDef.restitution = 0.1f;  // Adjust restitution for bounciness
+
+        fixtureDef = createFixture(sprite.getWidth(), sprite.getHeight());
 
         // Attach the fixture to the body
         body.createFixture(fixtureDef);
@@ -54,10 +52,29 @@ public class Block {
         // Dispose of the shape after use
         shape.dispose();
     }
+
+    private FixtureDef createFixture(float width, float height) {
+        FixtureDef fixtureDef = new FixtureDef();
+
+        float scaledWidth = width;
+        float scaledHeight = height;
+
+        Shape shape;
+        PolygonShape rectShape = new PolygonShape();
+        rectShape.setAsBox((scaledWidth / 2) / PPM, (scaledHeight / 2) / PPM);
+        shape = rectShape;
+
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 5f;
+        fixtureDef.restitution = 0.6f;  // Slight bounce
+        return fixtureDef;
+    }
+
     public void update() {
         // Update the sprite position based on the body's physics position
-        X = body.getPosition().x * ppm - width / 2;
-        Y = body.getPosition().y * ppm - height / 2;
+        X = body.getPosition().x * PPM - width / 2;
+        Y = body.getPosition().y * PPM - height / 2;
         sprite.setPosition(X, Y);
         sprite.setRotation((float) Math.toDegrees(body.getAngle()));  // Set sprite rotation to match body's rotation
     }

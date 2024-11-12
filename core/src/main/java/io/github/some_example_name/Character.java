@@ -21,13 +21,7 @@ public abstract class Character {
         this.mass = mass;
         this.width = width;
         this.height = height;
-
-        // Subclasses must define how to create the body
-        createBody(world, x, y);
     }
-
-    // Abstract method to create the body - overridden in subclasses
-    protected abstract void createBody(World world, float x, float y);
 
     public abstract void disappear(); // Implemented by subclasses
 }

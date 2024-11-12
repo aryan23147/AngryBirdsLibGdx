@@ -49,21 +49,25 @@ public class LevelCreator {
         Bird redBird = new RedBird(world, 125, 150);
         Bird blackBird = new BlackBird(world, 80, 150);
         Bird blueBird = new BlueBird(world, 20, 150);
+        birdQueue = new Queue<>();
         birdQueue.addFirst(redBird);
         birdQueue.addLast(blackBird);
         birdQueue.addLast(blueBird);
 
+        allBirds = new ArrayList<>();
         allBirds.add(redBird);
         allBirds.add(blackBird);
         allBirds.add(blueBird);
 
         ground = new Ground(world);
 
+        allPigs = new ArrayList<>();
         Pig pig1 = new MediumPig(970, 180, world);
         Pig pig2 = new KidPig(1040, 180, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
 
+        allBlocks = new ArrayList<>();
         Block block1 = new Block(1000, 200, world, 250, 50);
         Block block2 = new Block(1100, 100, world, 50, 80);
         Block block3 = new Block(900, 100, world, 50, 80);
@@ -78,29 +82,33 @@ public class LevelCreator {
         Bird redBird = new RedBird(world, 125, 150);
         Bird blackBird = new BlackBird(world, 80, 150);
         Bird blueBird = new BlueBird(world, 20, 150);
+        birdQueue = new Queue<>();
         birdQueue.addFirst(redBird);
         birdQueue.addLast(blackBird);
         birdQueue.addLast(blueBird);
 
+        allBirds = new ArrayList<>();
         allBirds.add(redBird);
         allBirds.add(blackBird);
         allBirds.add(blueBird);
 
         ground = new Ground(world);
 
-        Pig pig1 = new KingPig(935, 200, world);
-        Pig pig2 = new MediumPig(935, 600, world);
+        allPigs = new ArrayList<>();
+        Pig pig1 = new KingPig(885, 200, world);
+        Pig pig2 = new MediumPig(895, 600, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
 
-        Block block1 = new Block(1010, 150, world, 50, 50);
-        Block block2 = new Block(1010, 70, world, 50, 50);
-        Block block3 = new Block(930, 70, world, 50, 50);
-        Block block4 = new Block(875, 75, world, 50, 150);
-        Block block5 = new Block(870, 260, world, 50, 50);
-        Block block6 = new Block(990, 230, world, 50, 100);
-        Block block7 = new Block(920, 320, world, 175, 50);
-        Block block8 = new Block(860, 400, world, 50, 50);
+        allBlocks = new ArrayList<>();
+        Block block1 = new Block(960, 150, world, 50, 50);
+        Block block2 = new Block(960, 70, world, 50, 50);
+        Block block3 = new Block(890, 100, world, 50, 50);
+        Block block4 = new Block(825, 75, world, 50, 150);
+        Block block5 = new Block(820, 260, world, 50, 50);
+        Block block6 = new Block(940, 230, world, 50, 100);
+        Block block7 = new Block(880, 320, world, 175, 50);
+        Block block8 = new Block(840, 500, world, 50, 50);
 
         allBlocks.add(block1);
         allBlocks.add(block2);

@@ -65,18 +65,21 @@ public class WindowCreator {
         winWindow.setVisible(false);
 
         TextButton backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
-
+        TextButton restartButton = new TextButton("", createButtonStyle("abs/RestartButton.png", font));
         // Set button sizes
         nextLevelButton.setSize(100, 100); // Set width and height of the nextLevelButton
         backButton.setSize(100, 150); // Set width and height of the backButton
 
         // Position the buttons manually within the winWindow
-        nextLevelButton.setPosition(280, 60); // Adjust x and y for placement
-        backButton.setPosition(55, 30); // Adjust x and y for placement
+        nextLevelButton.setPosition(300, 60); // Adjust x and y for placement
+        backButton.setPosition(75, 30); // Adjust x and y for placement
+        restartButton.setSize(100, 125); // Set width and height of the nextLevelButton
+        restartButton.setPosition(186,55);
 
         // Add buttons to the winWindow without using table positioning
         winWindow.addActor(nextLevelButton);
         winWindow.addActor(backButton);
+        winWindow.addActor(restartButton);
 
         // Set the window size and position to center it on the screen
         winWindow.setSize(470, 500);
@@ -101,6 +104,11 @@ public class WindowCreator {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainMenuScreen(game));
+            }
+        });
+        restartButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event,float x ,float y){
+                game.setScreen(new GameScreen(game,level));
             }
         });
 

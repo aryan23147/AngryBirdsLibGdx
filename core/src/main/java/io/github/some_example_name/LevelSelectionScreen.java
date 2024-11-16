@@ -86,12 +86,15 @@ public class LevelSelectionScreen implements Screen {
         loadButton.setSize(100,100);
         loadButton.setPosition(55,5);
         stage.addActor(loadButton);
-
+        Window loadWindow=WindowCreator.createLoadedWindow(stage,chewyFont,game,1);
         // Add listeners to buttons
         level1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, 1));
+                loadWindow.toFront();
+                loadWindow.setVisible(!loadWindow.isVisible());
+
+//                game.setScreen(new GameScreen(game, 1));
             }
         });
         level2Button.addListener(new ClickListener() {

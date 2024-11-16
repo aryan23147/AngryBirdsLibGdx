@@ -4,6 +4,7 @@ import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.sun.org.apache.bcel.internal.generic.NOP;
+
+import org.w3c.dom.Text;
 
 public class WindowCreator {
     public WindowCreator(){}
@@ -201,5 +205,57 @@ public class WindowCreator {
         buttonStyle.font = font; // Set your font
 
         return buttonStyle;
+    }
+    public  static Window createLoadedWindow(Stage stage,BitmapFont font,Main game,int level){
+        Texture backgroundTexture = new Texture("abs/LoadWindowBackground.png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
+        Window.WindowStyle loadWindowStyle = new Window.WindowStyle();
+        loadWindowStyle.titleFont = font;
+        loadWindowStyle.titleFontColor = Color.WHITE;
+        loadWindowStyle.background = backgroundDrawable;
+
+        Window loadWindow = new Window("", loadWindowStyle);
+        loadWindow.setVisible(false);
+
+        TextButton yesButton = new TextButton("", TextButtonStyles.TextButtonStyleDummy);
+        TextButton noButton = new TextButton("",TextButtonStyles.TextButtonStyleDummy );
+
+        // Set button sizes
+        yesButton.setSize(100, 100); // Set width and height of the nextLevelButton
+        noButton.setSize(100, 100); // Set width and height of the backButton
+        yesButton.setText("Load");
+        noButton.setText("New");
+        // Position the buttons manually within the winWindow
+        yesButton.setPosition(300, 60); // Adjust x and y for placement
+        noButton.setPosition(75, 60); // Adjust x and y for placement
+
+        // Add buttons to the winWindow without using table positioning
+        loadWindow.addActor(yesButton);
+        loadWindow.addActor(noButton);
+
+        // Set the window size and position to center it on the screen
+        loadWindow.setSize(450, 500);
+        loadWindow.setPosition(
+            Gdx.graphics.getWidth() / 2f - loadWindow.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f - loadWindow.getHeight() / 2f
+        );
+
+        yesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, level));
+            }
+        });
+
+        noButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game,level));
+            }
+        });
+
+        stage.addActor(loadWindow);
+
+        return loadWindow;
     }
 }

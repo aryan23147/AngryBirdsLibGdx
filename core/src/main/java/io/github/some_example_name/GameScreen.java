@@ -226,7 +226,7 @@ public class GameScreen implements Screen {
         assetManager.load("GameBackground.png",Texture.class);
         assetManager.finishLoading();
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
-        
+
         // Initialize resources and setup the game for the given level
         System.out.println("Starting level: " + level);
     }

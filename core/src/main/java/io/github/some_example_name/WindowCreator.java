@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -18,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class WindowCreator {
     public WindowCreator(){}
 
-    public static Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage){
+    public static Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage,Main game,int level){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -38,6 +39,21 @@ public class WindowCreator {
             (stage.getWidth() - pauseWindow.getWidth()) / 2,  // Center horizontally
             (stage.getHeight() - pauseWindow.getHeight()) / 2  // Center vertically
         );
+        restartButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, level));
+            }
+        });
+        // Define action for the save game button
+        saveGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                    game.setScreen(new MainMenuScreen(game));
+////
+            }
+        });
 
         pauseWindow.addActor(musiconoffButton);
         pauseWindow.addActor(saveGameButton);

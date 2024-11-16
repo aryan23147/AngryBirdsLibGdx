@@ -1,6 +1,7 @@
 package io.github.some_example_name;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleDummy;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
@@ -109,7 +110,7 @@ public class GameScreen implements Screen {
         backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
         stage.addActor(backButton);
         // Set up pause, win, and lose windows
-        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage);
+        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
         winWindow = WindowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
         loseWindow = WindowCreator.createLoseWindow(level, game, stage, font);
 
@@ -144,7 +145,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.toggleMusic();
-                updateMusicButtonStyle();
+                musiconoffButton.setStyle(game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
                 click[0] =true;
             }
         });
@@ -185,13 +186,13 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void updateMusicButtonStyle() {
-        if (isMusicPlaying) {
-            musiconoffButton.setStyle(TextButtonStyleMusic);
-        } else {
-            musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMute);
-        }
-    }
+//    private void updateMusicButtonStyle() {
+//        if (isMusicPlaying) {
+//            musiconoffButton.setStyle(TextButtonStyleMusic);
+//        } else {
+//            musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMute);
+//        }
+//    }
 
     private void checkAndLoadBird() {
         Timer timer = new Timer();
@@ -225,7 +226,7 @@ public class GameScreen implements Screen {
         assetManager.load("GameBackground.png",Texture.class);
         assetManager.finishLoading();
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
-        updateMusicButtonStyle();
+        
         // Initialize resources and setup the game for the given level
         System.out.println("Starting level: " + level);
     }

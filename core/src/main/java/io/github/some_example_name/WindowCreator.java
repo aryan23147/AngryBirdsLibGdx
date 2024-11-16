@@ -1,5 +1,9 @@
 package io.github.some_example_name;
 
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class WindowCreator {
     public WindowCreator(){}
 
-    public static Window createPauseWindow(BitmapFont font){
+    public static Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -26,6 +30,24 @@ public class WindowCreator {
 
         // Create and style the window
         Window pauseWindow = new Window("", windowStyle);
+        TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
+        TextButton restartButton= new TextButton("",TextButtonStyleRestart);
+        pauseWindow.setSize(450, 540); // Width and height in pixels
+
+        pauseWindow.setPosition(
+            (stage.getWidth() - pauseWindow.getWidth()) / 2,  // Center horizontally
+            (stage.getHeight() - pauseWindow.getHeight()) / 2  // Center vertically
+        );
+
+        pauseWindow.addActor(musiconoffButton);
+        pauseWindow.addActor(saveGameButton);
+        pauseWindow.addActor(restartButton);
+
+        musiconoffButton.setPosition(50, 80);  // Adjust based on desired layout
+        saveGameButton.setPosition(175, 80);
+        restartButton.setPosition(300, 80);
+//        saveGameButton
+        stage.addActor(pauseWindow);
         pauseWindow.setVisible(false);
 
         return pauseWindow;

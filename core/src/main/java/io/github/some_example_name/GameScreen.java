@@ -82,30 +82,9 @@ public class GameScreen implements Screen {
             this.ground = returnStruct.ground;
         }
 
-        backButton =new TextButton("",TextButtonStyleback);
-        backButton.setSize(100,150);
-        backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
-        stage.addActor(backButton);
 
-        TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
-        TextButton restartButton= new TextButton("",TextButtonStyleRestart);
 
-        pauseWindow.setSize(450, 540); // Width and height in pixels
 
-        pauseWindow.setPosition(
-            (stage.getWidth() - pauseWindow.getWidth()) / 2,  // Center horizontally
-            (stage.getHeight() - pauseWindow.getHeight()) / 2  // Center vertically
-        );
-
-        pauseWindow.addActor(musiconoffButton);
-        pauseWindow.addActor(saveGameButton);
-        pauseWindow.addActor(restartButton);
-
-        musiconoffButton.setPosition(50, 80);  // Adjust based on desired layout
-        saveGameButton.setPosition(175, 80);
-        restartButton.setPosition(300, 80);
-
-        stage.addActor(pauseWindow);
     }
 
     private void initializeGameComponents() {
@@ -125,9 +104,12 @@ public class GameScreen implements Screen {
         winButton = new TextButton("Win", TextButtonStyleDummy);
         musiconoffButton = new TextButton("", TextButtonStyleMusic);
         nextLevelButton = new TextButton("", WindowCreator.createButtonStyle("abs/NextButton.png", font));
-
+        backButton =new TextButton("",TextButtonStyleback);
+        backButton.setSize(100,150);
+        backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
+        stage.addActor(backButton);
         // Set up pause, win, and lose windows
-        pauseWindow = WindowCreator.createPauseWindow(font);
+        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage);
         winWindow = WindowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
         loseWindow = WindowCreator.createLoseWindow(level, game, stage, font);
 
@@ -143,6 +125,8 @@ public class GameScreen implements Screen {
         table.top().left().setFillParent(true);
         table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
         stage.addActor(table);
+        Gdx.input.setInputProcessor(stage);
+
     }
 
     private void setupListeners() {
@@ -164,7 +148,13 @@ public class GameScreen implements Screen {
                 click[0] =true;
             }
         });
-
+        backButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event,float x,float y){
+                Gdx.app.log("Back Button","button clicked");
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
         winButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -293,7 +283,7 @@ public class GameScreen implements Screen {
         checkAndLoadBird();
         checkForEscapeKey();
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(30,30 , 0));
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     private void checkForEscapeKey() {

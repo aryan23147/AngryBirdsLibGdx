@@ -1,20 +1,29 @@
 package io.github.some_example_name;
 
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
+import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
+
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.sun.org.apache.bcel.internal.generic.NOP;
+
+import org.w3c.dom.Text;
 
 public class WindowCreator {
     public WindowCreator(){}
 
-    public static Window createPauseWindow(BitmapFont font){
+    public static Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage,Main game,int level){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -26,6 +35,39 @@ public class WindowCreator {
 
         // Create and style the window
         Window pauseWindow = new Window("", windowStyle);
+        TextButton saveGameButton =new TextButton("",TextButtonStyleSave);
+        TextButton restartButton= new TextButton("",TextButtonStyleRestart);
+        pauseWindow.setSize(450, 540); // Width and height in pixels
+
+        pauseWindow.setPosition(
+            (stage.getWidth() - pauseWindow.getWidth()) / 2,  // Center horizontally
+            (stage.getHeight() - pauseWindow.getHeight()) / 2  // Center vertically
+        );
+        restartButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, level));
+            }
+        });
+        // Define action for the save game button
+        saveGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                    game.setScreen(new MainMenuScreen(game));
+////
+            }
+        });
+
+        pauseWindow.addActor(musiconoffButton);
+        pauseWindow.addActor(saveGameButton);
+        pauseWindow.addActor(restartButton);
+
+        musiconoffButton.setPosition(50, 80);  // Adjust based on desired layout
+        saveGameButton.setPosition(175, 80);
+        restartButton.setPosition(300, 80);
+//        saveGameButton
+        stage.addActor(pauseWindow);
         pauseWindow.setVisible(false);
 
         return pauseWindow;
@@ -43,18 +85,21 @@ public class WindowCreator {
         winWindow.setVisible(false);
 
         TextButton backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
-
+        TextButton restartButton = new TextButton("", createButtonStyle("abs/RestartButton.png", font));
         // Set button sizes
         nextLevelButton.setSize(100, 100); // Set width and height of the nextLevelButton
         backButton.setSize(100, 150); // Set width and height of the backButton
 
         // Position the buttons manually within the winWindow
-        nextLevelButton.setPosition(280, 60); // Adjust x and y for placement
-        backButton.setPosition(55, 30); // Adjust x and y for placement
+        nextLevelButton.setPosition(300, 60); // Adjust x and y for placement
+        backButton.setPosition(75, 30); // Adjust x and y for placement
+        restartButton.setSize(100, 125); // Set width and height of the nextLevelButton
+        restartButton.setPosition(186,55);
 
         // Add buttons to the winWindow without using table positioning
         winWindow.addActor(nextLevelButton);
         winWindow.addActor(backButton);
+        winWindow.addActor(restartButton);
 
         // Set the window size and position to center it on the screen
         winWindow.setSize(470, 500);
@@ -79,6 +124,11 @@ public class WindowCreator {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainMenuScreen(game));
+            }
+        });
+        restartButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event,float x ,float y){
+                game.setScreen(new GameScreen(game,level));
             }
         });
 
@@ -155,5 +205,57 @@ public class WindowCreator {
         buttonStyle.font = font; // Set your font
 
         return buttonStyle;
+    }
+    public  static Window createLoadedWindow(Stage stage,BitmapFont font,Main game,int level){
+        Texture backgroundTexture = new Texture("abs/LoadWindowBackground.png");
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
+        Window.WindowStyle loadWindowStyle = new Window.WindowStyle();
+        loadWindowStyle.titleFont = font;
+        loadWindowStyle.titleFontColor = Color.WHITE;
+        loadWindowStyle.background = backgroundDrawable;
+
+        Window loadWindow = new Window("", loadWindowStyle);
+        loadWindow.setVisible(false);
+
+        TextButton yesButton = new TextButton("", TextButtonStyles.TextButtonStyleDummy);
+        TextButton noButton = new TextButton("",TextButtonStyles.TextButtonStyleDummy );
+
+        // Set button sizes
+        yesButton.setSize(100, 100); // Set width and height of the nextLevelButton
+        noButton.setSize(100, 100); // Set width and height of the backButton
+        yesButton.setText("Load");
+        noButton.setText("New");
+        // Position the buttons manually within the winWindow
+        yesButton.setPosition(300, 60); // Adjust x and y for placement
+        noButton.setPosition(75, 60); // Adjust x and y for placement
+
+        // Add buttons to the winWindow without using table positioning
+        loadWindow.addActor(yesButton);
+        loadWindow.addActor(noButton);
+
+        // Set the window size and position to center it on the screen
+        loadWindow.setSize(450, 500);
+        loadWindow.setPosition(
+            Gdx.graphics.getWidth() / 2f - loadWindow.getWidth() / 2f,
+            Gdx.graphics.getHeight() / 2f - loadWindow.getHeight() / 2f
+        );
+
+        yesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game, level));
+            }
+        });
+
+        noButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game,level));
+            }
+        });
+
+        stage.addActor(loadWindow);
+
+        return loadWindow;
     }
 }

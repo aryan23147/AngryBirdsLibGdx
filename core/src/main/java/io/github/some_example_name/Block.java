@@ -17,11 +17,15 @@ public class Block {
     private float height;
     private SpriteBatch batch;
     private Sprite sprite;
+    private float hp;
+    private World world;
     public Block(float x, float y, World world, float width, float height) {
         this.X=x;
         this.Y=y;
         this.width = width;
         this.height = height;
+        this.world=world;
+        this.hp = 10f;
 
         sprite=new Sprite(new Texture("abs/WoodBlock.jpg"));
 //        sprite.setPosition(x,y);
@@ -47,7 +51,8 @@ public class Block {
         fixtureDef = createFixture(sprite.getWidth(), sprite.getHeight());
 
         // Attach the fixture to the body
-        body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(this);
 
         // Dispose of the shape after use
         shape.dispose();
@@ -69,6 +74,24 @@ public class Block {
         fixtureDef.friction = 5f;
         fixtureDef.restitution = 0.6f;  // Slight bounce
         return fixtureDef;
+    }
+
+    public void reduceHP(float damage) {
+        hp -= damage;
+        if (hp <= 0) {
+            disappear();
+        }
+    }
+
+    public void disappear() {
+        world.destroyBody(this.getBody());
+    }
+
+    private Body getBody() {
+        return body;
+    }
+    public float getHp(){
+        return hp;
     }
 
     public void update() {

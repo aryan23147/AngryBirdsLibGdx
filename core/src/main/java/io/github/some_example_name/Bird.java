@@ -45,22 +45,20 @@ public class Bird extends Character {
         body.setLinearDamping(0.2f);  // Damping slows down sliding
 
         // Create and attach the fixture
-        fixtureDef = createFixture(sprite.getWidth(), sprite.getHeight());
-        body.createFixture(fixtureDef);
+        fixtureDef = createFixture(sprite.getWidth());
+        Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(this);
 
         // Dispose of the shape after use
         fixtureDef.shape.dispose();
     }
 
-    private FixtureDef createFixture(float width, float height) {
+    private FixtureDef createFixture(float width) {
         FixtureDef fixtureDef = new FixtureDef();
-
-        float scaledWidth = width;
-        float scaledHeight = height;
 
         Shape shape;
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius((scaledWidth / 2) / PPM); // Convert to meters
+        circleShape.setRadius((width / 2) / PPM); // Convert to meters
         shape = circleShape;
 
         fixtureDef.shape = shape;
@@ -107,7 +105,7 @@ public class Bird extends Character {
 
     @Override
     public void disappear() {
-        // Logic to remove bird from world, like world.destroyBody(body);
+        world.destroyBody(this.getBody());
     }
 
     public void dispose() {

@@ -60,6 +60,8 @@ public class GameScreen implements Screen {
     private List<Pig> allPigs;
     LevelManager levelManager;
     private static final float PIXELS_TO_METERS = 100f;
+    private static final float DAMAGE_MULTIPLIER = 0.1f;
+
 
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
@@ -90,8 +92,8 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage();
-//        world = new World(new Vector2(0, -9.8f), false);
-        world = new World(new Vector2(0, -22f), false);
+        world = new World(new Vector2(0, -9.8f), false);
+//        world = new World(new Vector2(0, -22f), false);
         debugRenderer = new Box2DDebugRenderer();
         slingshot = new Slingshot(130, 50);
     }
@@ -186,14 +188,6 @@ public class GameScreen implements Screen {
         }
     }
 
-//    private void updateMusicButtonStyle() {
-//        if (isMusicPlaying) {
-//            musiconoffButton.setStyle(TextButtonStyleMusic);
-//        } else {
-//            musiconoffButton.setStyle(TextButtonStyles.TextButtonStyleMute);
-//        }
-//    }
-
     private void checkAndLoadBird() {
         Timer timer = new Timer();
         if(birdQueue.isEmpty() && slingshot.isEmpty() && !allPigs.isEmpty()){
@@ -237,20 +231,100 @@ public class GameScreen implements Screen {
         assetManager.finishLoading();
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
 
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+
+                Object userDataA = fixtureA.getUserData();
+                Object userDataB = fixtureB.getUserData();
+
+                if (userDataA != null && userDataB != null) {
+                    System.out.println("Collision detected between: "
+                        + userDataA.getClass().getSimpleName() + " and "
+                        + userDataB.getClass().getSimpleName());
+                } else {
+                    System.out.println("Collision detected between: "
+                        + (userDataA != null ? userDataA.getClass().getSimpleName() : "Ground")
+                        + " and "
+                        + (userDataB != null ? userDataB.getClass().getSimpleName() : "Ground"));
+                }
+                handleCollision(contact);
+            }
+
+
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {}
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+                Object userDataA = contact.getFixtureA().getBody().getUserData();
+                Object userDataB = contact.getFixtureB().getBody().getUserData();
+                float collisionForce = impulse.getNormalImpulses()[0];
+
+                if (userDataA instanceof Pig && userDataB instanceof Bird) {
+                    ((Pig) userDataA).reduceHP((float) collisionForce * DAMAGE_MULTIPLIER);
+                }
+                // Handle other cases similarly
+            }
+
+        });
+
         // Initialize resources and set up the game for the given level
         System.out.println("Starting level: " + level);
+    }
+
+    private void handleCollision(Contact contact) {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+
+        Object userDataA = fixtureA.getBody().getUserData();
+        Object userDataB = fixtureB.getBody().getUserData();
+
+        if (userDataA == null || userDataB == null) return;
+
+        if (userDataA instanceof Bird || userDataB instanceof Bird) {
+            if (userDataA instanceof Bird) processCollision(userDataA, userDataB);
+            else processCollision(userDataB, userDataA); // Reverse order
+        }
+    }
+
+    private void processCollision(Object birdObject, Object otherObject) {
+        if (birdObject instanceof Bird) {
+            Bird bird = (Bird) birdObject;
+
+            if (otherObject instanceof Pig) {
+                Pig pig = (Pig) otherObject;
+                pig.reduceHP(10);
+                if (pig.getHp() <= 0) {
+                    pig.disappear();
+                    allPigs.remove(pig);
+                }
+            } else if (otherObject instanceof Block) {
+                Block block = (Block) otherObject;
+                block.reduceHP(50);
+                if (block.getHp() <= 0) {
+                    block.disappear();
+                    allBlocks.remove(block);
+                }
+            }
+        }
     }
 
     private void update() {
         // Assume birds is a list of active birds
         List<Bird> birdsToRemove = new ArrayList<>();
         for (Bird bird : allBirds) {
-            if (bird.isLaunched() && bird.getBody().getLinearVelocity().len2() < 0.005f) { // Velocity close to zero
+            if (bird.isLaunched() && bird.getBody().getLinearVelocity().len2() < 0.05f) { // Velocity close to zero
                 birdsToRemove.add(bird);
             }
         }
         for(Bird bird :birdsToRemove){
-            world.destroyBody(bird.getBody()); // Destroy the physics body in Box2D
+            bird.disappear();
             allBirds.remove(bird); // Remove from active list
         }
     }

@@ -17,21 +17,22 @@ public class Pig {
     private float y;
     private SpriteBatch batch;
     private Body body;
+    private float hp;
+    private World world;
 
-
-    public Pig(String texturePath, World world, float x, float y, float radius, float mass) {
+    public Pig(String texturePath, World world, float x, float y, float radius, float mass, float hp) {
         this.x=x;
         this.y=y;
+        this.world=world;
 
         // Load the texture and create the sprite
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
         this.sprite.setSize(radius*2*ppm, radius*2*ppm);  // Set bird size in pixels
-//        sprite.setRotation(float());
+//        sprite.setRotation(2f);
         createBody(world,x,y,radius);
         body.setLinearDamping(0.2f);  // Damping slows down sliding
-        // Set initial state
-//        this.launched = false;
+        this.hp=hp;
     }
 
     protected void createBody(World world, float x, float y,float radius) {
@@ -45,18 +46,12 @@ public class Pig {
         CircleShape shape = new CircleShape();
         shape.setRadius(radius);  // Convert radius from pixels to meters
 
-//        // Define the fixture
-//        this.fixtureDef = new FixtureDef();
-//        this.fixtureDef.shape = shape;
-//        this.fixtureDef.density = 1f;
-//        this.fixtureDef.friction = 5f;
-//        this.fixtureDef.restitution = 0.6f;  // Pig bounces a bit
-
         // Create and attach the fixture
         fixtureDef = createFixture(sprite.getWidth(), sprite.getHeight());
 
         // Attach the fixture to the body
-        body.createFixture(fixtureDef);
+         Fixture fixture = body.createFixture(fixtureDef);
+         fixture.setUserData(this);
 
         // Dispose of the shape after use
         shape.dispose();
@@ -79,11 +74,11 @@ public class Pig {
         fixtureDef.restitution = 0.6f;  // Slight bounce
         return fixtureDef;
     }
-
-    public void setDensity(float density) {
-        // This method doesn't modify the density after the fixture is created,
-        // but you could destroy and recreate the fixture if necessary.
-        fixtureDef.density = density;
+    public void reduceHP(float damage) {
+        hp -= damage;
+        if (hp <= 0) {
+            disappear();
+        }
     }
 
     public void draw(Batch batch) {
@@ -92,9 +87,15 @@ public class Pig {
         sprite.draw(batch);  // Draw the bird
     }
 
-
     public void disappear() {
-        // Logic to remove bird from world, like world.destroyBody(body);
+        world.destroyBody(this.getBody());
+    }
+
+    private Body getBody() {
+        return body;
+    }
+    public float getHp(){
+        return hp;
     }
 
     public void dispose() {

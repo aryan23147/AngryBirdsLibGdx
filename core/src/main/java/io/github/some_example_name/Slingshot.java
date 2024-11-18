@@ -12,7 +12,7 @@ public class Slingshot {
     private Bird bird;
     private Vector2 pullStartPosition; // Where pulling starts
     private float maxPullDistance = 100f; // Maximum pull distance
-    private float forceScale = 0.075f; // Scale for launch force
+    private float forceScale = 0.12f; // Scale for launch force
 
     public Slingshot(float x, float y) {
         Texture texture = new Texture(Gdx.files.internal("abs/Slingshot.png"));

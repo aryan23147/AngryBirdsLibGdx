@@ -1,29 +1,26 @@
 package io.github.some_example_name;
 
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.sun.org.apache.bcel.internal.generic.NOP;
-
-import org.w3c.dom.Text;
 
 public class WindowCreator {
-    public WindowCreator(){}
+    LevelManager levelManager;
+    public WindowCreator(LevelManager levelManager){
+        this.levelManager=levelManager;
+    }
 
-    public static Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage,Main game,int level){
+    public Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage,Main game,int level){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -53,9 +50,9 @@ public class WindowCreator {
         saveGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
-                    game.setScreen(new MainMenuScreen(game));
-////
+                game.setScreen(new LevelSelectionScreen(game));
+                levelManager.saveLevel(level, true);
+                System.out.println("Level " + level + " saved.");
             }
         });
 
@@ -72,7 +69,7 @@ public class WindowCreator {
 
         return pauseWindow;
     }
-    public static Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
+    public Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/WinWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -136,7 +133,7 @@ public class WindowCreator {
         return winWindow;
     }
 
-    public static Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
+    public Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/LoseWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -217,21 +214,21 @@ public class WindowCreator {
         Window loadWindow = new Window("", loadWindowStyle);
         loadWindow.setVisible(false);
 
-        TextButton yesButton = new TextButton("", TextButtonStyles.TextButtonStyleDummy);
-        TextButton noButton = new TextButton("",TextButtonStyles.TextButtonStyleDummy );
+        TextButton loadButton = new TextButton("", TextButtonStyles.TextButtonStyleDummy);
+        TextButton newButton = new TextButton("",TextButtonStyles.TextButtonStyleDummy );
 
         // Set button sizes
-        yesButton.setSize(100, 100); // Set width and height of the nextLevelButton
-        noButton.setSize(100, 100); // Set width and height of the backButton
-        yesButton.setText("Load");
-        noButton.setText("New");
+        loadButton.setSize(100, 100); // Set width and height of the nextLevelButton
+        newButton.setSize(100, 100); // Set width and height of the backButton
+        loadButton.setText("Load");
+        newButton.setText("New");
         // Position the buttons manually within the winWindow
-        yesButton.setPosition(300, 60); // Adjust x and y for placement
-        noButton.setPosition(75, 60); // Adjust x and y for placement
+        loadButton.setPosition(300, 60); // Adjust x and y for placement
+        newButton.setPosition(75, 60); // Adjust x and y for placement
 
         // Add buttons to the winWindow without using table positioning
-        loadWindow.addActor(yesButton);
-        loadWindow.addActor(noButton);
+        loadWindow.addActor(loadButton);
+        loadWindow.addActor(newButton);
 
         // Set the window size and position to center it on the screen
         loadWindow.setSize(450, 500);
@@ -240,17 +237,20 @@ public class WindowCreator {
             Gdx.graphics.getHeight() / 2f - loadWindow.getHeight() / 2f
         );
 
-        yesButton.addListener(new ClickListener() {
+        loadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GameScreen(game, level));
+                System.out.println("Playing saved game");
             }
         });
 
-        noButton.addListener(new ClickListener() {
+        newButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                LevelManager.saveLevel(level, false);
                 game.setScreen(new GameScreen(game,level));
+                System.out.println("Playing new game");
             }
         });
 

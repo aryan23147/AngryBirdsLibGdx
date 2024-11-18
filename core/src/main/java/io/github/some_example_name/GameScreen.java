@@ -2,8 +2,6 @@ package io.github.some_example_name;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleDummy;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
 import static io.github.some_example_name.TextButtonStyles.TextButtonStylepause;
 
@@ -60,6 +58,7 @@ public class GameScreen implements Screen {
     private List<Bird> allBirds;
     private List<Block> allBlocks;
     private List<Pig> allPigs;
+    LevelManager levelManager;
     private static final float PIXELS_TO_METERS = 100f;
 
     public GameScreen(Main game, int level) {
@@ -67,12 +66,13 @@ public class GameScreen implements Screen {
         this.level = level;  // Save the level number
         isMusicPlaying = game.isMusicPlaying();
         initializeGameComponents();
+        levelManager = new LevelManager();
         setupUIComponents();
         show();
         ReturnStruct returnStruct = null;
-        if(level==1) returnStruct=LevelCreator.setupWorldObjectsLevel1(world);
-        else if(level == 2) returnStruct=LevelCreator.setupWorldObjectsLevel2(world);
-        else if (level == 3) returnStruct=LevelCreator.setupWorldObjectsLevel3(world);
+        if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
+        else if(level == 2) returnStruct= levelManager.setupWorldObjectsLevel2(world);
+        else if (level == 3) returnStruct= levelManager.setupWorldObjectsLevel3(world);
         setupListeners();
 
         if(returnStruct!=null) {
@@ -82,10 +82,6 @@ public class GameScreen implements Screen {
             this.allBlocks = returnStruct.blocks;
             this.ground = returnStruct.ground;
         }
-
-
-
-
     }
 
     private void initializeGameComponents() {
@@ -94,7 +90,8 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage();
-        world = new World(new Vector2(0, -9.8f), false);
+//        world = new World(new Vector2(0, -9.8f), false);
+        world = new World(new Vector2(0, -22f), false);
         debugRenderer = new Box2DDebugRenderer();
         slingshot = new Slingshot(130, 50);
     }
@@ -109,10 +106,12 @@ public class GameScreen implements Screen {
         backButton.setSize(100,150);
         backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
         stage.addActor(backButton);
+
         // Set up pause, win, and lose windows
-        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
-        winWindow = WindowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
-        loseWindow = WindowCreator.createLoseWindow(level, game, stage, font);
+        WindowCreator windowCreator = new WindowCreator(levelManager);
+        pauseWindow = windowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
+        winWindow = windowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
+        loseWindow = windowCreator.createLoseWindow(level, game, stage, font);
 
         // Manually set size and position for winButton
         winButton.setSize(100, 100); // Set the size of the win button
@@ -179,6 +178,7 @@ public class GameScreen implements Screen {
     private void togglePause() {
         isPaused = !isPaused;
         pauseWindow.setVisible(isPaused);
+        pauseWindow.toFront();
         if (isPaused) {
             pause();
         } else {
@@ -207,6 +207,16 @@ public class GameScreen implements Screen {
                 }
             }, 5f);
         }
+        else if(allPigs.isEmpty()){
+            timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    // Code to execute after 2 seconds
+                    winWindow.setVisible(true);
+                    winWindow.toFront();
+                }
+            }, 5f);
+        }
         else if (slingshot.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
             slingshot.loadBird(bird);  // Load it into the slingshot
@@ -227,11 +237,11 @@ public class GameScreen implements Screen {
         assetManager.finishLoading();
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
 
-        // Initialize resources and setup the game for the given level
+        // Initialize resources and set up the game for the given level
         System.out.println("Starting level: " + level);
     }
 
-    private void update(float deltaTime) {
+    private void update() {
         // Assume birds is a list of active birds
         List<Bird> birdsToRemove = new ArrayList<>();
         for (Bird bird : allBirds) {
@@ -244,7 +254,6 @@ public class GameScreen implements Screen {
             allBirds.remove(bird); // Remove from active list
         }
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -269,7 +278,7 @@ public class GameScreen implements Screen {
         ground.draw(batch);
         batch.end();
 
-        update(delta);
+        update();
         for (Bird bird : allBirds) {
             Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
             bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);

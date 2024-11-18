@@ -32,7 +32,7 @@ public class Main extends Game {
         }
         isMusicPlaying = !isMusicPlaying;
     }
-//    if(!isMusicPlaying){
+    //    if(!isMusicPlaying){
 //        music.play();
 //        isMusicPlaying=true;
 //        musiconoffButton.setStyle(TextButtonStyleMusic);

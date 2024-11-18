@@ -31,7 +31,6 @@ public class LevelSelectionScreen implements Screen {
     private Texture backgroundTexture;
     private Stage stage;
     private Table table;
-    private Window loadWindow;
     private BitmapFont chewyFont;
     private TextButton musicOnOffButton;
 
@@ -59,7 +58,6 @@ public class LevelSelectionScreen implements Screen {
         buttonStyle.font = chewyFont;
         buttonStyle.fontColor = Color.WHITE;
         buttonStyle.overFontColor = Color.BLACK;
-        createLoadWindow();
 
         // Create and set up buttons
         createLevelButtons(buttonStyle);
@@ -81,45 +79,52 @@ public class LevelSelectionScreen implements Screen {
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
         TextButton exitButton = new TextButton("", TextButtonStyleback);
-
-        TextButton loadButton = new TextButton("", createButtonStyle("abs/LoadGameButton.png"));
-        loadButton.setSize(100,100);
-        loadButton.setPosition(55,5);
-        stage.addActor(loadButton);
         Window loadWindow=WindowCreator.createLoadedWindow(stage,chewyFont,game,1);
         // Add listeners to buttons
         level1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                loadWindow.toFront();
-                loadWindow.setVisible(!loadWindow.isVisible());
 
-//                game.setScreen(new GameScreen(game, 1));
+                if(LevelManager.isLevelSaved(1)) {
+                    loadWindow.toFront();
+                    loadWindow.setVisible(!loadWindow.isVisible());
+                    System.out.println("There is a saved game.");
+                }
+                else {
+                    game.setScreen(new GameScreen(game, 1));
+                }
             }
         });
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, 2));
+                if(LevelManager.isLevelSaved(1)) {
+                    loadWindow.toFront();
+                    loadWindow.setVisible(!loadWindow.isVisible());
+                    System.out.println("There is a saved game.");
+                }
+                else {
+                    game.setScreen(new GameScreen(game, 2));
+                }
             }
         });
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, 3));
+                if(LevelManager.isLevelSaved(1)) {
+                    loadWindow.toFront();
+                    loadWindow.setVisible(!loadWindow.isVisible());
+                    System.out.println("There is a saved game.");
+                }
+                else {
+                    game.setScreen(new GameScreen(game, 3));
+                }
             }
         });
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainMenuScreen(game));
-            }
-        });
-        loadButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                loadWindow.setVisible(!loadWindow.isVisible()); // Toggle visibility
-                loadWindow.toFront(); // Bring the loadWindow to the topmost layer
             }
         });
 
@@ -162,27 +167,6 @@ public class LevelSelectionScreen implements Screen {
         buttonStyle.font = chewyFont; // Set your font
 
         return buttonStyle;
-    }
-
-    public void createLoadWindow() {
-        Texture backgroundTexture = new Texture("abs/LoadGameWindowBackground.png");
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
-
-        // Define custom style for the window
-        Window.WindowStyle windowStyle = new Window.WindowStyle();
-        windowStyle.titleFont = chewyFont;
-        windowStyle.titleFontColor = Color.WHITE;
-        windowStyle.background = backgroundDrawable;
-
-        // Initialize the load window
-        loadWindow = new Window("", windowStyle);
-        loadWindow.setSize(400, 450); // Set a size for the window
-        loadWindow.setPosition((Gdx.graphics.getWidth() - loadWindow.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - loadWindow.getHeight()) / 2);
-        loadWindow.setVisible(false); // Initially hidden
-
-        // Add the loadWindow to the stage
-        stage.addActor(loadWindow);
     }
 
     @Override

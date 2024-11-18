@@ -6,15 +6,20 @@ import com.badlogic.gdx.utils.Queue;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LevelCreator {
-    public LevelCreator(){}
-    static Queue<Bird> birdQueue;
-    static List<Bird> allBirds;
-    static Ground ground;
-    static List<Pig> allPigs;
-    static List<Block> allBlocks;
+public class LevelManager {
+    public LevelManager() {
+    }
 
-    public static ReturnStruct setupWorldObjectsLevel1(World world) {
+    private static Queue<Bird> birdQueue;
+    private static List<Bird> allBirds;
+    private static Ground ground;
+    private static List<Pig> allPigs;
+    private static List<Block> allBlocks;
+    private static boolean isL1Saved = false;
+    private static boolean isL2Saved = false;
+    private static boolean isL3Saved = false;
+
+    public ReturnStruct setupWorldObjectsLevel1(World world) {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150);
         Bird blackBird = new BlackBird(world, 80, 150);
@@ -42,9 +47,10 @@ public class LevelCreator {
         allBlocks.add(block2);
         allBlocks.add(block3);
 
-        return new ReturnStruct(birdQueue,allBirds, allPigs, allBlocks, ground);
+        return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);
     }
-    public static ReturnStruct setupWorldObjectsLevel2(World world) {
+
+    public ReturnStruct setupWorldObjectsLevel2(World world) {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150);
         Bird blackBird = new BlackBird(world, 80, 150);
@@ -75,9 +81,10 @@ public class LevelCreator {
         allBlocks.add(block2);
         allBlocks.add(block3);
 
-        return new ReturnStruct(birdQueue,allBirds, allPigs, allBlocks, ground);
+        return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);
     }
-    public static ReturnStruct setupWorldObjectsLevel3(World world) {
+
+    public ReturnStruct setupWorldObjectsLevel3(World world) {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150);
         Bird blackBird = new BlackBird(world, 80, 150);
@@ -119,6 +126,35 @@ public class LevelCreator {
         allBlocks.add(block7);
         allBlocks.add(block8);
 
-        return new ReturnStruct(birdQueue,allBirds, allPigs, allBlocks, ground);
+        return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);
+    }
+
+    public static boolean isLevelSaved(int level) {
+        switch (level) {
+            case 1:
+                return isL1Saved;
+            case 2:
+                return isL2Saved;
+            case 3:
+                return isL3Saved;
+            default:
+                return false;
+        }
+    }
+
+    public static void saveLevel(int level, boolean bool) {
+        switch (level) {
+            case 1:
+                isL1Saved = bool;
+                break;
+            case 2:
+                isL2Saved = bool;
+                break;
+            case 3:
+                isL3Saved = bool;
+                break;
+            default:
+                break;
+        }
     }
 }

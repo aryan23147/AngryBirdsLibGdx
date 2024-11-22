@@ -1,6 +1,5 @@
-package io.github.some_example_name;
+package io.github.some_example_name.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;

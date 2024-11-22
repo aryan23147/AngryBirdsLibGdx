@@ -1,29 +1,26 @@
-package io.github.some_example_name;
+package io.github.some_example_name.screens;
 
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
+import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleMusic;
+import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleMute;
+import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleback;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.some_example_name.setUp.LevelManager;
+import io.github.some_example_name.setUp.WindowCreator;
 
 public class LevelSelectionScreen implements Screen {
     private final Main game;
@@ -79,7 +76,7 @@ public class LevelSelectionScreen implements Screen {
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
         TextButton exitButton = new TextButton("", TextButtonStyleback);
-        Window loadWindow=WindowCreator.createLoadedWindow(stage,chewyFont,game,1);
+        Window loadWindow= WindowCreator.createLoadedWindow(stage,chewyFont,game,1);
         // Add listeners to buttons
         level1Button.addListener(new ClickListener() {
             @Override

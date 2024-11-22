@@ -1,4 +1,4 @@
-package io.github.some_example_name;
+package io.github.some_example_name.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
-import static io.github.some_example_name.Bird.PPM;
+import static io.github.some_example_name.actors.Bird.PPM;
 
 public class Pig {
     protected Sprite sprite;

@@ -1,6 +1,11 @@
-package io.github.some_example_name;
+package io.github.some_example_name.returnStructs;
 
 import com.badlogic.gdx.utils.Queue;
+import io.github.some_example_name.actors.Bird;
+import io.github.some_example_name.actors.Block;
+import io.github.some_example_name.actors.Ground;
+import io.github.some_example_name.actors.Pig;
+
 import java.util.List;
 
 public class ReturnStruct {

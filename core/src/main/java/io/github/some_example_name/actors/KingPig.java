@@ -1,11 +1,11 @@
-package io.github.some_example_name;
+package io.github.some_example_name.actors;
 
 import com.badlogic.gdx.physics.box2d.World;
 
 public class KingPig extends Pig {
 
     public KingPig(float X, float Y, World world){
-        super("abs/KingPig.png",world,X,Y,1.3f,50,100);
+        super("abs/KingPig.png",world,X,Y,1.3f,50,70);
     }
 
 }

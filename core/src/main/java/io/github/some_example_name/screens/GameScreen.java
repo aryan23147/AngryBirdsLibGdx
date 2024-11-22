@@ -1,9 +1,4 @@
-package io.github.some_example_name;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleDummy;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleback;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStylepause;
+package io.github.some_example_name.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,16 +9,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Queue;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
+import io.github.some_example_name.actors.*;
+import io.github.some_example_name.returnStructs.CollisionReturnStruct;
+import io.github.some_example_name.returnStructs.ReturnStruct;
+import io.github.some_example_name.returnStructs.SetUpReturnStruct;
+import io.github.some_example_name.setUp.CollisionManager;
+import io.github.some_example_name.setUp.GameSetUp;
+import io.github.some_example_name.setUp.LevelManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +58,8 @@ public class GameScreen implements Screen {
     private List<Block> allBlocks;
     private List<Pig> allPigs;
     LevelManager levelManager;
-    static final float PIXELS_TO_METERS = 100f;
-    private static final float DAMAGE_MULTIPLIER = 0.1f;
+    public static final float PIXELS_TO_METERS = 100f;
+    public static final float DAMAGE_MULTIPLIER = 0.1f;
 
 
     public GameScreen(Main game, int level) {
@@ -88,7 +87,10 @@ public class GameScreen implements Screen {
         this.winWindow = return2.winWindow;
         this.loseWindow = return2.loseWindow;
 
-        show();
+        CollisionReturnStruct return3 = CollisionManager.show(world, level);
+        this.assetManager = return3.assetManager;
+        this.backgroundTexture = return3.backgroundTexture;
+
         ReturnStruct returnStruct = null;
         if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
         else if(level == 2) returnStruct= levelManager.setupWorldObjectsLevel2(world);
@@ -162,102 +164,6 @@ public class GameScreen implements Screen {
         for (Bird b : birdQueue) {
             b.setInSlingshot(false);  // Enable gravity for birds not in the slingshot
         }
-    }
-
-    @Override
-    public void show() {
-        assetManager = new AssetManager();
-        assetManager.load("GameBackground.png",Texture.class);
-        assetManager.finishLoading();
-        backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
-
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
-                Fixture fixtureA = contact.getFixtureA();
-                Fixture fixtureB = contact.getFixtureB();
-
-                Object userDataA = fixtureA.getUserData();
-                Object userDataB = fixtureB.getUserData();
-
-                if (userDataA != null && userDataB != null) {
-                    System.out.println("Collision detected between: "
-                        + userDataA.getClass().getSimpleName() + " and "
-                        + userDataB.getClass().getSimpleName());
-                    handleCollision(userDataA,userDataB);
-                } else {
-                    System.out.println("Collision detected between: "
-                        + (userDataA != null ? userDataA.getClass().getSimpleName() : "Ground")
-                        + " and "
-                        + (userDataB != null ? userDataB.getClass().getSimpleName() : "Ground"));
-                }
-            }
-
-            @Override
-            public void endContact(Contact contact) {}
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {}
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-                Object userDataA = contact.getFixtureA().getBody().getUserData();
-                Object userDataB = contact.getFixtureB().getBody().getUserData();
-                float collisionForce = impulse.getNormalImpulses()[0];
-
-                if (userDataA instanceof Pig && userDataB instanceof Bird) {
-                    ((Pig) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
-                }
-            }
-
-        });
-
-        // Initialize resources and set up the game for the given level
-        System.out.println("Starting level: " + level);
-    }
-
-    private void handleCollision(Object userDataA,Object userDataB) {
-        if (userDataA instanceof Bird || userDataB instanceof Bird) {
-            if (userDataA instanceof Bird) processCollision(userDataA, userDataB);
-            else processCollision(userDataB, userDataA); // Reverse order
-        }
-    }
-
-    private void processCollision(Object birdObject, Object otherObject) {
-        if (birdObject instanceof Bird) {
-            Bird bird = (Bird) birdObject;
-            float mass = bird.getMass();  // Assuming `getMass()` returns the bird's mass
-            Vector2 velocity = bird.getVelocity();  // Assuming `getVelocity()` returns the bird's velocity as a Vector2
-
-            // Calculate the kinetic energy (KE = 1/2 * m * v^2)
-            float kineticEnergy = 0.5f * mass * velocity.len2();  // len2() gives v^2 (velocity squared)
-
-            System.out.println("Kinetic Energy of bird: " + kineticEnergy);
-
-            if (otherObject instanceof Pig) {
-                Pig pig = (Pig) otherObject;
-                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
-                pig.reduceHP(damage);
-                System.out.println("Pigs hp reduced by " + damage); // Debugging statement
-            } else if (otherObject instanceof Block) {
-                Block block = (Block) otherObject;
-                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
-                block.reduceHP(damage);
-                System.out.println("Blocks hp reduced by " + damage); // Debugging statement
-            }
-        }
-    }
-
-    // Helper function to calculate damage from kinetic energy
-    private int calculateDamage(float kineticEnergy) {
-        // You can scale the damage based on the kinetic energy. For example:
-        int baseDamage = 5;  // Base damage (could be adjusted)
-        float damageMultiplier = 0.01f;  // Damage multiplier based on kinetic energy
-        int calculatedDamage = (int) (baseDamage + kineticEnergy * damageMultiplier);
-
-        // Clamp the damage to a reasonable range (e.g., max damage of 100)
-        calculatedDamage = Math.min(calculatedDamage, 100);
-        return calculatedDamage;
     }
 
 
@@ -342,6 +248,9 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         cam.setToOrtho(false, width, height);
         cam.update();
+    }
+    @Override
+    public void show(){
     }
     @Override
     public void pause() {

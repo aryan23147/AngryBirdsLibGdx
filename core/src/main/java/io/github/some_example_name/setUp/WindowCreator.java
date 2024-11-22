@@ -1,7 +1,7 @@
-package io.github.some_example_name;
+package io.github.some_example_name.setUp;
 
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleRestart;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleSave;
+import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleRestart;
+import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleSave;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.some_example_name.screens.GameScreen;
+import io.github.some_example_name.screens.LevelSelectionScreen;
+import io.github.some_example_name.screens.Main;
+import io.github.some_example_name.screens.MainMenuScreen;
 
 public class WindowCreator {
     LevelManager levelManager;
@@ -20,7 +24,7 @@ public class WindowCreator {
         this.levelManager=levelManager;
     }
 
-    public Window createPauseWindow(BitmapFont font,TextButton musiconoffButton,Stage stage,Main game,int level){
+    public Window createPauseWindow(BitmapFont font, TextButton musiconoffButton, Stage stage, Main game, int level){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 

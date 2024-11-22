@@ -1,7 +1,9 @@
-package io.github.some_example_name;
+package io.github.some_example_name.setUp;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Queue;
+import io.github.some_example_name.actors.*;
+import io.github.some_example_name.returnStructs.ReturnStruct;
 
 import java.util.ArrayList;
 import java.util.List;

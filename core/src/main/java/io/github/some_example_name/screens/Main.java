@@ -1,7 +1,4 @@
-package io.github.some_example_name;
-
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMusic;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
+package io.github.some_example_name.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

@@ -1,6 +1,6 @@
-package io.github.some_example_name;
+package io.github.some_example_name.actors;
 
-import static io.github.some_example_name.Bird.PPM;
+import static io.github.some_example_name.actors.Bird.PPM;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;

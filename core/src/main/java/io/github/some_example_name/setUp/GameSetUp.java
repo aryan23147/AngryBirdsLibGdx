@@ -1,10 +1,8 @@
-package io.github.some_example_name;
+package io.github.some_example_name.setUp;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -15,10 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import io.github.some_example_name.actors.Slingshot;
+import io.github.some_example_name.returnStructs.SetUpReturnStruct;
+import io.github.some_example_name.screens.GameScreen;
+import io.github.some_example_name.screens.Main;
+import io.github.some_example_name.screens.MainMenuScreen;
 
-import static io.github.some_example_name.GameScreen.PIXELS_TO_METERS;
-import static io.github.some_example_name.TextButtonStyles.*;
-import static io.github.some_example_name.TextButtonStyles.TextButtonStyleMute;
+import static io.github.some_example_name.screens.GameScreen.PIXELS_TO_METERS;
+import static io.github.some_example_name.setUp.TextButtonStyles.*;
+import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleMute;
 
 public class GameSetUp {
     public static SetUpReturnStruct initializeGameComponents() {

@@ -1,4 +1,6 @@
-package io.github.some_example_name;
+package io.github.some_example_name.bonusStuff;
+
+import io.github.some_example_name.actors.Bird;
 
 public interface Power {
     boolean hasUsedPower = false;  // Default value

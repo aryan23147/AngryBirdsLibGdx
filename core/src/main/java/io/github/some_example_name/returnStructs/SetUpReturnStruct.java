@@ -1,7 +1,6 @@
-package io.github.some_example_name;
+package io.github.some_example_name.returnStructs;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -9,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.sun.org.apache.xpath.internal.operations.Or;
+import io.github.some_example_name.actors.Slingshot;
 
 public class SetUpReturnStruct {
     public TextButton back;

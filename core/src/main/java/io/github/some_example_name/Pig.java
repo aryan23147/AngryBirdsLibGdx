@@ -31,6 +31,7 @@ public class Pig {
         this.sprite.setSize(radius*2*ppm, radius*2*ppm);  // Set bird size in pixels
 //        sprite.setRotation(2f);
         createBody(world,x,y,radius);
+        this.sprite.setPosition(x,y);
         body.setLinearDamping(0.2f);  // Damping slows down sliding
         this.hp=hp;
     }
@@ -80,10 +81,17 @@ public class Pig {
             disappear();
         }
     }
+    public void update(){
+        float scalingFactor = 0.93f; // Use this to tweak the alignment
+        float spriteX = (body.getPosition().x * PPM - sprite.getWidth() / 2) * scalingFactor - body.getPosition().x * 0.01f; // Fractional offset
+        float spriteY = (body.getPosition().y * PPM - sprite.getHeight() / 2) * scalingFactor - body.getPosition().y * 0.01f; // Fractional offset
 
+        sprite.setPosition(spriteX, spriteY);
+    }
     public void draw(Batch batch) {
         // Update sprite position to match the Box2D body and convert meters to pixels
-        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);
+//        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);
+        update();
         sprite.draw(batch);  // Draw the bird
     }
 

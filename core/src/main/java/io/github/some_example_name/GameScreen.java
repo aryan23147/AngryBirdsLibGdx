@@ -353,11 +353,11 @@ public class GameScreen implements Screen {
         batch.end();
 
         update();
-        for (Bird bird : allBirds) {
-            Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
-//            bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
-//            bird.update();
-        }
+//        for (Bird bird : allBirds) {
+//            Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
+////            bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
+////            bird.update();
+//        }
 
         stage.act(delta);
         stage.draw();

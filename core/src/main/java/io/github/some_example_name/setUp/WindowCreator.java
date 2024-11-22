@@ -25,6 +25,7 @@ public class WindowCreator {
     public static float score;
     public static Window winWindow;
     public static Window loseWindow;
+    private static Label scoreLabel;
     public WindowCreator(LevelManager levelManager){
         this.levelManager=levelManager;
     }
@@ -203,7 +204,7 @@ public class WindowCreator {
         labelStyle.font = font;
         labelStyle.fontColor = Color.WHITE;
 
-        Label scoreLabel = new Label(scoreText, labelStyle);
+        scoreLabel = new Label(scoreText, labelStyle);
         if(isWon) {
             scoreLabel.setAlignment(Align.center); // Center-align the text
             scoreLabel.setPosition(

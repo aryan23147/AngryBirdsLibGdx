@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -196,10 +197,14 @@ public class GameScreen implements Screen {
         for(Pig pig:pigsToRemove){
             pig.disappear();
             allPigs.remove(pig);
+            Sound pigDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("PigDestroyed.mp3"));
+            pigDestroyedSound.play();
         }
         for(Block block:blocksToRemove){
             block.disappear();
             allBlocks.remove(block);
+            Sound woodDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("WoodDestroyed.mp3"));
+            woodDestroyedSound.play();
         }
     }
     @Override

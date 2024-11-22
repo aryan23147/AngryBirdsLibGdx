@@ -1,6 +1,7 @@
 package io.github.some_example_name.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -73,6 +74,9 @@ public class Slingshot {
             // Call the launch method with the calculated force
             launch(bird, launchForce);
             bird.setLaunched(true);
+
+            Sound birdShotSound = Gdx.audio.newSound(Gdx.files.internal("BirdShot.mp3"));
+            birdShotSound.play();
 
             // Reset the bird in the slingshot after release
             bird = null;

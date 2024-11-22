@@ -1,6 +1,8 @@
 package io.github.some_example_name.setUp;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -84,12 +86,16 @@ public class CollisionManager {
                 Pig pig = (Pig) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
                 pig.reduceHP(damage);
+                Sound pigCollisionSound = Gdx.audio.newSound(Gdx.files.internal("PigCollision.mp3"));
+                pigCollisionSound.play();
                 totalDamage+=damage;
                 System.out.println("Pigs hp reduced by " + damage); // Debugging statement
             } else if (otherObject instanceof Block) {
                 Block block = (Block) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
                 block.reduceHP(damage);
+                Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("WoodCollision.mp3"));
+                woodCollisionSound.play();
                 totalDamage+=damage;
                 System.out.println("Blocks hp reduced by " + damage); // Debugging statement
             }
@@ -103,24 +109,32 @@ public class CollisionManager {
         if (objectA instanceof Pig) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Pig) objectA).reduceHP(damage);
+            Sound pigCollisionSound = Gdx.audio.newSound(Gdx.files.internal("PigCollision.mp3"));
+            pigCollisionSound.play();
             totalDamage+=damage;
             System.out.println("Pig damaged by: " + damage);
         }
         else if (objectA instanceof Block) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Block) objectA).reduceHP(damage);
+            Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("WoodCollision.mp3"));
+            woodCollisionSound.play();
             totalDamage+=damage;
             System.out.println("Block damaged by: " + damage);
         }
         if (objectB instanceof Pig) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Pig) objectB).reduceHP(damage);
+            Sound pigCollisionSound = Gdx.audio.newSound(Gdx.files.internal("PigCollision.mp3"));
+            pigCollisionSound.play();
             totalDamage+=damage;
             System.out.println("Pig damaged by: " + damage);
         }
         else if (objectB instanceof Block) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Block) objectB).reduceHP(damage);
+            Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("WoodCollision.mp3"));
+            woodCollisionSound.play();
             totalDamage+=damage;
             System.out.println("Block damaged by: " + damage);
         }

@@ -77,9 +77,6 @@ public class Pig {
     }
     public void reduceHP(float damage) {
         hp -= damage;
-//        if (hp <= 0) {
-//            disappear();
-//        }
     }
     public void update(){
         float scalingFactor = 0.93f; // Use this to tweak the alignment
@@ -87,7 +84,14 @@ public class Pig {
         float spriteY = (body.getPosition().y * PPM - sprite.getHeight() / 2) * scalingFactor - body.getPosition().y * 0.01f; // Fractional offset
 
         sprite.setPosition(spriteX, spriteY);
+
+        // Set origin for rotation
+        sprite.setOriginCenter();
+
+        // Apply rotation
+        sprite.setRotation((float) Math.toDegrees(body.getAngle()));
     }
+
     public void draw(Batch batch) {
         // Update sprite position to match the Box2D body and convert meters to pixels
 //        sprite.setPosition(body.getPosition().x * ppm - sprite.getWidth() / 2, body.getPosition().y * ppm - sprite.getHeight() / 2);

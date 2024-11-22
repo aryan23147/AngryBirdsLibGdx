@@ -27,7 +27,6 @@ import io.github.some_example_name.setUp.LevelManager;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class GameScreen implements Screen {
     private static final float PPM = 1;
     private static boolean isPaused=false;

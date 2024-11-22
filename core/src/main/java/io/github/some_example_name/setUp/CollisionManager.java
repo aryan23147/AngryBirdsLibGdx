@@ -53,11 +53,23 @@ public class CollisionManager {
                 Object userDataB = contact.getFixtureB().getBody().getUserData();
                 float collisionForce = impulse.getNormalImpulses()[0];
 
-                if (userDataA instanceof Pig && userDataB instanceof Bird) {
+                if (userDataA instanceof Pig) {
+                    System.out.println("A");
                     ((Pig) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
                 }
+                else if (userDataA instanceof Block) {
+                    System.out.println("B");
+                    ((Block) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                }
+                if (userDataB instanceof Pig) {
+                    System.out.println("C");
+                    ((Pig) userDataB).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                }
+                else if (userDataB instanceof Block) {
+                    System.out.println("D");
+                    ((Block) userDataB).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                }
             }
-
         });
 
         // Initialize resources and set up the game for the given level
@@ -68,12 +80,15 @@ public class CollisionManager {
 
     private static void handleCollision(Object userDataA, Object userDataB) {
         if (userDataA instanceof Bird || userDataB instanceof Bird) {
-            if (userDataA instanceof Bird) processCollision(userDataA, userDataB);
-            else processCollision(userDataB, userDataA); // Reverse order
+            if (userDataA instanceof Bird) processBirdCollision(userDataA, userDataB);
+            else processBirdCollision(userDataB, userDataA); // Reverse order
+        }
+        else{
+            processOtherCollision(userDataA, userDataB);
         }
     }
 
-    private static void processCollision(Object birdObject, Object otherObject) {
+    private static void processBirdCollision(Object birdObject, Object otherObject) {
         if (birdObject instanceof Bird) {
             Bird bird = (Bird) birdObject;
             float mass = bird.getMass();  // Assuming `getMass()` returns the bird's mass
@@ -95,6 +110,32 @@ public class CollisionManager {
                 block.reduceHP(damage);
                 System.out.println("Blocks hp reduced by " + damage); // Debugging statement
             }
+        }
+    }
+
+    private static void processOtherCollision(Object objectA, Object objectB){
+//        float collisionForce = 50;
+        float damage = 1;
+
+        if (objectA instanceof Pig) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            ((Pig) objectA).reduceHP(damage);
+            System.out.println("Pig damaged by: " + damage);
+        }
+        else if (objectA instanceof Block) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            ((Block) objectA).reduceHP(damage);
+            System.out.println("Block damaged by: " + damage);
+        }
+        if (objectB instanceof Pig) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            ((Pig) objectB).reduceHP(damage);
+            System.out.println("Pig damaged by: " + damage);
+        }
+        else if (objectB instanceof Block) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            ((Block) objectB).reduceHP(damage);
+            System.out.println("Block damaged by: " + damage);
         }
     }
 

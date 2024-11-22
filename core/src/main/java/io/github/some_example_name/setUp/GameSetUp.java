@@ -30,8 +30,8 @@ public class GameSetUp {
         OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Stage stage = new Stage();
-        World world = new World(new Vector2(0, -9.8f), false);
-//        World world = new World(new Vector2(0, -22f), false);
+//        World world = new World(new Vector2(0, -9.8f), false);
+        World world = new World(new Vector2(0, -22f), false);
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
         Slingshot slingshot = new Slingshot(130, 50);
         return new SetUpReturnStruct(batch, font, cam, stage, world, debugRenderer, slingshot);
@@ -53,13 +53,6 @@ public class GameSetUp {
         pauseWindow = windowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
         winWindow = windowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
         loseWindow = windowCreator.createLoseWindow(level, game, stage, font);
-
-//        // Manually set size and position for winButton
-//        winButton.setSize(100, 100); // Set the size of the win button
-//        winButton.setPosition(Gdx.graphics.getWidth() / 2f +100, Gdx.graphics.getHeight() / 2f + 160); // Set position in the center
-//
-//        // Add buttons to the stage directly
-//        stage.addActor(winButton);
 
         // Configure table layout
         Table table = new Table();

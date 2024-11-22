@@ -101,6 +101,12 @@ public class Bird extends Character {
         sprite.setPosition(spriteX, spriteY);
 
 //        sprite.setPosition(0,0);
+
+        // Set origin for rotation
+        sprite.setOriginCenter();
+
+        // Apply rotation
+        sprite.setRotation((float) Math.toDegrees(body.getAngle()));
     }
 
     public void draw(Batch batch) {

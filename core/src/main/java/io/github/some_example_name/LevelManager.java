@@ -37,7 +37,7 @@ public class LevelManager {
         ground = new Ground(world);
 
         allPigs = new ArrayList<>();
-        Pig pig1 = new MediumPig(1050, 200, world);
+        Pig pig1 = new MediumPig(1070, 200, world);
         allPigs.add(pig1);
         allBlocks = new ArrayList<>();
         Block block1 = new Block(960, 200, world, 64, 64);

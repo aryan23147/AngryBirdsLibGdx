@@ -20,20 +20,25 @@ public class Block {
     private float hp;
     private World world;
 
-    public Block(float x, float y, World world, float width, float height) {
+    public Block(float x, float y, World world, float width, float height, boolean isDynamic) {
         this.X = x;
         this.Y = y;
         this.width = width;
         this.height = height;
         this.world = world;
-        this.hp = 10f;
+        this.hp = 30f;
 
         sprite = new Sprite(new Texture("abs/WoodBlock.jpg"));
         sprite.setSize(width, height);
         sprite.setOrigin(width / 2, height / 2); // Set the sprite's origin to its center
 
         bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        if(isDynamic) {
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+        }
+        else{
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+        }
         bodyDef.position.set((x + width / 2) / PPM, (y + height / 2) / PPM); // Adjust for center alignment
 
         this.body = world.createBody(bodyDef);

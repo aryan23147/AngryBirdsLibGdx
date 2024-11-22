@@ -40,9 +40,9 @@ public class LevelManager {
         Pig pig1 = new MediumPig(1070, 200, world);
         allPigs.add(pig1);
         allBlocks = new ArrayList<>();
-        Block block1 = new Block(960, 200, world, 64, 64);
-        Block block2 = new Block(960, 100, world, 64, 64);
-        Block block3 = new Block(890, 100, world, 64, 64);
+        Block block1 = new Block(960, 200, world, 64, 64, true);
+        Block block2 = new Block(960, 100, world, 64, 64, true);
+        Block block3 = new Block(890, 100, world, 64, 64, true);
         allBlocks.add(block1);
         allBlocks.add(block2);
         allBlocks.add(block3);
@@ -68,15 +68,15 @@ public class LevelManager {
         ground = new Ground(world);
 
         allPigs = new ArrayList<>();
-        Pig pig1 = new MediumPig(970, 180, world);
-        Pig pig2 = new KidPig(1040, 180, world);
+        Pig pig1 = new MediumPig(1000, 100, world);
+        Pig pig2 = new KidPig(1060, 100, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
 
         allBlocks = new ArrayList<>();
-        Block block1 = new Block(1000, 200, world, 250, 50);
-        Block block2 = new Block(1100, 100, world, 50, 80);
-        Block block3 = new Block(900, 100, world, 50, 80);
+        Block block1 = new Block(900, 200, world, 250, 50, true);
+        Block block2 = new Block(1111, 100, world, 50, 100, true);
+        Block block3 = new Block(900, 100, world, 50, 100, true);
         allBlocks.add(block1);
         allBlocks.add(block2);
         allBlocks.add(block3);
@@ -87,43 +87,42 @@ public class LevelManager {
     public ReturnStruct setupWorldObjectsLevel3(World world) {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150);
-        Bird blackBird = new BlackBird(world, 80, 150);
-        Bird blueBird = new BlueBird(world, 20, 150);
+        Bird blueBird = new BlueBird(world, 80, 150);
+        Bird blackBird = new BlackBird(world, 20, 150);
         birdQueue = new Queue<>();
         birdQueue.addFirst(redBird);
-        birdQueue.addLast(blackBird);
         birdQueue.addLast(blueBird);
+        birdQueue.addLast(blackBird);
 
         allBirds = new ArrayList<>();
         allBirds.add(redBird);
-        allBirds.add(blackBird);
         allBirds.add(blueBird);
+        allBirds.add(blackBird);
 
         ground = new Ground(world);
 
         allPigs = new ArrayList<>();
         Pig pig1 = new KingPig(885, 200, world);
-        Pig pig2 = new MediumPig(895, 600, world);
+        Pig pig2 = new MediumPig(911 , 450, world);
         allPigs.add(pig1);
         allPigs.add(pig2);
 
         allBlocks = new ArrayList<>();
-        Block block1 = new Block(960, 150, world, 50, 50);
-        Block block2 = new Block(960, 70, world, 50, 50);
-        Block block3 = new Block(890, 100, world, 50, 50);
-        Block block4 = new Block(825, 75, world, 50, 150);
-        Block block5 = new Block(820, 260, world, 50, 50);
-        Block block6 = new Block(940, 230, world, 50, 100);
-        Block block7 = new Block(880, 320, world, 175, 50);
-        Block block8 = new Block(840, 500, world, 50, 50);
-
+        Block block1 = new Block(960, 150, world, 50, 50, true);
         allBlocks.add(block1);
+        Block block2 = new Block(960, 70, world, 50, 50, true);
         allBlocks.add(block2);
+        Block block3 = new Block(890, 100, world, 50, 50, true);
         allBlocks.add(block3);
+        Block block4 = new Block(810, 75, world, 50, 150, true);
         allBlocks.add(block4);
+        Block block5 = new Block(810, 275, world, 50, 50, true);
         allBlocks.add(block5);
+        Block block6 = new Block(950, 230, world, 50, 100, true);
         allBlocks.add(block6);
+        Block block7 = new Block(810, 320, world, 175, 50, true);
         allBlocks.add(block7);
+        Block block8 = new Block(810, 500, world, 50, 50, true);
         allBlocks.add(block8);
 
         return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);

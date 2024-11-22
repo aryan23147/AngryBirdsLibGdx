@@ -84,6 +84,13 @@ public class GameScreen implements Screen {
             this.allBlocks = returnStruct.blocks;
             this.ground = returnStruct.ground;
         }
+
+        Block wallLeft = new Block(0, 50, world, 1, 720, false);
+        Block wallRight = new Block(1380, 50, world, 1, 720, false);
+        batch.begin();
+        wallLeft.draw(batch);
+        wallRight.draw(batch);
+        batch.end();
     }
 
     private void initializeGameComponents() {
@@ -92,8 +99,8 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage = new Stage();
-        world = new World(new Vector2(0, -9.8f), false);
-//        world = new World(new Vector2(0, -22f), false);
+//        world = new World(new Vector2(0, -9.8f), false);
+        world = new World(new Vector2(0, -22f), false);
         debugRenderer = new Box2DDebugRenderer();
         slingshot = new Slingshot(130, 50);
     }
@@ -170,6 +177,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(!click[0]) {
+                    System.out.println("\nClicked at: ("+x+", "+y+")\n");
                     slingshot.releaseBird(x,y);
                     click[0]=false;
                 }
@@ -189,25 +197,29 @@ public class GameScreen implements Screen {
     }
 
     private void checkAndLoadBird() {
-        Timer timer = new Timer();
-        if(birdQueue.isEmpty() && slingshot.isEmpty() && !allPigs.isEmpty()){
-
-            timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    // Code to execute after 2 seconds
-                    loseWindow.setVisible(true);
-                    loseWindow.toFront();
-                }
-            }, 5f);
-        }
-        else if(allPigs.isEmpty()){
-            timer.schedule(new Timer.Task() {
+        final boolean[] isWon = {false};
+        if(allPigs.isEmpty()){
+            isWon[0] =true;
+            Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     // Code to execute after 2 seconds
                     winWindow.setVisible(true);
                     winWindow.toFront();
+                }
+            }, 2f);
+        }
+
+        else if(birdQueue.isEmpty() && slingshot.isEmpty()){
+
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    if(!isWon[0]) {
+                        // Code to execute after 2 seconds
+                        loseWindow.setVisible(true);
+                        loseWindow.toFront();
+                    }
                 }
             }, 5f);
         }
@@ -287,38 +299,76 @@ public class GameScreen implements Screen {
 //        Object userDataB = fixtureB.getBody().getUserData();
 
 //        if (userDataA == null || userDataB == null) return;
-        System.out.println("Reached handleCollison m"+userDataA.getClass()+userDataB.getClass());
+//        System.out.println("Reached handleCollison m"+userDataA.getClass()+userDataB.getClass());
         if (userDataA instanceof Bird || userDataB instanceof Bird) {
-            System.out.println("Reached handleCollison method second if block");
+//            System.out.println("Reached handleCollison method second if block");
             if (userDataA instanceof Bird) processCollision(userDataA, userDataB);
             else processCollision(userDataB, userDataA); // Reverse order
         }
     }
 
+//    private void processCollision(Object birdObject, Object otherObject) {
+//        if (birdObject instanceof Bird) {
+//
+//            Bird bird = (Bird) birdObject;
+//
+//            if (otherObject instanceof Pig) {
+//                Pig pig = (Pig) otherObject;
+//                pig.reduceHP(10);
+//                System.out.println("Pigs hp reduced"); // Debugging statement
+////                if (pig.getHp() <= 0) {
+////                    pig.disappear();
+////                    allPigs.remove(pig);
+////                }
+//            } else if (otherObject instanceof Block) {
+//                Block block = (Block) otherObject;
+//                block.reduceHP(5);
+//                System.out.println("Blocks hp reduced");
+////                if (block.getHp() <= 0) {
+////                    block.disappear();
+////                    allBlocks.remove(block);
+////                }
+//            }
+//        }
+//    }
+
     private void processCollision(Object birdObject, Object otherObject) {
         if (birdObject instanceof Bird) {
-
             Bird bird = (Bird) birdObject;
+            float mass = bird.getMass();  // Assuming `getMass()` returns the bird's mass
+            Vector2 velocity = bird.getVelocity();  // Assuming `getVelocity()` returns the bird's velocity as a Vector2
+
+            // Calculate the kinetic energy (KE = 1/2 * m * v^2)
+            float kineticEnergy = 0.5f * mass * velocity.len2();  // len2() gives v^2 (velocity squared)
+
+            System.out.println("Kinetic Energy of bird: " + kineticEnergy);
 
             if (otherObject instanceof Pig) {
                 Pig pig = (Pig) otherObject;
-                pig.reduceHP(10);
-                System.out.println("Pigs hp reduced"); // Debugging statement
-//                if (pig.getHp() <= 0) {
-//                    pig.disappear();
-//                    allPigs.remove(pig);
-//                }
+                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
+                pig.reduceHP(damage);
+                System.out.println("Pigs hp reduced by " + damage); // Debugging statement
             } else if (otherObject instanceof Block) {
                 Block block = (Block) otherObject;
-                block.reduceHP(5);
-                System.out.println("Blocks hp reduced");
-//                if (block.getHp() <= 0) {
-//                    block.disappear();
-//                    allBlocks.remove(block);
-//                }
+                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
+                block.reduceHP(damage);
+                System.out.println("Blocks hp reduced by " + damage); // Debugging statement
             }
         }
     }
+
+    // Helper function to calculate damage from kinetic energy
+    private int calculateDamage(float kineticEnergy) {
+        // You can scale the damage based on the kinetic energy. For example:
+        int baseDamage = 5;  // Base damage (could be adjusted)
+        float damageMultiplier = 0.01f;  // Damage multiplier based on kinetic energy
+        int calculatedDamage = (int) (baseDamage + kineticEnergy * damageMultiplier);
+
+        // Clamp the damage to a reasonable range (e.g., max damage of 100)
+        calculatedDamage = Math.min(calculatedDamage, 100);
+        return calculatedDamage;
+    }
+
 
     private void update() {
         // Assume birds is a list of active birds

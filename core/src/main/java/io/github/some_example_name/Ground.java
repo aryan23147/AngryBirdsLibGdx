@@ -28,7 +28,7 @@ public class Ground {
         // Define the shape of the ground
         PolygonShape groundBox = new PolygonShape();
         float worldWidth = Gdx.graphics.getWidth() / PIXELS_PER_METER;  // Convert screen width to world units (meters)
-        groundBox.setAsBox(worldWidth, 65 / PIXELS_PER_METER);  // Set width and height in meters
+        groundBox.setAsBox(worldWidth+20, 65 / PIXELS_PER_METER);  // Set width and height in meters
 
         // Create fixture definition and set properties
         FixtureDef fixtureDef = new FixtureDef();

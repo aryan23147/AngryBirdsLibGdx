@@ -134,4 +134,12 @@ public class Bird extends Character {
     public Vector2 getPosition() {
         return new Vector2(x, y);
     }
+
+    public float getMass() {
+        return mass;
+    }
+
+    public Vector2 getVelocity() {
+        return body.getLinearVelocity();
+    }
 }

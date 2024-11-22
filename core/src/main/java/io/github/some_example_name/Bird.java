@@ -12,7 +12,7 @@ public class Bird extends Character {
     private boolean launched;
     private FixtureDef fixtureDef;
     public static float PPM = 32f;  // Pixels per meter conversion factor
-    public static float ppm = 40f;  // Pixels per meter conversion factor
+
     private boolean inSlingshot = true;
 
     public Bird(String texturePath, World world, float x, float y, float radius, float mass) {
@@ -22,7 +22,7 @@ public class Bird extends Character {
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
         this.sprite.setSize(width, height);  // Set bird size in pixels
-
+        this.sprite.setPosition(x,y);
         createBody(world, x, y);
         // Set initial state
         this.launched = false;
@@ -93,13 +93,20 @@ public class Bird extends Character {
 
     public void update() {
         // Only update sprite position to follow Box2D body's position in world coordinates
-        sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
+
+        float scalingFactor = 0.93f; // Use this to tweak the alignment
+        float spriteX = (body.getPosition().x * PPM - sprite.getWidth() / 2) * scalingFactor - body.getPosition().x * 0.01f; // Fractional offset
+        float spriteY = (body.getPosition().y * PPM - sprite.getHeight() / 2) * scalingFactor - body.getPosition().y * 0.01f; // Fractional offset
+
+        sprite.setPosition(spriteX, spriteY);
+
+//        sprite.setPosition(0,0);
     }
 
     public void draw(Batch batch) {
         // Update sprite position to match the Box2D body and convert meters to pixels
         update();
-        sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
+//        sprite.setPosition(body.getPosition().x * PPM - sprite.getWidth() / 2, body.getPosition().y * PPM - sprite.getHeight() / 2);
         sprite.draw(batch);  // Draw the bird
     }
 

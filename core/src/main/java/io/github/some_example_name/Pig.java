@@ -77,9 +77,9 @@ public class Pig {
     }
     public void reduceHP(float damage) {
         hp -= damage;
-        if (hp <= 0) {
-            disappear();
-        }
+//        if (hp <= 0) {
+//            disappear();
+//        }
     }
     public void update(){
         float scalingFactor = 0.93f; // Use this to tweak the alignment

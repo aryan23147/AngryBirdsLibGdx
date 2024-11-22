@@ -59,9 +59,9 @@ public class Block {
 
     public void reduceHP(float damage) {
         hp -= damage;
-        if (hp <= 0) {
-            disappear();
-        }
+//        if (hp <= 0) {
+//            disappear();
+//        }
     }
 
     public void disappear() {

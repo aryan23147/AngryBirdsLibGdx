@@ -244,13 +244,14 @@ public class GameScreen implements Screen {
                     System.out.println("Collision detected between: "
                         + userDataA.getClass().getSimpleName() + " and "
                         + userDataB.getClass().getSimpleName());
+                    handleCollision(userDataA,userDataB);
                 } else {
                     System.out.println("Collision detected between: "
                         + (userDataA != null ? userDataA.getClass().getSimpleName() : "Ground")
                         + " and "
                         + (userDataB != null ? userDataB.getClass().getSimpleName() : "Ground"));
                 }
-                handleCollision(contact);
+
             }
 
 
@@ -278,16 +279,17 @@ public class GameScreen implements Screen {
         System.out.println("Starting level: " + level);
     }
 
-    private void handleCollision(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
+    private void handleCollision(Object userDataA,Object userDataB) {
+//        Fixture fixtureA = contact.getFixtureA();
+//        Fixture fixtureB = contact.getFixtureB();
+//
+//        Object userDataA = fixtureA.getBody().getUserData();
+//        Object userDataB = fixtureB.getBody().getUserData();
 
-        Object userDataA = fixtureA.getBody().getUserData();
-        Object userDataB = fixtureB.getBody().getUserData();
-
-        if (userDataA == null || userDataB == null) return;
-
+//        if (userDataA == null || userDataB == null) return;
+        System.out.println("Reached handleCollison m"+userDataA.getClass()+userDataB.getClass());
         if (userDataA instanceof Bird || userDataB instanceof Bird) {
+            System.out.println("Reached handleCollison method second if block");
             if (userDataA instanceof Bird) processCollision(userDataA, userDataB);
             else processCollision(userDataB, userDataA); // Reverse order
         }
@@ -295,22 +297,25 @@ public class GameScreen implements Screen {
 
     private void processCollision(Object birdObject, Object otherObject) {
         if (birdObject instanceof Bird) {
+
             Bird bird = (Bird) birdObject;
 
             if (otherObject instanceof Pig) {
                 Pig pig = (Pig) otherObject;
                 pig.reduceHP(10);
-                if (pig.getHp() <= 0) {
-                    pig.disappear();
-                    allPigs.remove(pig);
-                }
+                System.out.println("Pigs hp reduced"); // Debugging statement
+//                if (pig.getHp() <= 0) {
+//                    pig.disappear();
+//                    allPigs.remove(pig);
+//                }
             } else if (otherObject instanceof Block) {
                 Block block = (Block) otherObject;
-                block.reduceHP(50);
-                if (block.getHp() <= 0) {
-                    block.disappear();
-                    allBlocks.remove(block);
-                }
+                block.reduceHP(5);
+                System.out.println("Blocks hp reduced");
+//                if (block.getHp() <= 0) {
+//                    block.disappear();
+//                    allBlocks.remove(block);
+//                }
             }
         }
     }
@@ -318,6 +323,8 @@ public class GameScreen implements Screen {
     private void update() {
         // Assume birds is a list of active birds
         List<Bird> birdsToRemove = new ArrayList<>();
+        List<Pig> pigsToRemove =new ArrayList<>();
+        List<Block> blocksToRemove =new ArrayList<>();
         for (Bird bird : allBirds) {
             if (bird.isLaunched() && bird.getBody().getLinearVelocity().len2() < 0.05f) { // Velocity close to zero
                 birdsToRemove.add(bird);
@@ -326,6 +333,24 @@ public class GameScreen implements Screen {
         for(Bird bird :birdsToRemove){
             bird.disappear();
             allBirds.remove(bird); // Remove from active list
+        }
+        for(Pig pig:allPigs){
+            if(pig.getHp()<=0){
+                pigsToRemove.add(pig);
+            }
+        }
+        for(Block block:allBlocks){
+            if(block.getHp()<=0){
+                blocksToRemove.add(block);
+            }
+        }
+        for(Pig pig:pigsToRemove){
+            pig.disappear();
+            allPigs.remove(pig);
+        }
+        for(Block block:blocksToRemove){
+            block.disappear();
+            allBlocks.remove(block);
         }
     }
     @Override

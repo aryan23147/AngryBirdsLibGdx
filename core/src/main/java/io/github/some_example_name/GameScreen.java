@@ -31,7 +31,7 @@ import java.util.List;
 
 public class GameScreen implements Screen {
     private static final float PPM = 1;
-    private boolean isPaused=false;
+    private static boolean isPaused=false;
     private final Main game;
     private final int level;
     private SpriteBatch batch;
@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private Ground ground;
     private OrthographicCamera cam;
-    private Window pauseWindow;
+    private  Window pauseWindow;
     private TextButton pauseButton;
     private TextButton winButton;
     private Window winWindow;
@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
     private List<Block> allBlocks;
     private List<Pig> allPigs;
     LevelManager levelManager;
-    private static final float PIXELS_TO_METERS = 100f;
+    static final float PIXELS_TO_METERS = 100f;
     private static final float DAMAGE_MULTIPLIER = 0.1f;
 
 
@@ -67,15 +67,34 @@ public class GameScreen implements Screen {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
         isMusicPlaying = game.isMusicPlaying();
-        initializeGameComponents();
+
+        SetUpReturnStruct return1 = GameSetUp.initializeGameComponents();
+        this.batch = return1.batch;
+        this.font = return1.font;
+        this.cam = return1.cam;
+        this.stage = return1.stage;
+        this.world = return1.world;
+        this.debugRenderer = return1.debugRenderer;
+        this.slingshot = return1.slingshot;
+
         levelManager = new LevelManager();
-        setupUIComponents();
+
+        SetUpReturnStruct return2 = GameSetUp.setupUIComponents(stage, levelManager, pauseWindow, winWindow, loseWindow, game, level, font);
+        this.pauseButton = return2.pause;
+        this.musiconoffButton = return2.music;
+        this.nextLevelButton = return2.next;
+        this.backButton = return2.back;
+        this.pauseWindow = return2.pauseWindow;
+        this.winWindow = return2.winWindow;
+        this.loseWindow = return2.loseWindow;
+
         show();
         ReturnStruct returnStruct = null;
         if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
         else if(level == 2) returnStruct= levelManager.setupWorldObjectsLevel2(world);
         else if (level == 3) returnStruct= levelManager.setupWorldObjectsLevel3(world);
-        setupListeners();
+
+        GameSetUp.setupListeners(stage, pauseButton, musiconoffButton, backButton, game, slingshot, this);
 
         if(returnStruct!=null) {
             this.birdQueue = returnStruct.birdQueue;
@@ -91,101 +110,10 @@ public class GameScreen implements Screen {
         wallLeft.draw(batch);
         wallRight.draw(batch);
         batch.end();
-    }
 
-    private void initializeGameComponents() {
-        batch = new SpriteBatch();
-        font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
-        cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
-        cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        stage = new Stage();
-//        world = new World(new Vector2(0, -9.8f), false);
-        world = new World(new Vector2(0, -22f), false);
-        debugRenderer = new Box2DDebugRenderer();
-        slingshot = new Slingshot(130, 50);
-    }
-
-    private void setupUIComponents() {
-        // Create the UI buttons, windows, and table layout
-        pauseButton = new TextButton("", TextButtonStylepause);
-        winButton = new TextButton("Win", TextButtonStyleDummy);
-        musiconoffButton = new TextButton("", TextButtonStyleMusic);
-        nextLevelButton = new TextButton("", WindowCreator.createButtonStyle("abs/NextButton.png", font));
-        backButton =new TextButton("",TextButtonStyleback);
-        backButton.setSize(100,150);
-        backButton.setPosition(100, stage.getHeight()-140); // Adjust x and y for placement
-        stage.addActor(backButton);
-
-        // Set up pause, win, and lose windows
-        WindowCreator windowCreator = new WindowCreator(levelManager);
-        pauseWindow = windowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
-        winWindow = windowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
-        loseWindow = windowCreator.createLoseWindow(level, game, stage, font);
-
-        // Manually set size and position for winButton
-        winButton.setSize(100, 100); // Set the size of the win button
-        winButton.setPosition(Gdx.graphics.getWidth() / 2f +100, Gdx.graphics.getHeight() / 2f + 160); // Set position in the center
-
-        // Add buttons to the stage directly
-        stage.addActor(winButton);
-
-        // Configure table layout
-        table = new Table();
-        table.top().left().setFillParent(true);
-        table.add(pauseButton).padTop(5f).padLeft(5f).top().left();
-        stage.addActor(table);
-        Gdx.input.setInputProcessor(stage);
 
     }
-
-    private void setupListeners() {
-        Gdx.input.setInputProcessor(stage);
-        final boolean[] click = {false};
-
-        pauseButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                togglePause();
-                click[0] =true;
-            }
-        });
-
-        musiconoffButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.toggleMusic();
-                musiconoffButton.setStyle(game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
-                click[0] =true;
-            }
-        });
-        backButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event,float x,float y){
-                Gdx.app.log("Back Button","button clicked");
-                game.setScreen(new MainMenuScreen(game));
-            }
-        });
-        winButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                winWindow.setVisible(true);
-                winWindow.toFront();
-                click[0] =true;
-            }
-        });
-
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(!click[0]) {
-                    System.out.println("\nClicked at: ("+x+", "+y+")\n");
-                    slingshot.releaseBird(x,y);
-                    click[0]=false;
-                }
-            }
-        });
-    }
-
-    private void togglePause() {
+    public void togglePause() {
         isPaused = !isPaused;
         pauseWindow.setVisible(isPaused);
         pauseWindow.toFront();
@@ -263,9 +191,7 @@ public class GameScreen implements Screen {
                         + " and "
                         + (userDataB != null ? userDataB.getClass().getSimpleName() : "Ground"));
                 }
-
             }
-
 
             @Override
             public void endContact(Contact contact) {}
@@ -280,9 +206,8 @@ public class GameScreen implements Screen {
                 float collisionForce = impulse.getNormalImpulses()[0];
 
                 if (userDataA instanceof Pig && userDataB instanceof Bird) {
-                    ((Pig) userDataA).reduceHP((float) collisionForce * DAMAGE_MULTIPLIER);
+                    ((Pig) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
                 }
-                // Handle other cases similarly
             }
 
         });
@@ -292,45 +217,11 @@ public class GameScreen implements Screen {
     }
 
     private void handleCollision(Object userDataA,Object userDataB) {
-//        Fixture fixtureA = contact.getFixtureA();
-//        Fixture fixtureB = contact.getFixtureB();
-//
-//        Object userDataA = fixtureA.getBody().getUserData();
-//        Object userDataB = fixtureB.getBody().getUserData();
-
-//        if (userDataA == null || userDataB == null) return;
-//        System.out.println("Reached handleCollison m"+userDataA.getClass()+userDataB.getClass());
         if (userDataA instanceof Bird || userDataB instanceof Bird) {
-//            System.out.println("Reached handleCollison method second if block");
             if (userDataA instanceof Bird) processCollision(userDataA, userDataB);
             else processCollision(userDataB, userDataA); // Reverse order
         }
     }
-
-//    private void processCollision(Object birdObject, Object otherObject) {
-//        if (birdObject instanceof Bird) {
-//
-//            Bird bird = (Bird) birdObject;
-//
-//            if (otherObject instanceof Pig) {
-//                Pig pig = (Pig) otherObject;
-//                pig.reduceHP(10);
-//                System.out.println("Pigs hp reduced"); // Debugging statement
-////                if (pig.getHp() <= 0) {
-////                    pig.disappear();
-////                    allPigs.remove(pig);
-////                }
-//            } else if (otherObject instanceof Block) {
-//                Block block = (Block) otherObject;
-//                block.reduceHP(5);
-//                System.out.println("Blocks hp reduced");
-////                if (block.getHp() <= 0) {
-////                    block.disappear();
-////                    allBlocks.remove(block);
-////                }
-//            }
-//        }
-//    }
 
     private void processCollision(Object birdObject, Object otherObject) {
         if (birdObject instanceof Bird) {
@@ -428,11 +319,6 @@ public class GameScreen implements Screen {
         batch.end();
 
         update();
-//        for (Bird bird : allBirds) {
-//            Vector2 bodyPosition = bird.getBody().getPosition(); // Get position in meters
-////            bird.setPosition(bodyPosition.x * PIXELS_TO_METERS, bodyPosition.y * PIXELS_TO_METERS);
-////            bird.update();
-//        }
 
         stage.act(delta);
         stage.draw();

@@ -9,22 +9,27 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import io.github.some_example_name.screens.GameScreen;
 import io.github.some_example_name.screens.LevelSelectionScreen;
 import io.github.some_example_name.screens.Main;
 import io.github.some_example_name.screens.MainMenuScreen;
 
 public class WindowCreator {
-    LevelManager levelManager;
+    public static LevelManager levelManager;
+    public static float score;
+    public static Window winWindow;
+    public static Window loseWindow;
     public WindowCreator(LevelManager levelManager){
         this.levelManager=levelManager;
     }
 
-    public Window createPauseWindow(BitmapFont font, TextButton musiconoffButton, Stage stage, Main game, int level){
+    public static Window createPauseWindow(BitmapFont font, TextButton musiconoffButton, Stage stage, Main game, int level){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -73,7 +78,7 @@ public class WindowCreator {
 
         return pauseWindow;
     }
-    public Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
+    static Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/WinWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -82,7 +87,7 @@ public class WindowCreator {
         winWindowStyle.titleFontColor = Color.WHITE;
         winWindowStyle.background = backgroundDrawable;
 
-        Window winWindow = new Window("", winWindowStyle);
+        winWindow = new Window("", winWindowStyle);
         winWindow.setVisible(false);
 
         TextButton backButton = new TextButton("", createButtonStyle("abs/BackButton.png", font));
@@ -137,7 +142,7 @@ public class WindowCreator {
         return winWindow;
     }
 
-    public Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
+    static Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/LoseWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -146,7 +151,7 @@ public class WindowCreator {
         loseWindowStyle.titleFontColor = Color.WHITE;
         loseWindowStyle.background = backgroundDrawable;
 
-        Window loseWindow = new Window("", loseWindowStyle);
+        loseWindow = new Window("", loseWindowStyle);
         loseWindow.setVisible(false);
 
         TextButton restartButton = new TextButton("", createButtonStyle("abs/RestartButton.png", font));
@@ -188,6 +193,33 @@ public class WindowCreator {
         stage.addActor(loseWindow);
 
         return loseWindow;
+    }
+    public static void showScore(BitmapFont font, boolean isWon){
+        score=CollisionManager.getScore();
+
+        // Create the score text
+        String scoreText = "Your Score is: " + (int)CollisionManager.getScore();
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.WHITE;
+
+        Label scoreLabel = new Label(scoreText, labelStyle);
+        if(isWon) {
+            scoreLabel.setAlignment(Align.center); // Center-align the text
+            scoreLabel.setPosition(
+                winWindow.getWidth() / 2f - scoreLabel.getWidth() / 2f,
+                winWindow.getHeight() / 3.2f
+            );
+        winWindow.addActor(scoreLabel);
+        }
+        else {
+            scoreLabel.setAlignment(Align.center); // Center-align the text
+            scoreLabel.setPosition(
+                loseWindow.getWidth() / 2f - scoreLabel.getWidth() / 2f,
+                loseWindow.getHeight() / 3.2f
+            );
+        loseWindow.addActor(scoreLabel);
+        }
     }
 
     public static TextButton.TextButtonStyle createButtonStyle(String buttonName, BitmapFont font) {

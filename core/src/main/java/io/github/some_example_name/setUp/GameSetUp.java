@@ -49,10 +49,9 @@ public class GameSetUp {
         stage.addActor(backButton);
 
         // Set up pause, win, and lose windows
-        WindowCreator windowCreator = new WindowCreator(levelManager);
-        pauseWindow = windowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
-        winWindow = windowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
-        loseWindow = windowCreator.createLoseWindow(level, game, stage, font);
+        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
+        winWindow = WindowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
+        loseWindow = WindowCreator.createLoseWindow(level, game, stage, font);
 
         // Configure table layout
         Table table = new Table();

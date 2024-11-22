@@ -23,6 +23,7 @@ import io.github.some_example_name.returnStructs.SetUpReturnStruct;
 import io.github.some_example_name.setUp.CollisionManager;
 import io.github.some_example_name.setUp.GameSetUp;
 import io.github.some_example_name.setUp.LevelManager;
+import io.github.some_example_name.setUp.WindowCreator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,14 +57,16 @@ public class GameScreen implements Screen {
     private List<Bird> allBirds;
     private List<Block> allBlocks;
     private List<Pig> allPigs;
-    LevelManager levelManager;
+
+    public float totalDamage=0;
+    public LevelManager levelManager;
     public static final float PIXELS_TO_METERS = 100f;
     public static final float DAMAGE_MULTIPLIER = 0.1f;
-
 
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
+//        this.totalDamage = 0;
         isMusicPlaying = game.isMusicPlaying();
 
         SetUpReturnStruct return1 = GameSetUp.initializeGameComponents();
@@ -86,9 +89,10 @@ public class GameScreen implements Screen {
         this.winWindow = return2.winWindow;
         this.loseWindow = return2.loseWindow;
 
-        CollisionReturnStruct return3 = CollisionManager.show(world, level);
+        CollisionReturnStruct return3 = CollisionManager.show(world, level, totalDamage);
         this.assetManager = return3.assetManager;
         this.backgroundTexture = return3.backgroundTexture;
+        this.totalDamage = return3.totalDamage;
 
         ReturnStruct returnStruct = null;
         if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
@@ -111,9 +115,8 @@ public class GameScreen implements Screen {
         wallLeft.draw(batch);
         wallRight.draw(batch);
         batch.end();
-
-
     }
+
     public void togglePause() {
         isPaused = !isPaused;
         pauseWindow.setVisible(isPaused);
@@ -132,25 +135,26 @@ public class GameScreen implements Screen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
+                    WindowCreator.showScore(font, true);
                     // Code to execute after 2 seconds
                     winWindow.setVisible(true);
                     winWindow.toFront();
                 }
             }, 2f);
         }
-
         else if(birdQueue.isEmpty() && slingshot.isEmpty()){
 
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     if(!isWon[0]) {
+                        WindowCreator.showScore(font, false);
                         // Code to execute after 2 seconds
                         loseWindow.setVisible(true);
                         loseWindow.toFront();
                     }
                 }
-            }, 5f);
+            }, 7f);
         }
         else if (slingshot.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue
@@ -164,7 +168,6 @@ public class GameScreen implements Screen {
             b.setInSlingshot(false);  // Enable gravity for birds not in the slingshot
         }
     }
-
 
     private void update() {
         // Assume birds is a list of active birds

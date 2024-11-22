@@ -13,7 +13,9 @@ import static io.github.some_example_name.screens.GameScreen.DAMAGE_MULTIPLIER;
 
 public class CollisionManager {
 
-    public static CollisionReturnStruct show(World world, int level) {
+    private static float totalDamage;
+    public static CollisionReturnStruct show(World world, int level, float damage) {
+        totalDamage=damage;
         AssetManager assetManager = new AssetManager();
         assetManager.load("GameBackground.png", Texture.class);
         assetManager.finishLoading();
@@ -48,34 +50,13 @@ public class CollisionManager {
             public void preSolve(Contact contact, Manifold oldManifold) {}
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-                Object userDataA = contact.getFixtureA().getBody().getUserData();
-                Object userDataB = contact.getFixtureB().getBody().getUserData();
-                float collisionForce = impulse.getNormalImpulses()[0];
-
-                if (userDataA instanceof Pig) {
-                    System.out.println("A");
-                    ((Pig) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
-                }
-                else if (userDataA instanceof Block) {
-                    System.out.println("B");
-                    ((Block) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
-                }
-                if (userDataB instanceof Pig) {
-                    System.out.println("C");
-                    ((Pig) userDataB).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
-                }
-                else if (userDataB instanceof Block) {
-                    System.out.println("D");
-                    ((Block) userDataB).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
-                }
-            }
+            public void postSolve(Contact contact, ContactImpulse impulse) {}
         });
 
         // Initialize resources and set up the game for the given level
         System.out.println("Starting level: " + level);
 
-        return new CollisionReturnStruct(assetManager, backgroundTexture);
+        return new CollisionReturnStruct(assetManager, backgroundTexture, totalDamage);
     }
 
     private static void handleCollision(Object userDataA, Object userDataB) {
@@ -103,11 +84,13 @@ public class CollisionManager {
                 Pig pig = (Pig) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
                 pig.reduceHP(damage);
+                totalDamage+=damage;
                 System.out.println("Pigs hp reduced by " + damage); // Debugging statement
             } else if (otherObject instanceof Block) {
                 Block block = (Block) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
                 block.reduceHP(damage);
+                totalDamage+=damage;
                 System.out.println("Blocks hp reduced by " + damage); // Debugging statement
             }
         }
@@ -120,21 +103,25 @@ public class CollisionManager {
         if (objectA instanceof Pig) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Pig) objectA).reduceHP(damage);
+            totalDamage+=damage;
             System.out.println("Pig damaged by: " + damage);
         }
         else if (objectA instanceof Block) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Block) objectA).reduceHP(damage);
+            totalDamage+=damage;
             System.out.println("Block damaged by: " + damage);
         }
         if (objectB instanceof Pig) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Pig) objectB).reduceHP(damage);
+            totalDamage+=damage;
             System.out.println("Pig damaged by: " + damage);
         }
         else if (objectB instanceof Block) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
             ((Block) objectB).reduceHP(damage);
+            totalDamage+=damage;
             System.out.println("Block damaged by: " + damage);
         }
     }
@@ -149,5 +136,9 @@ public class CollisionManager {
         // Clamp the damage to a reasonable range (e.g., max damage of 100)
         calculatedDamage = Math.min(calculatedDamage, 100);
         return calculatedDamage;
+    }
+
+    public static float getScore() {
+        return totalDamage;
     }
 }

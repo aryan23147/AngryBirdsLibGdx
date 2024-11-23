@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
     private List<Pig> allPigs;
     LevelManager levelManager;
     private static final float PIXELS_TO_METERS = 100f;
-    private static final float DAMAGE_MULTIPLIER = 0.1f;
+    private static final float DAMAGE_MULTIPLIER = 0.05f;
 
 
     public GameScreen(Main game, int level) {
@@ -232,19 +232,22 @@ public class GameScreen implements Screen {
         backgroundTexture = assetManager.get("GameBackground.png", Texture.class);
 
         world.setContactListener(new ContactListener() {
+
+            Object userDataA;
+            Object userDataB;
             @Override
             public void beginContact(Contact contact) {
                 Fixture fixtureA = contact.getFixtureA();
                 Fixture fixtureB = contact.getFixtureB();
 
-                Object userDataA = fixtureA.getUserData();
-                Object userDataB = fixtureB.getUserData();
+                userDataA = fixtureA.getUserData();
+                userDataB = fixtureB.getUserData();
 
                 if (userDataA != null && userDataB != null) {
                     System.out.println("Collision detected between: "
                         + userDataA.getClass().getSimpleName() + " and "
                         + userDataB.getClass().getSimpleName());
-                    handleCollision(userDataA,userDataB);
+//                    handleCollision(userDataA,userDataB);
                 } else {
                     System.out.println("Collision detected between: "
                         + (userDataA != null ? userDataA.getClass().getSimpleName() : "Ground")
@@ -256,22 +259,63 @@ public class GameScreen implements Screen {
 
 
             @Override
-            public void endContact(Contact contact) {}
+            public void endContact(Contact contact) {
+                System.out.println("Contact ended");
+            }
 
             @Override
             public void preSolve(Contact contact, Manifold oldManifold) {}
 
+
+//            public void postSolve(Contact contact, ContactImpulse impulse) {
+////                System.out.println("post solve is coming");
+////                Object userDataA = contact.getFixtureA().getBody().getUserData();
+////                Object userDataB = contact.getFixtureB().getBody().getUserData();
+////                float collisionForce = impulse.getNormalImpulses()[0];
+////
+////                if (userDataA instanceof Pig && userDataB instanceof Bird) {
+////                    ((Pig) userDataA).reduceHP((float) collisionForce * DAMAGE_MULTIPLIER);
+////                    System.out.println("uwfnuwfunwfbwnfjwn");
+////                }
+//                // Handle other cases similarly
+//
+//            }
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {
-                Object userDataA = contact.getFixtureA().getBody().getUserData();
-                Object userDataB = contact.getFixtureB().getBody().getUserData();
-                float collisionForce = impulse.getNormalImpulses()[0];
+//                System.out.println("post solve whdhwudhuwhudhuwhu");
+//                Object userDataA = contact.getFixtureA().getBody().getUserData();
+//                Object userDataB = contact.getFixtureB().getBody().getUserData();
+                if(userDataA!=null && userDataB!=null){
+                    System.out.println(userDataA.getClass()+" "+userDataB.getClass());
+                }
+//
+                float collisionForce = impulse.getNormalImpulses()[0]; // Primary collision force
 
                 if (userDataA instanceof Pig && userDataB instanceof Bird) {
-                    ((Pig) userDataA).reduceHP((float) collisionForce * DAMAGE_MULTIPLIER);
+                    // Bird colliding with Pig
+                    ((Pig) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                    System.out.println("Pig's HP reduced by collision force (Bird hit Pig).");
+                } else if (userDataB instanceof Pig && userDataA instanceof Bird) {
+                    // Bird colliding with Pig (reverse case)
+                    ((Pig) userDataB).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                    System.out.println("Pig's HP reduced by collision force (Bird hit Pig).");
                 }
-                // Handle other cases similarly
+
+                else if (userDataA instanceof Block && userDataB instanceof Bird) {
+                    // Bird colliding with Block
+                    ((Block) userDataA).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                    System.out.println("Block's HP reduced by collision force (Bird hit Block).");
+                } else if (userDataB instanceof Block && userDataA instanceof Bird) {
+                    // Bird colliding with Block (reverse case)
+                    ((Block) userDataB).reduceHP(collisionForce * DAMAGE_MULTIPLIER);
+                    System.out.println("Block's HP reduced by collision force (Bird hit Block).");
+                }
+//                if(userDataA!=null && userDataB!=null) {
+//                    System.out.println(userDataA.getClass().getSimpleName() + " " + userDataB.getClass().getSimpleName());
+//                    // Add more cases as needed for other object interactions}
+//                }
             }
+
 
         });
 
@@ -342,6 +386,10 @@ public class GameScreen implements Screen {
         for(Block block:allBlocks){
             if(block.getHp()<=0){
                 blocksToRemove.add(block);
+            }
+            else if(block.getHp()<5f){
+                System.out.println("whfuwufh");
+                block.breakIt();
             }
         }
         for(Pig pig:pigsToRemove){

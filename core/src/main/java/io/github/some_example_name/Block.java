@@ -63,6 +63,9 @@ public class Block {
 //            disappear();
 //        }
     }
+    public void breakIt(){
+        this.sprite.setTexture( new Texture("abs/brokeBlock.png"));
+    }
 
     public void disappear() {
         world.destroyBody(this.getBody());

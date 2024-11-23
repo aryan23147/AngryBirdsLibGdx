@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
+import static io.github.some_example_name.screens.GameScreen.*;
+
 public class Bird extends Character {
     protected Sprite sprite;
     private boolean launched;
@@ -65,6 +67,9 @@ public class Bird extends Character {
         fixtureDef.density = 1f;
         fixtureDef.friction = 5f;
         fixtureDef.restitution = 0.6f;  // Slight bounce
+
+        fixtureDef.filter.categoryBits = CATEGORY_BIRD;   // Bird's category
+        fixtureDef.filter.maskBits = CATEGORY_PIG | CATEGORY_BLOCK; // Only collides with pigs
         return fixtureDef;
     }
 

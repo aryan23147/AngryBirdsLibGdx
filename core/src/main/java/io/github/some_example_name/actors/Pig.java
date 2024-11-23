@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
 import static io.github.some_example_name.actors.Bird.PPM;
+import static io.github.some_example_name.screens.GameScreen.*;
 
 public class Pig {
     protected Sprite sprite;
@@ -73,6 +74,10 @@ public class Pig {
         fixtureDef.density = 1f;
         fixtureDef.friction = 5f;
         fixtureDef.restitution = 0.6f;  // Slight bounce
+
+        fixtureDef.filter.categoryBits = CATEGORY_BLOCK;       // Pig's category
+        fixtureDef.filter.maskBits = CATEGORY_BIRD | CATEGORY_SLINGSHOT | CATEGORY_BLOCK | CATEGORY_PIG; // Collides with birds and slingshot
+
         return fixtureDef;
     }
     public void reduceHP(float damage) {

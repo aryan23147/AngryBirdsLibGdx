@@ -6,9 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import io.github.some_example_name.actors.Bird;
-import io.github.some_example_name.actors.Block;
-import io.github.some_example_name.actors.Pig;
+import io.github.some_example_name.actors.*;
 import io.github.some_example_name.returnStructs.CollisionReturnStruct;
 
 import static io.github.some_example_name.screens.GameScreen.DAMAGE_MULTIPLIER;
@@ -90,12 +88,34 @@ public class CollisionManager {
                 pigCollisionSound.play();
                 totalDamage+=damage;
                 System.out.println("Pigs hp reduced by " + damage); // Debugging statement
-            } else if (otherObject instanceof Block) {
-                Block block = (Block) otherObject;
+            }
+            else if (otherObject instanceof WoodBlock) {
+                Block block = (WoodBlock) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
                 block.reduceHP(damage);
                 Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("WoodCollision.mp3"));
                 woodCollisionSound.play();
+                block.damageAppearance("abs/DamagedWoodenBlock.png", 30f);
+                totalDamage+=damage;
+                System.out.println("Blocks hp reduced by " + damage); // Debugging statement
+            }
+            else if (otherObject instanceof GlassBlock) {
+                Block block = (GlassBlock) otherObject;
+                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
+                block.reduceHP(damage);
+                Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("GlassCollision.mp3"));
+                woodCollisionSound.play();
+                block.damageAppearance("abs/DamagedGlassBlock.png", 10);
+                totalDamage+=damage;
+                System.out.println("Blocks hp reduced by " + damage); // Debugging statement
+            }
+            else if (otherObject instanceof StoneBlock) {
+                Block block = (StoneBlock) otherObject;
+                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
+                block.reduceHP(damage);
+                Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("StoneCollision.mp3"));
+                woodCollisionSound.play();
+                block.damageAppearance("abs/DamagedStoneBlock.png", 50);
                 totalDamage+=damage;
                 System.out.println("Blocks hp reduced by " + damage); // Debugging statement
             }
@@ -114,11 +134,33 @@ public class CollisionManager {
             totalDamage+=damage;
             System.out.println("Pig damaged by: " + damage);
         }
-        else if (objectA instanceof Block) {
+        else if (objectA instanceof WoodBlock) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
-            ((Block) objectA).reduceHP(damage);
+            Block block = (Block) objectA;
+            block.reduceHP(damage);
             Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("WoodCollision.mp3"));
             woodCollisionSound.play();
+            block.damageAppearance("abs/DamagedWoodenBlock.png", 30f);
+            totalDamage+=damage;
+            System.out.println("Block damaged by: " + damage);
+        }
+        else if (objectA instanceof GlassBlock) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            Block block = (Block) objectA;
+            block.reduceHP(damage);
+            Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("GlassCollision.mp3"));
+            woodCollisionSound.play();
+            block.damageAppearance("abs/DamagedGlassBlock.png", 15f);
+            totalDamage+=damage;
+            System.out.println("Block damaged by: " + damage);
+        }
+        else if (objectA instanceof StoneBlock) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            Block block = (Block) objectA;
+            block.reduceHP(damage);
+            Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("StoneCollision.mp3"));
+            woodCollisionSound.play();
+            block.damageAppearance("abs/DamagedStoneBlock.png", 50f);
             totalDamage+=damage;
             System.out.println("Block damaged by: " + damage);
         }
@@ -130,11 +172,33 @@ public class CollisionManager {
             totalDamage+=damage;
             System.out.println("Pig damaged by: " + damage);
         }
-        else if (objectB instanceof Block) {
+        else if (objectB instanceof WoodBlock) {
 //            float damage = collisionForce * DAMAGE_MULTIPLIER;
-            ((Block) objectB).reduceHP(damage);
+            Block block = (Block) objectB;
+            block.reduceHP(damage);
             Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("WoodCollision.mp3"));
             woodCollisionSound.play();
+            block.damageAppearance("abs/DamagedWoodenBlock.png", 30f);
+            totalDamage+=damage;
+            System.out.println("Block damaged by: " + damage);
+        }
+        else if (objectB instanceof GlassBlock) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            Block block = (Block) objectB;
+            block.reduceHP(damage);
+            Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("GlassCollision.mp3"));
+            woodCollisionSound.play();
+            block.damageAppearance("abs/DamagedGlassBlock.png", 15f);
+            totalDamage+=damage;
+            System.out.println("Block damaged by: " + damage);
+        }
+        else if (objectB instanceof StoneBlock) {
+//            float damage = collisionForce * DAMAGE_MULTIPLIER;
+            Block block = (Block) objectB;
+            block.reduceHP(damage);
+            Sound woodCollisionSound = Gdx.audio.newSound(Gdx.files.internal("StoneCollision.mp3"));
+            woodCollisionSound.play();
+            block.damageAppearance("abs/DamagedStoneBlock.png", 50f);
             totalDamage+=damage;
             System.out.println("Block damaged by: " + damage);
         }

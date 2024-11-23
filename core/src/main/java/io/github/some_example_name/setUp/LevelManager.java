@@ -42,9 +42,9 @@ public class LevelManager {
         Pig pig1 = new MediumPig(1070, 200, world);
         allPigs.add(pig1);
         allBlocks = new ArrayList<>();
-        Block block1 = new Block(960, 200, world, 64, 64, true);
-        Block block2 = new Block(960, 100, world, 64, 64, true);
-        Block block3 = new Block(890, 100, world, 64, 64, true);
+        Block block1 = new GlassBlock(960, 200, world, 64, 64, true);
+        Block block2 = new WoodBlock(960, 100, world, 64, 64, true);
+        Block block3 = new WoodBlock(890, 100, world, 64, 64, true);
         allBlocks.add(block1);
         allBlocks.add(block2);
         allBlocks.add(block3);
@@ -76,9 +76,9 @@ public class LevelManager {
         allPigs.add(pig2);
 
         allBlocks = new ArrayList<>();
-        Block block1 = new Block(900, 200, world, 250, 50, true);
-        Block block2 = new Block(1111, 100, world, 50, 100, true);
-        Block block3 = new Block(900, 100, world, 50, 100, true);
+        Block block1 = new StoneBlock(900, 200, world, 250, 50, true);
+        Block block2 = new GlassBlock(1111, 100, world, 50, 100, true);
+        Block block3 = new WoodBlock(900, 100, world, 50, 100, true);
         allBlocks.add(block1);
         allBlocks.add(block2);
         allBlocks.add(block3);
@@ -110,21 +110,21 @@ public class LevelManager {
         allPigs.add(pig2);
 
         allBlocks = new ArrayList<>();
-        Block block1 = new Block(960, 150, world, 50, 50, true);
+        Block block1 = new WoodBlock(960, 150, world, 50, 50, true);
         allBlocks.add(block1);
-        Block block2 = new Block(960, 70, world, 50, 50, true);
+        Block block2 = new StoneBlock(960, 70, world, 50, 50, true);
         allBlocks.add(block2);
-        Block block3 = new Block(890, 100, world, 50, 50, true);
+        Block block3 = new WoodBlock(890, 100, world, 50, 50, true);
         allBlocks.add(block3);
-        Block block4 = new Block(810, 75, world, 50, 150, true);
+        Block block4 = new GlassBlock(810, 75, world, 50, 150, true);
         allBlocks.add(block4);
-        Block block5 = new Block(810, 275, world, 50, 50, true);
+        Block block5 = new WoodBlock(810, 275, world, 50, 50, true);
         allBlocks.add(block5);
-        Block block6 = new Block(950, 230, world, 50, 100, true);
+        Block block6 = new StoneBlock(950, 230, world, 50, 100, true);
         allBlocks.add(block6);
-        Block block7 = new Block(810, 320, world, 175, 50, true);
+        Block block7 = new WoodBlock(810, 320, world, 175, 50, true);
         allBlocks.add(block7);
-        Block block8 = new Block(810, 500, world, 50, 50, true);
+        Block block8 = new GlassBlock(810, 500, world, 50, 50, true);
         allBlocks.add(block8);
 
         return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);

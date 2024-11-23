@@ -64,6 +64,12 @@ public class GameScreen implements Screen {
     public static final float PIXELS_TO_METERS = 100f;
     public static final float DAMAGE_MULTIPLIER = 0.1f;
 
+    public static final short CATEGORY_BIRD = 0x0001;    // Binary 00000001
+    public static final short CATEGORY_PIG = 0x0002;     // Binary 00000010
+    public static final short CATEGORY_BLOCK = 0x0003;     // Binary 00000011
+    public static final short CATEGORY_SLINGSHOT = 0x0004; // Binary 00000100
+
+
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
         this.level = level;  // Save the level number
@@ -110,8 +116,8 @@ public class GameScreen implements Screen {
             this.ground = returnStruct.ground;
         }
 
-        Block wallLeft = new Block(0, 50, world, 1, 720, false);
-        Block wallRight = new Block(1380, 50, world, 1, 720, false);
+        Block wallLeft = new WoodBlock(0, 50, world, 1, 720, false);
+        Block wallRight = new WoodBlock(1380, 50, world, 1, 720, false);
         batch.begin();
         wallLeft.draw(batch);
         wallRight.draw(batch);
@@ -141,7 +147,7 @@ public class GameScreen implements Screen {
                     winWindow.setVisible(true);
                     winWindow.toFront();
                 }
-            }, 2f);
+            }, 3f);
         }
         else if(birdQueue.isEmpty() && slingshot.isEmpty()){
 
@@ -201,10 +207,20 @@ public class GameScreen implements Screen {
             pigDestroyedSound.play();
         }
         for(Block block:blocksToRemove){
+            if (block instanceof WoodBlock) {
+                Sound woodDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("WoodDestroyed.mp3"));
+                woodDestroyedSound.play();
+            }
+            else if (block instanceof GlassBlock) {
+                Sound glassDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("GlassDestroyed.mp3"));
+                glassDestroyedSound.play();
+            }
+            else if (block instanceof StoneBlock) {
+                Sound stoneDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("StoneDestroyed.mp3"));
+                stoneDestroyedSound.play();
+            }
             block.disappear();
             allBlocks.remove(block);
-            Sound woodDestroyedSound = Gdx.audio.newSound(Gdx.files.internal("WoodDestroyed.mp3"));
-            woodDestroyedSound.play();
         }
     }
     @Override

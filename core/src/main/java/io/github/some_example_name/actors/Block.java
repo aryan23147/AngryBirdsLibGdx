@@ -1,6 +1,8 @@
 package io.github.some_example_name.actors;
 
 import static io.github.some_example_name.actors.Bird.PPM;
+import static io.github.some_example_name.screens.GameScreen.*;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,15 +22,15 @@ public class Block {
     private float hp;
     private World world;
 
-    public Block(float x, float y, World world, float width, float height, boolean isDynamic) {
+    public Block(float x, float y, World world, float width, float height, boolean isDynamic, String texturePath, float hp) {
         this.X = x;
         this.Y = y;
         this.width = width;
         this.height = height;
         this.world = world;
-        this.hp = 30f;
+        this.hp = hp;
 
-        sprite = new Sprite(new Texture("abs/WoodBlock.jpg"));
+        sprite = new Sprite(new Texture(texturePath));
         sprite.setSize(width, height);
         sprite.setOrigin(width / 2, height / 2); // Set the sprite's origin to its center
 
@@ -54,6 +56,8 @@ public class Block {
         fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.1f;
 
+        fixtureDef.filter.categoryBits = CATEGORY_PIG;       // Pig's category
+        fixtureDef.filter.maskBits = CATEGORY_BIRD | CATEGORY_SLINGSHOT | CATEGORY_BLOCK | CATEGORY_PIG; // Collides with birds and slingshot
         // Attach the fixture to the body
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(this);
@@ -67,6 +71,14 @@ public class Block {
 //        if (hp <= 0) {
 //            disappear();
 //        }
+    }
+
+    public void damageAppearance(String texturePath, float ogHP){
+        if(ogHP-hp>=10) {
+            sprite = new Sprite(new Texture(texturePath));
+            sprite.setSize(width, height);
+            sprite.setOrigin(width / 2, height / 2); // Set the sprite's origin to its center
+        }
     }
 
     public void disappear() {

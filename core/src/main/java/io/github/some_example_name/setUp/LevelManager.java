@@ -122,7 +122,7 @@ public class LevelManager {
         allBlocks.add(block5);
         Block block6 = new StoneBlock(950, 230, world, 50, 100, true);
         allBlocks.add(block6);
-        Block block7 = new WoodBlock(810, 320, world, 175, 50, true);
+        Block block7 = new StoneBlock(810, 320, world, 175, 50, true);
         allBlocks.add(block7);
         Block block8 = new GlassBlock(810, 500, world, 50, 50, true);
         allBlocks.add(block8);

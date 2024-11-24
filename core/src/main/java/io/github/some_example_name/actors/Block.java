@@ -2,6 +2,7 @@ package io.github.some_example_name.actors;
 
 import static io.github.some_example_name.actors.Bird.PPM;
 import static io.github.some_example_name.screens.GameScreen.*;
+//import static io.github.some_example_name.GameScreen1.*;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;

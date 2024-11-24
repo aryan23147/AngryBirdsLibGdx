@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import static io.github.some_example_name.actors.Bird.PPM;
 import static io.github.some_example_name.screens.GameScreen.*;
+//import static io.github.some_example_name.GameScreen1.*;
 
 public class Pig {
     protected Sprite sprite;

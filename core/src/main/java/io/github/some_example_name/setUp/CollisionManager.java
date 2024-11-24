@@ -9,11 +9,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import io.github.some_example_name.actors.*;
 import io.github.some_example_name.returnStructs.CollisionReturnStruct;
 
-import static io.github.some_example_name.screens.GameScreen.DAMAGE_MULTIPLIER;
+//import static io.github.some_example_name.screens.GameScreen.DAMAGE_MULTIPLIER;
+//import static io.github.some_example_name.GameScreen1.DAMAGE_MULTIPLIER;
 
 public class CollisionManager {
 
     private static float totalDamage;
+    private static final float DAMAGE_MULTIPLIER = 0.1f;
     public static CollisionReturnStruct show(World world, int level, float damage) {
         totalDamage=damage;
         AssetManager assetManager = new AssetManager();
@@ -211,12 +213,12 @@ public class CollisionManager {
         float damageMultiplier = 0.01f;  // Damage multiplier based on kinetic energy
         int calculatedDamage = (int) (baseDamage + kineticEnergy * damageMultiplier);
 
-        // Clamp the damage to a reasonable range (e.g., max damage of 100)
+        // Clamp the damage to a reasonable range (e.g., max damage 100 points)
         calculatedDamage = Math.min(calculatedDamage, 100);
         return calculatedDamage;
     }
 
-    public static float getScore() {
-        return totalDamage;
+    public static float getScore(int numBirds) {
+        return totalDamage + numBirds*50;
     }
 }

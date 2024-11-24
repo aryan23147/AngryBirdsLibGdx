@@ -79,7 +79,7 @@ public class WindowCreator {
 
         return pauseWindow;
     }
-    static Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
+    public static Window createWinWindow(TextButton nextLevelButton, int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/WinWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -143,7 +143,7 @@ public class WindowCreator {
         return winWindow;
     }
 
-    static Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
+    public static Window createLoseWindow(int level, Main game, Stage stage, BitmapFont font) {
         Texture backgroundTexture = new Texture("abs/LoseWindowBackground.png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -195,11 +195,9 @@ public class WindowCreator {
 
         return loseWindow;
     }
-    public static void showScore(BitmapFont font, boolean isWon){
-        score=CollisionManager.getScore();
-
+    public static void showScore(BitmapFont font, boolean isWon, int numBirds){
         // Create the score text
-        String scoreText = "Your Score is: " + (int)CollisionManager.getScore();
+        String scoreText = "Your Score is: " + (int)CollisionManager.getScore(numBirds);
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.WHITE;

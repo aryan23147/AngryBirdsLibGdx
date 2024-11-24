@@ -1,4 +1,4 @@
-package io.github.some_example_name.screens;
+package io.github.some_example_name.screens;//package io.github.some_example_name.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -60,6 +60,7 @@ public class GameScreen implements Screen {
     private List<Pig> allPigs;
 
     public float totalDamage=0;
+    private boolean isCompleted = false;
     public LevelManager levelManager;
     public static final float PIXELS_TO_METERS = 100f;
     public static final float DAMAGE_MULTIPLIER = 0.1f;
@@ -136,13 +137,12 @@ public class GameScreen implements Screen {
     }
 
     private void checkAndLoadBird() {
-        final boolean[] isWon = {false};
         if(allPigs.isEmpty()){
-            isWon[0] =true;
+            isCompleted=true;
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    WindowCreator.showScore(font, true);
+                    WindowCreator.showScore(font, true, allBirds.size());
                     // Code to execute after 2 seconds
                     winWindow.setVisible(true);
                     winWindow.toFront();
@@ -150,15 +150,22 @@ public class GameScreen implements Screen {
             }, 3f);
         }
         else if(birdQueue.isEmpty() && slingshot.isEmpty()){
+            isCompleted=true;
 
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    if(!isWon[0]) {
-                        WindowCreator.showScore(font, false);
+                    if(!allPigs.isEmpty()) {
+                        WindowCreator.showScore(font, false, allBirds.size());
                         // Code to execute after 2 seconds
                         loseWindow.setVisible(true);
                         loseWindow.toFront();
+                    }
+                    else{
+                        WindowCreator.showScore(font, true, allBirds.size());
+                        // Code to execute after 2 seconds
+                        winWindow.setVisible(true);
+                        winWindow.toFront();
                     }
                 }
             }, 7f);
@@ -255,7 +262,9 @@ public class GameScreen implements Screen {
         for (Block block : allBlocks) {
             block.update();
         }
-        checkAndLoadBird();
+        if(!isCompleted) {
+            checkAndLoadBird();
+        }
         checkForEscapeKey();
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(30,30 , 0));
         Gdx.input.setInputProcessor(stage);

@@ -3,7 +3,7 @@ package io.github.some_example_name.returnStructs;
 import com.badlogic.gdx.utils.Queue;
 import io.github.some_example_name.actors.birds.Bird;
 import io.github.some_example_name.actors.blocks.Block;
-import io.github.some_example_name.actors.Ground;
+import io.github.some_example_name.actors.extras.Ground;
 import io.github.some_example_name.actors.pigs.Pig;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import io.github.some_example_name.actors.Character;
+import io.github.some_example_name.actors.extras.Character;
 import io.github.some_example_name.bonusStuff.Power;
 
 import static io.github.some_example_name.screens.GameScreen.*;
@@ -35,6 +35,12 @@ public class Bird extends Character {
         this.power=power;
     }
 
+    public float getWidth(){
+        return this.width;
+    }
+    public float getHeight(){
+        return this.height;
+    }
     public boolean isLaunched() {
         return launched;
     }
@@ -168,5 +174,9 @@ public class Bird extends Character {
 
     public boolean hasUsedPower() {
         return hasUsedPower;
+    }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite=sprite;
     }
 }

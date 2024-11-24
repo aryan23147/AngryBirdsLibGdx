@@ -2,7 +2,6 @@ package io.github.some_example_name.setUp;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Queue;
-import io.github.some_example_name.actors.*;
 import io.github.some_example_name.actors.birds.Bird;
 import io.github.some_example_name.actors.birds.BlackBird;
 import io.github.some_example_name.actors.birds.BlueBird;
@@ -11,6 +10,7 @@ import io.github.some_example_name.actors.blocks.Block;
 import io.github.some_example_name.actors.blocks.GlassBlock;
 import io.github.some_example_name.actors.blocks.StoneBlock;
 import io.github.some_example_name.actors.blocks.WoodBlock;
+import io.github.some_example_name.actors.extras.Ground;
 import io.github.some_example_name.actors.pigs.KidPig;
 import io.github.some_example_name.actors.pigs.KingPig;
 import io.github.some_example_name.actors.pigs.MediumPig;
@@ -40,7 +40,7 @@ public class LevelManager {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150, new RedPower());
         Bird blackBird = new BlackBird(world, 80, 150, new BlackPower());
-        Bird blueBird = new BlueBird(world, 20, 150, new BluePower());
+        Bird blueBird = new BlueBird(world, 20, 150, new BluePower(), 1.0f, 20f);
         birdQueue = new Queue<>();
         birdQueue.addFirst(redBird);
         birdQueue.addLast(blackBird);
@@ -71,7 +71,7 @@ public class LevelManager {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150, new RedPower());
         Bird blackBird = new BlackBird(world, 80, 150, new BlackPower());
-        Bird blueBird = new BlueBird(world, 20, 150, new BluePower());
+        Bird blueBird = new BlueBird(world, 20, 150, new BluePower(), 1.0f, 20f);
         birdQueue = new Queue<>();
         birdQueue.addFirst(redBird);
         birdQueue.addLast(blackBird);
@@ -104,7 +104,7 @@ public class LevelManager {
     public ReturnStruct setupWorldObjectsLevel3(World world) {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150, new RedPower());
-        Bird blueBird = new BlueBird(world, 80, 150, new BluePower());
+        Bird blueBird = new BlueBird(world, 80, 150, new BluePower(), 1.0f, 20f);
         Bird blackBird = new BlackBird(world, 20, 150, new BlackPower());
         birdQueue = new Queue<>();
         birdQueue.addFirst(redBird);

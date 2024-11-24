@@ -6,8 +6,8 @@ import io.github.some_example_name.bonusStuff.Power;
 
 public class BlueBird extends Bird {
 
-    public BlueBird(World world, float X, float Y, Power power) {
-        super("abs/BlueBird.png", world, X, Y, 1.0f, 10f, power);
+    public BlueBird(World world, float X, float Y, Power power, float radius, float mass) {
+        super("abs/BlueBird.png", world, X, Y, radius, mass, power);
     }
 
 

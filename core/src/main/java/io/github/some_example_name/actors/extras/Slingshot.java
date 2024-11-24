@@ -1,4 +1,4 @@
-package io.github.some_example_name.actors;
+package io.github.some_example_name.actors.extras;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -22,8 +22,8 @@ public class Slingshot {
     private Vector2 pullStartPosition; // Where pulling starts
     private float maxPullDistance = 100f; // Maximum pull distance
 //    private float forceScale = 0.05f; // Scale for launch force
-//    private float forceScale = 0.075f; // Scale for launch force
-    private float forceScale = 0.1f; // Scale for launch force
+    private float forceScale = 0.075f; // Scale for launch force
+//    private float forceScale = 0.1f; // Scale for launch force
 
     public Slingshot(float x, float y, World world) {
         Texture texture = new Texture(Gdx.files.internal("abs/Slingshot.png"));

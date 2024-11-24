@@ -17,9 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Timer;
-import io.github.some_example_name.actors.*;
 import io.github.some_example_name.actors.birds.Bird;
-import io.github.some_example_name.actors.Slingshot;
+import io.github.some_example_name.actors.extras.Ground;
+import io.github.some_example_name.actors.extras.Slingshot;
 import io.github.some_example_name.actors.blocks.Block;
 import io.github.some_example_name.actors.blocks.GlassBlock;
 import io.github.some_example_name.actors.blocks.StoneBlock;
@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
     private TextButton musiconoffButton;
     private Slingshot slingshot;
     private Queue<Bird> birdQueue;
-    private List<Bird> allBirds;
+    public static List<Bird> allBirds;
     private List<Block> allBlocks;
     private List<Pig> allPigs;
 

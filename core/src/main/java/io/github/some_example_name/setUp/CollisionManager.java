@@ -85,7 +85,7 @@ public class CollisionManager {
             // Calculate the kinetic energy (KE = 1/2 * m * v^2)
             float kineticEnergy = 0.5f * mass * velocity.len2();  // len2() gives v^2 (velocity squared)
 
-            System.out.println("Kinetic Energy of bird: " + kineticEnergy);
+            System.out.println("Kinetic Energy of bird: " + (int)kineticEnergy);
 
             if (otherObject instanceof Pig) {
                 Pig pig = (Pig) otherObject;

@@ -31,8 +31,8 @@ public class GameSetUp {
         cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Stage stage = new Stage();
 //        World world = new World(new Vector2(0, -5f), false);
-        World world = new World(new Vector2(0, -9.8f), false);
-//        World world = new World(new Vector2(0, -22f), false);
+//        World world = new World(new Vector2(0, -9.8f), false);
+        World world = new World(new Vector2(0, -22f), false);
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
         Slingshot slingshot = new Slingshot(130, 50, world);
         return new SetUpReturnStruct(batch, font, cam, stage, world, debugRenderer, slingshot);

@@ -25,6 +25,7 @@ import io.github.some_example_name.actors.blocks.GlassBlock;
 import io.github.some_example_name.actors.blocks.StoneBlock;
 import io.github.some_example_name.actors.blocks.WoodBlock;
 import io.github.some_example_name.actors.pigs.Pig;
+import io.github.some_example_name.bonusStuff.BlackPower;
 import io.github.some_example_name.returnStructs.CollisionReturnStruct;
 import io.github.some_example_name.returnStructs.ReturnStruct;
 import io.github.some_example_name.returnStructs.SetUpReturnStruct;
@@ -153,6 +154,8 @@ public class GameScreen implements Screen {
                     // Code to execute after 2 seconds
                     winWindow.setVisible(true);
                     winWindow.toFront();
+                    Sound wonSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
+                    wonSound.play();
                 }
             }, 3f);
         }
@@ -167,12 +170,16 @@ public class GameScreen implements Screen {
                         // Code to execute after 2 seconds
                         loseWindow.setVisible(true);
                         loseWindow.toFront();
+                        Sound lostSound = Gdx.audio.newSound(Gdx.files.internal("LevelLost.mp3"));
+                        lostSound.play();
                     }
                     else{
                         WindowCreator.showScore(font, true, allBirds.size());
                         // Code to execute after 2 seconds
                         winWindow.setVisible(true);
                         winWindow.toFront();
+                        Sound wonSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
+                        wonSound.play();
                     }
                 }
             }, 7f);
@@ -259,6 +266,7 @@ public class GameScreen implements Screen {
 
         slingshot.draw(batch);
         ground.draw(batch);
+        BlackPower.render(batch, Gdx.graphics.getDeltaTime());
         batch.end();
 
         update();

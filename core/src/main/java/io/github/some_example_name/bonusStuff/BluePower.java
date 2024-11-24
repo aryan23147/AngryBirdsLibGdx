@@ -1,6 +1,7 @@
 package io.github.some_example_name.bonusStuff;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -34,6 +35,8 @@ public class BluePower implements Power {
                 Vector2 offset = new Vector2(0, i * 5f); // Spread horizontally
                 Vector2 velocityWithOffset = bird.getBody().getLinearVelocity().cpy().add(offset);
                 smallBird.getBody().setLinearVelocity(velocityWithOffset);
+                Sound powerSound = Gdx.audio.newSound(Gdx.files.internal("BluePower.mp3"));
+                powerSound.play();
             }
             bird.disappear();
             GameScreen.allBirds.remove(bird);

@@ -1,4 +1,4 @@
-package io.github.some_example_name.actors;
+package io.github.some_example_name.actors.birds;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import io.github.some_example_name.actors.Character;
+import io.github.some_example_name.bonusStuff.Power;
 
 import static io.github.some_example_name.screens.GameScreen.*;
 
@@ -14,10 +16,12 @@ public class Bird extends Character {
     private boolean launched;
     private FixtureDef fixtureDef;
     public static float PPM = 32f;  // Pixels per meter conversion factor
+    private Power power;
+    private boolean hasUsedPower = false;
 
     private boolean inSlingshot = true;
 
-    public Bird(String texturePath, World world, float x, float y, float radius, float mass) {
+    public Bird(String texturePath, World world, float x, float y, float radius, float mass, Power power) {
         super(world, radius, x, y, mass, radius * 2 * PPM, radius * 2 * PPM);  // Convert radius to pixel size for sprite
 
         // Load the texture and create the sprite
@@ -28,6 +32,7 @@ public class Bird extends Character {
         createBody(world, x, y);
         // Set initial state
         this.launched = false;
+        this.power=power;
     }
 
     public boolean isLaunched() {
@@ -152,5 +157,16 @@ public class Bird extends Character {
 
     public Vector2 getVelocity() {
         return body.getLinearVelocity();
+    }
+
+    public void activatePower() {
+        if (power != null && !hasUsedPower) {
+            power.activate(this);
+            hasUsedPower=true;
+        }
+    }
+
+    public boolean hasUsedPower() {
+        return hasUsedPower;
     }
 }

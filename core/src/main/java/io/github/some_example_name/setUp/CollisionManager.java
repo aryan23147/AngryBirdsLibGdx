@@ -6,7 +6,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import io.github.some_example_name.actors.*;
+import io.github.some_example_name.actors.birds.Bird;
+import io.github.some_example_name.actors.blocks.Block;
+import io.github.some_example_name.actors.blocks.GlassBlock;
+import io.github.some_example_name.actors.blocks.StoneBlock;
+import io.github.some_example_name.actors.blocks.WoodBlock;
+import io.github.some_example_name.actors.pigs.Pig;
 import io.github.some_example_name.returnStructs.CollisionReturnStruct;
 
 //import static io.github.some_example_name.screens.GameScreen.DAMAGE_MULTIPLIER;

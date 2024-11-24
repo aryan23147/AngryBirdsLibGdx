@@ -104,6 +104,7 @@ public class GameSetUp {
             public void clicked(InputEvent event, float x, float y) {
                 if(!click[0]) {
                     System.out.println("\nClicked at: ("+x+", "+y+")\n");
+
                     slingshot.releaseBird(x,y);
                     click[0]=false;
                 }

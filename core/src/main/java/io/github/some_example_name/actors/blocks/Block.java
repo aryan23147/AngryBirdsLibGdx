@@ -1,6 +1,6 @@
-package io.github.some_example_name.actors;
+package io.github.some_example_name.actors.blocks;
 
-import static io.github.some_example_name.actors.Bird.PPM;
+import static io.github.some_example_name.actors.birds.Bird.PPM;
 import static io.github.some_example_name.screens.GameScreen.*;
 //import static io.github.some_example_name.GameScreen1.*;
 

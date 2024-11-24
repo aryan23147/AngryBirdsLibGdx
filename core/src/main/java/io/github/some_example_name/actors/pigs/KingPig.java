@@ -1,4 +1,4 @@
-package io.github.some_example_name.actors;
+package io.github.some_example_name.actors.pigs;
 
 import com.badlogic.gdx.physics.box2d.World;
 

@@ -7,15 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import io.github.some_example_name.actors.birds.Bird;
 
-import static io.github.some_example_name.actors.Bird.PPM;
+import static io.github.some_example_name.actors.birds.Bird.PPM;
 import static io.github.some_example_name.screens.GameScreen.*;
 //import static io.github.some_example_name.GameScreen1.*;
 
 public class Slingshot {
     private Sprite sprite;
     private float x, y; // Position of the slingshot anchor
-    private Bird bird;
+    private Bird bird, launchedBird;
     private Body body;
 
     private Vector2 pullStartPosition; // Where pulling starts
@@ -110,7 +111,7 @@ public class Slingshot {
     }
 
     public void releaseBird(float x, float y) {
-        if (bird != null) {
+        if(launchedBird == null){
             Vector2 launchDirection = new Vector2(x, y);
             float pullDistance = launchDirection.len();
 
@@ -125,13 +126,61 @@ public class Slingshot {
             birdShotSound.play();
 
             // Reset the bird in the slingshot after release
+            launchedBird=bird;
             bird = null;
         }
+        else if(!launchedBird.hasUsedPower()){
+            launchedBird.activatePower();
+//            check = true;
+        }
+        else if (bird!=null){
+            Vector2 launchDirection = new Vector2(x, y);
+            float pullDistance = launchDirection.len();
+
+            // Calculate the launch force based on pullback distance and scale
+            Vector2 launchForce = launchDirection.nor().scl(pullDistance * forceScale);
+
+            // Call the launch method with the calculated force
+            launch(bird, launchForce);
+            bird.setLaunched(true);
+
+            Sound birdShotSound = Gdx.audio.newSound(Gdx.files.internal("BirdShot.mp3"));
+            birdShotSound.play();
+
+            // Reset the bird in the slingshot after release
+            launchedBird=bird;
+            bird = null;
+        }
+//        boolean check = false;
+//        if(launchedBird!=null){
+//            launchedBird.activatePower();
+//            check = true;
+//        }
+//        if (launchedBird == null || bird != null && launchedBird.hasUsedPower()) {
+//            Vector2 launchDirection = new Vector2(x, y);
+//            float pullDistance = launchDirection.len();
+//
+//            // Calculate the launch force based on pullback distance and scale
+//            Vector2 launchForce = launchDirection.nor().scl(pullDistance * forceScale);
+//
+//            // Call the launch method with the calculated force
+//            launch(bird, launchForce);
+//            bird.setLaunched(true);
+//
+//            Sound birdShotSound = Gdx.audio.newSound(Gdx.files.internal("BirdShot.mp3"));
+//            birdShotSound.play();
+//
+//            // Reset the bird in the slingshot after release
+//            launchedBird=bird;
+//            bird = null;
+//        }
     }
 
     private void launch(Bird bird, Vector2 force) {
         // Activate bird's physics body and apply the force for launching
-        bird.getBody().setActive(true);
-        bird.getBody().applyLinearImpulse(force, bird.getBody().getWorldCenter(), true);
+        if(bird!=null) {
+            bird.getBody().setActive(true);
+            bird.getBody().applyLinearImpulse(force, bird.getBody().getWorldCenter(), true);
+        }
     }
 }

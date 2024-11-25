@@ -42,10 +42,10 @@ public class Pig {
         this.hp=hp;
     }
     public float getX(){
-        return this.spriteX;
+        return this.x;
     }
     public float getY(){
-        return this.spriteY;
+        return this.y;
     }
     protected void createBody(World world, float x, float y,float radius) {
         BodyDef bodyDef = new BodyDef();
@@ -104,7 +104,8 @@ public class Pig {
         float scalingFactor = 0.93f; // Use this to tweak the alignment
          spriteX = (body.getPosition().x * PPM - sprite.getWidth() / 2) * scalingFactor - body.getPosition().x * 0.01f; // Fractional offset
         spriteY = (body.getPosition().y * PPM - sprite.getHeight() / 2) * scalingFactor - body.getPosition().y * 0.01f; // Fractional offset
-
+        x=spriteX+(sprite.getWidth()/2);
+        y=spriteY+(sprite.getHeight()/2);
         sprite.setPosition(spriteX, spriteY);
 
         // Set origin for rotation

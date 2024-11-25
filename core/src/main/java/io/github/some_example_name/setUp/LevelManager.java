@@ -1,6 +1,7 @@
 package io.github.some_example_name.setUp;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
@@ -38,6 +39,7 @@ public class LevelManager {
     private static List<Bird> allBirds;
     private static Ground ground;
     private static List<Pig> allPigs;
+    private static final FileHandle file = Gdx.files.local("levelStatus.txt");
     private static List<Block> allBlocks;
     private static boolean isL1Saved = false;
     private static boolean isL2Saved = false;
@@ -190,6 +192,28 @@ public class LevelManager {
         return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);
     }
 
+    static {
+        loadLevelStatus();
+    }
+
+    // Method to load level statuses from the file
+    private static void loadLevelStatus() {
+        if (file.exists()) {
+            String status = file.readString().trim();  // Read the file and remove any leading/trailing whitespace
+            if (status.length() >= 3) {
+                isL1Saved = status.charAt(0) == 'T';
+                isL2Saved = status.charAt(1) == 'T';
+                isL3Saved = status.charAt(2) == 'T';
+            }
+        } else {
+            // If the file doesn't exist, default to all levels not saved
+            isL1Saved = false;
+            isL2Saved = false;
+            isL3Saved = false;
+        }
+    }
+
+    // Method to check if a level is saved
     public static boolean isLevelSaved(int level) {
         switch (level) {
             case 1:
@@ -203,19 +227,30 @@ public class LevelManager {
         }
     }
 
-    public static void saveLevel(int level, boolean bool) {
+    // Method to save a level's status
+    public static void saveLevel(int level, boolean isSaved) {
         switch (level) {
             case 1:
-                isL1Saved = bool;
+                isL1Saved = isSaved;
                 break;
             case 2:
-                isL2Saved = bool;
+                isL2Saved = isSaved;
                 break;
             case 3:
-                isL3Saved = bool;
+                isL3Saved = isSaved;
                 break;
             default:
-                break;
+                return;
         }
+        // After updating, save the status to the file
+        saveLevelStatus();
+    }
+
+    // Method to save the current level statuses to the file
+    private static void saveLevelStatus() {
+        String status = (isL1Saved ? "T" : "F") +
+            (isL2Saved ? "T" : "F") +
+            (isL3Saved ? "T" : "F");
+        file.writeString(status, false);  // Overwrite the file with the new status
     }
 }

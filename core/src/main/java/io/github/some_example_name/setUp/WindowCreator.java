@@ -3,6 +3,7 @@ package io.github.some_example_name.setUp;
 import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleRestart;
 import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleSave;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,7 +31,7 @@ public class WindowCreator {
         this.levelManager=levelManager;
     }
 
-    public static Window createPauseWindow(BitmapFont font, TextButton musiconoffButton, Stage stage, Main game, int level){
+    public static Window createPauseWindow(BitmapFont font, TextButton musiconoffButton, Stage stage, Main game, int level, GameScreen gameScreen){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
 
@@ -53,6 +54,7 @@ public class WindowCreator {
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                gameScreen.togglePause();
                 game.setScreen(new GameScreen(game, level));
             }
         });

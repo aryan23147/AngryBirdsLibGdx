@@ -38,7 +38,7 @@ public class GameSetUp {
         return new SetUpReturnStruct(batch, font, cam, stage, world, debugRenderer, slingshot);
     }
 
-    public static SetUpReturnStruct setupUIComponents(Stage stage, LevelManager levelManager, Window pauseWindow, Window winWindow, Window loseWindow, Main game, int level, BitmapFont font) {
+    public static SetUpReturnStruct setupUIComponents(Stage stage, LevelManager levelManager, Window pauseWindow, Window winWindow, Window loseWindow, Main game, int level, BitmapFont font,GameScreen gs) {
         // Create the UI buttons, windows, and table layout
         TextButton pauseButton = new TextButton("", TextButtonStylepause);
 //        TextButton winButton = new TextButton("Win", TextButtonStyleDummy);
@@ -50,7 +50,7 @@ public class GameSetUp {
         stage.addActor(backButton);
 
         // Set up pause, win, and lose windows
-        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage,game,level);
+        pauseWindow = WindowCreator.createPauseWindow(font,musiconoffButton,stage,game,level,gs);
         winWindow = WindowCreator.createWinWindow(nextLevelButton, level, game, stage, font);
         loseWindow = WindowCreator.createLoseWindow(level, game, stage, font);
 
@@ -104,8 +104,10 @@ public class GameSetUp {
             public void clicked(InputEvent event, float x, float y) {
                 if(!click[0]) {
                     System.out.println("\nClicked at: ("+x+", "+y+")\n");
+                    if(x>=15 && x<=89 && y>=653 && y<=703){
 
-                    slingshot.releaseBird(x,y);
+                    }
+                    else{slingshot.releaseBird(x,y);}
                     click[0]=false;
                 }
             }

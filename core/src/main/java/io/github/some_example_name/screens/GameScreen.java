@@ -81,6 +81,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(Main game, int level) {
         this.game = game;  // Save the reference to the main game object
+        game.resume();
         this.level = level;  // Save the level number
 //        this.totalDamage = 0;
         isMusicPlaying = game.isMusicPlaying();
@@ -96,7 +97,7 @@ public class GameScreen implements Screen {
 
         levelManager = new LevelManager();
 
-        SetUpReturnStruct return2 = GameSetUp.setupUIComponents(stage, levelManager, pauseWindow, winWindow, loseWindow, game, level, font);
+        SetUpReturnStruct return2 = GameSetUp.setupUIComponents(stage, levelManager, pauseWindow, winWindow, loseWindow, game, level, font,this);
         this.pauseButton = return2.pause;
         this.musiconoffButton = return2.music;
         this.nextLevelButton = return2.next;

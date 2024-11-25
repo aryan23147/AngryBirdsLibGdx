@@ -114,7 +114,7 @@ public class GameScreen implements Screen {
         this.totalDamage = return3.totalDamage;
 
         ReturnStruct returnStruct = null;
-        if(isLoaded)returnStruct=levelManager.loadObjects(world);
+        if(isLoaded)returnStruct=levelManager.loadObjects(world,level);
         else if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
         else if(level == 2) returnStruct= levelManager.setupWorldObjectsLevel2(world);
         else if (level == 3) returnStruct= levelManager.setupWorldObjectsLevel3(world);

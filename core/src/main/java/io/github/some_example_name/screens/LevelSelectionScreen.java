@@ -76,15 +76,19 @@ public class LevelSelectionScreen implements Screen {
         TextButton level2Button = new TextButton("Level 2", buttonStyle);
         TextButton level3Button = new TextButton("Level 3", buttonStyle);
         TextButton exitButton = new TextButton("", TextButtonStyleback);
-        Window loadWindow= WindowCreator.createLoadedWindow(stage,chewyFont,game,1);
+        Window loadWindow1= WindowCreator.createLoadedWindow(stage,chewyFont,game,1);
+        Window loadWindow2= WindowCreator.createLoadedWindow(stage,chewyFont,game,2);
+        Window loadWindow3= WindowCreator.createLoadedWindow(stage,chewyFont,game,3);
+
         // Add listeners to buttons
         level1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 if(LevelManager.isLevelSaved(1)) {
-                    loadWindow.toFront();
-                    loadWindow.setVisible(!loadWindow.isVisible());
+
+                    loadWindow1.toFront();
+                    loadWindow1.setVisible(!loadWindow1.isVisible());
                     System.out.println("There is a saved game.");
                 }
                 else {
@@ -96,8 +100,8 @@ public class LevelSelectionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(LevelManager.isLevelSaved(2)) {
-                    loadWindow.toFront();
-                    loadWindow.setVisible(!loadWindow.isVisible());
+                    loadWindow2.toFront();
+                    loadWindow2.setVisible(!loadWindow2.isVisible());
                     System.out.println("There is a saved game.");
                 }
                 else {
@@ -109,8 +113,8 @@ public class LevelSelectionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(LevelManager.isLevelSaved(3)) {
-                    loadWindow.toFront();
-                    loadWindow.setVisible(!loadWindow.isVisible());
+                    loadWindow3.toFront();
+                    loadWindow3.setVisible(!loadWindow3.isVisible());
                     System.out.println("There is a saved game.");
                 }
                 else {

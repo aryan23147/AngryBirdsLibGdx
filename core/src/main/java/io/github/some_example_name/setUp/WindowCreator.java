@@ -338,6 +338,7 @@ public class WindowCreator {
                 System.out.println("Playing new game");
             }
         });
+//        public void setLevel
 
         stage.addActor(loadWindow);
 

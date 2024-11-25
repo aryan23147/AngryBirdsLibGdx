@@ -34,7 +34,17 @@ public class GameState {
         GameState gameState = new GameState(screen);
         Json json = new Json();
         String jsonString = json.toJson(gameState);
+
         String filePath="saved_games/game_state.json";
+        if(screen.level==1){
+            filePath="saved_games/game_state1.json";
+        }
+        else if(screen.level==2){
+            filePath="saved_games/game_state2.json";
+        }
+        else{
+            filePath="saved_games/game_state3.json";
+        }
         Gdx.files.local(filePath).writeString(jsonString, false);  // Save JSON to file
     }
 }

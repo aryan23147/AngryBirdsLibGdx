@@ -44,11 +44,20 @@ public class LevelManager {
     private static boolean isL3Saved = false;
 
 
-    public ReturnStruct loadObjects(World world){
+    public ReturnStruct loadObjects(World world,int level){
         Json json=new Json();
-        String jsonString= Gdx.files.local("saved_games/game_state.json").readString();
+        String jsonString;
+        if(level==1){
+            jsonString= Gdx.files.local("saved_games/game_state1.json").readString();
+        }
+        else if(level==2){
+            jsonString= Gdx.files.local("saved_games/game_state2.json").readString();
+        }
+        else{
+            jsonString= Gdx.files.local("saved_games/game_state3.json").readString();
+        }
+
         GameState gameState=json.fromJson(GameState.class,jsonString);
-        int level=gameState.level;
         allBirds = new ArrayList<>();
         birdQueue = new Queue<>();
         for(BirdState birdState: gameState.birds){

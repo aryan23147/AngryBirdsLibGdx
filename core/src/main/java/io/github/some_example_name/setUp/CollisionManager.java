@@ -11,6 +11,9 @@ import io.github.some_example_name.actors.blocks.Block;
 import io.github.some_example_name.actors.blocks.GlassBlock;
 import io.github.some_example_name.actors.blocks.StoneBlock;
 import io.github.some_example_name.actors.blocks.WoodBlock;
+import io.github.some_example_name.actors.pigs.KidPig;
+import io.github.some_example_name.actors.pigs.KingPig;
+import io.github.some_example_name.actors.pigs.MediumPig;
 import io.github.some_example_name.actors.pigs.Pig;
 import io.github.some_example_name.returnStructs.CollisionReturnStruct;
 
@@ -87,15 +90,38 @@ public class CollisionManager {
 
             System.out.println("Kinetic Energy of bird: " + (int)kineticEnergy);
 
-            if (otherObject instanceof Pig) {
+            if (otherObject instanceof KingPig) {
                 Pig pig = (Pig) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
                 pig.reduceHP(damage);
                 Sound pigCollisionSound = Gdx.audio.newSound(Gdx.files.internal("PigCollision.mp3"));
                 pigCollisionSound.play();
+                pig.damageAppearance("abs/DamagedKingPig.png", 100f);
                 totalDamage+=damage;
                 System.out.println("Pigs hp reduced by " + damage); // Debugging statement
             }
+            else if (otherObject instanceof MediumPig) {
+                Pig pig = (Pig) otherObject;
+                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
+                pig.reduceHP(damage);
+                Sound pigCollisionSound = Gdx.audio.newSound(Gdx.files.internal("PigCollision.mp3"));
+                pigCollisionSound.play();
+                pig.damageAppearance("abs/DamagedPig.png", 40f);
+                totalDamage+=damage;
+                System.out.println("Pigs hp reduced by " + damage); // Debugging statement
+            }
+            else if (otherObject instanceof KidPig) {
+                Pig pig = (Pig) otherObject;
+                int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE
+                pig.reduceHP(damage);
+                Sound pigCollisionSound = Gdx.audio.newSound(Gdx.files.internal("PigCollision.mp3"));
+                pigCollisionSound.play();
+                pig.damageAppearance("abs/DamagedPig.png", 15f);
+                totalDamage+=damage;
+                System.out.println("Pigs hp reduced by " + damage); // Debugging statement
+            }
+
+
             else if (otherObject instanceof WoodBlock) {
                 Block block = (WoodBlock) otherObject;
                 int damage = calculateDamage(kineticEnergy);  // Calculate damage based on KE

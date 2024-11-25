@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -200,15 +201,17 @@ public class WindowCreator {
 
         return loseWindow;
     }
-    public static void showScore(BitmapFont font, boolean isWon, int numBirds){
+    public static void showScore(BitmapFont font, boolean isWon, int numBirds, int level){
         // Create the score text
-        String scoreText = "Your Score is: " + (int)CollisionManager.getScore(numBirds);
+        int score = (int)CollisionManager.getScore(numBirds);
+        String scoreText = "Your Score is: " + score;
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.WHITE;
 
         scoreLabel = new Label(scoreText, labelStyle);
         if(isWon) {
+            showStars(level, score);
             scoreLabel.setAlignment(Align.center); // Center-align the text
             scoreLabel.setPosition(
                 winWindow.getWidth() / 2f - scoreLabel.getWidth() / 2f,
@@ -224,6 +227,48 @@ public class WindowCreator {
             );
         loseWindow.addActor(scoreLabel);
         }
+    }
+
+    private static void showStars(int level, int score){
+        int stars = 1;
+        if(level==1){
+            if(score>=500){
+                stars = 3;
+            }
+            else if(score >400) {
+                stars = 2;
+            }
+        }
+        if(level==2){
+            if(score>=400){
+                stars = 3;
+            }
+            else if(score >300) {
+                stars = 2;
+            }
+        }
+        if(level==3){
+            if(score>=700){
+                stars = 3;
+            }
+            else if(score >500) {
+                stars = 2;
+            }
+        }
+        // Load the texture for the stars
+        Texture starsTexture = new Texture(Gdx.files.internal("abs/WinWindow"+stars+"Star.png")); // Update path as needed
+
+        // Create an Image actor for the stars
+        Image starsImage = new Image(starsTexture);
+
+        // Position the starsImage on the winWindow
+        starsImage.setPosition(
+            winWindow.getWidth() / 2f - starsImage.getWidth() / 2f,  // Center horizontally
+            winWindow.getHeight() / 2f                              // Adjust as needed
+        );
+
+        // Add the starsImage to the winWindow
+        winWindow.addActor(starsImage);
     }
 
     public static TextButton.TextButtonStyle createButtonStyle(String buttonName, BitmapFont font) {

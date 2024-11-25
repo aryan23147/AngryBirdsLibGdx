@@ -79,10 +79,10 @@ public class Block {
     }
 
     public void damageAppearance(String texturePath, float ogHP){
-        if(ogHP-hp>=10) {
+        if(hp<=ogHP/2) {
             sprite = new Sprite(new Texture(texturePath));
             sprite.setSize(width, height);
-            sprite.setOrigin(width / 2, height / 2); // Set the sprite's origin to its center
+            sprite.setOrigin(this.width / 2, this.height / 2); // Set the sprite's origin to its center
         }
     }
 

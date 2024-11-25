@@ -22,12 +22,13 @@ public class Pig {
     private Body body;
     private float hp;
     private World world;
+    private float radius;
 
     public Pig(String texturePath, World world, float x, float y, float radius, float mass, float hp) {
         this.x=x;
         this.y=y;
         this.world=world;
-
+        this.radius = radius;
         // Load the texture and create the sprite
         Texture texture = new Texture(Gdx.files.internal(texturePath));
         this.sprite = new Sprite(texture);
@@ -89,6 +90,13 @@ public class Pig {
     }
     public void reduceHP(float damage) {
         hp -= damage;
+    }
+    public void damageAppearance(String texturePath, float ogHP){
+        if(hp<=ogHP/2) {
+            sprite = new Sprite(new Texture(texturePath));
+            sprite.setSize(radius*2*ppm, radius*2*ppm);
+            sprite.setOrigin(radius / 2, radius / 2); // Set the sprite's origin to its center
+        }
     }
     public void update(){
         float scalingFactor = 0.93f; // Use this to tweak the alignment

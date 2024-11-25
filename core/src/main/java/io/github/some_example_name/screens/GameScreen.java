@@ -154,7 +154,7 @@ public class GameScreen implements Screen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    WindowCreator.showScore(font, true, allBirds.size());
+                    WindowCreator.showScore(font, true, allBirds.size(), level);
                     // Code to execute after 2 seconds
                     winWindow.setVisible(true);
                     winWindow.toFront();
@@ -170,7 +170,7 @@ public class GameScreen implements Screen {
                 @Override
                 public void run() {
                     if(!allPigs.isEmpty()) {
-                        WindowCreator.showScore(font, false, allBirds.size());
+                        WindowCreator.showScore(font, false, allBirds.size(), level);
                         // Code to execute after 2 seconds
                         loseWindow.setVisible(true);
                         loseWindow.toFront();
@@ -178,7 +178,7 @@ public class GameScreen implements Screen {
                         lostSound.play();
                     }
                     else{
-                        WindowCreator.showScore(font, true, allBirds.size());
+                        WindowCreator.showScore(font, true, allBirds.size(), level);
                         // Code to execute after 2 seconds
                         winWindow.setVisible(true);
                         winWindow.toFront();

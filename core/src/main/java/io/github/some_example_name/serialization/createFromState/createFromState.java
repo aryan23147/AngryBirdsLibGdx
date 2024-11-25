@@ -66,13 +66,13 @@ public class createFromState {
         Pig pig;
         switch (pigState.type){
             case "kid":
-                pig = new KidPig(pigState.x, pigState.y, world);
+                pig = new KidPig(pigState.x, pigState.y, world,pigState.hp);
                 break;
             case "medium":
-                pig = new MediumPig(pigState.x, pigState.y, world);
+                pig = new MediumPig(pigState.x, pigState.y, world,pigState.hp);
                 break;
             case "king":
-                pig = new KingPig(pigState.x, pigState.y, world);
+                pig = new KingPig(pigState.x, pigState.y, world,pigState.hp);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown pig type: " + pigState.type);

@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
     private Queue<Bird> birdQueue;
     public static List<Bird> allBirds;
     public List<Block> allBlocks;
-    public List<Pig> allPigs;
+    public static List<Pig> allPigs;
     private boolean isLoaded;
     public float totalDamage=0;
     private boolean isCompleted = false;

@@ -21,6 +21,8 @@ public class Pig {
     private SpriteBatch batch;
     private Body body;
     private float hp;
+    private float spriteX;
+    private float spriteY;
     private World world;
     private float radius;
 
@@ -40,10 +42,10 @@ public class Pig {
         this.hp=hp;
     }
     public float getX(){
-        return this.x;
+        return this.spriteX;
     }
     public float getY(){
-        return this.y;
+        return this.spriteY;
     }
     protected void createBody(World world, float x, float y,float radius) {
         BodyDef bodyDef = new BodyDef();
@@ -100,8 +102,8 @@ public class Pig {
     }
     public void update(){
         float scalingFactor = 0.93f; // Use this to tweak the alignment
-        float spriteX = (body.getPosition().x * PPM - sprite.getWidth() / 2) * scalingFactor - body.getPosition().x * 0.01f; // Fractional offset
-        float spriteY = (body.getPosition().y * PPM - sprite.getHeight() / 2) * scalingFactor - body.getPosition().y * 0.01f; // Fractional offset
+         spriteX = (body.getPosition().x * PPM - sprite.getWidth() / 2) * scalingFactor - body.getPosition().x * 0.01f; // Fractional offset
+        spriteY = (body.getPosition().y * PPM - sprite.getHeight() / 2) * scalingFactor - body.getPosition().y * 0.01f; // Fractional offset
 
         sprite.setPosition(spriteX, spriteY);
 
@@ -138,5 +140,6 @@ public class Pig {
     }
     public void setHp(float hp){
         this.hp=hp;
+        System.out.println("pig hp is updated");
     }
 }

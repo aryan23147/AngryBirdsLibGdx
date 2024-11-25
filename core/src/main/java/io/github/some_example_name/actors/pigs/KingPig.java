@@ -7,5 +7,8 @@ public class KingPig extends Pig {
     public KingPig(float X, float Y, World world){
         super("abs/KingPig.png",world,X,Y,1.3f,50,100);
     }
+    public KingPig(float X, float Y, World world,float hp){
+        super("abs/KingPig.png",world,X,Y,1.3f,50,hp);
+    }
 
 }

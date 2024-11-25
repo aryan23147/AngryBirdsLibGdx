@@ -129,6 +129,8 @@ public class Slingshot {
             launchedBird=bird;
             bird = null;
         }
+
+
         else if(!launchedBird.hasUsedPower()){
             launchedBird.activatePower();
 //            check = true;

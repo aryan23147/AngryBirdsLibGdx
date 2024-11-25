@@ -20,6 +20,7 @@ import io.github.some_example_name.screens.GameScreen;
 import io.github.some_example_name.screens.LevelSelectionScreen;
 import io.github.some_example_name.screens.Main;
 import io.github.some_example_name.screens.MainMenuScreen;
+import io.github.some_example_name.serialization.state.GameState;
 
 public class WindowCreator {
     public static LevelManager levelManager;
@@ -63,7 +64,9 @@ public class WindowCreator {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelSelectionScreen(game));
+                gameScreen.togglePause();
                 levelManager.saveLevel(level, true);
+                GameState.saveGame(gameScreen);
                 System.out.println("Level " + level + " saved.");
             }
         });
@@ -277,7 +280,7 @@ public class WindowCreator {
         loadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, level));
+                game.setScreen(new GameScreen(game, level,true));
                 System.out.println("Playing saved game");
             }
         });

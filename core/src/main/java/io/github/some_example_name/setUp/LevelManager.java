@@ -1,6 +1,8 @@
 package io.github.some_example_name.setUp;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Queue;
 import io.github.some_example_name.actors.birds.Bird;
 import io.github.some_example_name.actors.birds.BlackBird;
@@ -19,6 +21,11 @@ import io.github.some_example_name.bonusStuff.BlackPower;
 import io.github.some_example_name.bonusStuff.BluePower;
 import io.github.some_example_name.bonusStuff.RedPower;
 import io.github.some_example_name.returnStructs.ReturnStruct;
+import io.github.some_example_name.serialization.createFromState.createFromState;
+import io.github.some_example_name.serialization.state.BirdState;
+import io.github.some_example_name.serialization.state.BlockState;
+import io.github.some_example_name.serialization.state.GameState;
+import io.github.some_example_name.serialization.state.PigState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +43,35 @@ public class LevelManager {
     private static boolean isL2Saved = false;
     private static boolean isL3Saved = false;
 
+
+    public ReturnStruct loadObjects(World world){
+        Json json=new Json();
+        String jsonString= Gdx.files.local("saved_games/game_state.json").readString();
+        GameState gameState=json.fromJson(GameState.class,jsonString);
+        int level=gameState.level;
+        allBirds = new ArrayList<>();
+        birdQueue = new Queue<>();
+        for(BirdState birdState: gameState.birds){
+            Bird bird= createFromState.createBirdFromState(world,birdState);
+            if(!birdState.isLaunched){
+                birdQueue.addLast(bird);
+            }
+            allBirds.add(bird);
+
+        }
+        ground = new Ground(world);
+        allPigs=new ArrayList<>();
+        for(PigState pigState: gameState.pigs){
+            Pig pig=createFromState.createPigFromState(world,pigState);
+            allPigs.add(pig);
+        }
+        allBlocks=new ArrayList<>();
+        for(BlockState blockState: gameState.blocks){
+            Block block=createFromState.createBlockFromState(world,blockState);
+            allBlocks.add(block);
+        }
+        return new ReturnStruct(birdQueue, allBirds, allPigs, allBlocks, ground);
+    }
     public ReturnStruct setupWorldObjectsLevel1(World world) {
         // Initialize game objects
         Bird redBird = new RedBird(world, 125, 150, new RedPower());

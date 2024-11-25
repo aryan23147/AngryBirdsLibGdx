@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import static io.github.some_example_name.actors.birds.Bird.PPM;
@@ -37,7 +38,12 @@ public class Pig {
         body.setLinearDamping(0.2f);  // Damping slows down sliding
         this.hp=hp;
     }
-
+    public float getX(){
+        return this.x;
+    }
+    public float getY(){
+        return this.y;
+    }
     protected void createBody(World world, float x, float y,float radius) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -109,7 +115,7 @@ public class Pig {
         world.destroyBody(this.getBody());
     }
 
-    private Body getBody() {
+    public Body getBody() {
         return body;
     }
     public float getHp(){
@@ -118,5 +124,11 @@ public class Pig {
 
     public void dispose() {
         sprite.getTexture().dispose();  // Free the texture memory
+    }
+    public Vector2 getVelocity(){
+        return this.getBody().getLinearVelocity();
+    }
+    public void setHp(float hp){
+        this.hp=hp;
     }
 }

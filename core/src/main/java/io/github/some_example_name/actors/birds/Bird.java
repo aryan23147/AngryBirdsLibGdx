@@ -44,7 +44,9 @@ public class Bird extends Character {
     public boolean isLaunched() {
         return launched;
     }
-
+    public Power getPower(){
+        return this.power;
+    }
     public void setLaunched(boolean launched) {
         this.launched = launched;
     }
@@ -146,11 +148,11 @@ public class Bird extends Character {
     }
 
     public float getX() {
-        return x;
+        return sprite.getX();
     }
 
     public float getY() {
-        return y;
+        return sprite.getY();
     }
 
     public Vector2 getPosition() {

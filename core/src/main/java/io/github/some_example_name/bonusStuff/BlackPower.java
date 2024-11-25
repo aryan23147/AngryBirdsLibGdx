@@ -58,7 +58,7 @@ import java.util.List;
 
 public class BlackPower implements Power {
     private static boolean used;
-    private Texture ringTexture;
+    private  transient Texture ringTexture;
     private static Sprite ringSprite;
     private static float scale;
     private float maxScale;

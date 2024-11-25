@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Block {
@@ -89,12 +90,27 @@ public class Block {
         world.destroyBody(this.getBody());
     }
 
-    private Body getBody() {
+    public Body getBody() {
         return body;
     }
 
     public float getHp() {
         return hp;
+    }
+    public float getX(){
+        return this.X;
+    }
+    public float getY(){
+        return this.Y;
+    }
+    public float getWidth(){
+        return this.width;
+    }
+    public float getHeight(){
+        return this.height;
+    }
+    public Vector2 getVelocity(){
+        return this.getBody().getLinearVelocity();
     }
 
     public void update() {
@@ -111,5 +127,8 @@ public class Block {
 
     public void draw(Batch batch) {
         sprite.draw(batch);
+    }
+    public void setHp(float hp){
+        this.hp=hp;
     }
 }

@@ -39,9 +39,9 @@ import java.util.List;
 
 public class GameScreen implements Screen {
     private static final float PPM = 1;
-    private static boolean isPaused=false;
+    public static boolean isPaused=false;
     private final Main game;
-    private final int level;
+    public final int level;
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
@@ -64,9 +64,9 @@ public class GameScreen implements Screen {
     private Slingshot slingshot;
     private Queue<Bird> birdQueue;
     public static List<Bird> allBirds;
-    private List<Block> allBlocks;
-    private List<Pig> allPigs;
-
+    public List<Block> allBlocks;
+    public List<Pig> allPigs;
+    private boolean isLoaded;
     public float totalDamage=0;
     private boolean isCompleted = false;
     public LevelManager levelManager;
@@ -77,15 +77,17 @@ public class GameScreen implements Screen {
     public static final short CATEGORY_PIG = 0x0002;     // Binary 00000010
     public static final short CATEGORY_BLOCK = 0x0003;     // Binary 00000011
     public static final short CATEGORY_SLINGSHOT = 0x0004; // Binary 00000100
+    public GameScreen(Main game,int level){
+        this(game,level,false);
+    }
 
-
-    public GameScreen(Main game, int level) {
+    public GameScreen(Main game, int level,boolean isLoaded) {
         this.game = game;  // Save the reference to the main game object
         game.resume();
         this.level = level;  // Save the level number
 //        this.totalDamage = 0;
         isMusicPlaying = game.isMusicPlaying();
-
+        this.isLoaded=isLoaded;
         SetUpReturnStruct return1 = GameSetUp.initializeGameComponents();
         this.batch = return1.batch;
         this.font = return1.font;
@@ -112,7 +114,8 @@ public class GameScreen implements Screen {
         this.totalDamage = return3.totalDamage;
 
         ReturnStruct returnStruct = null;
-        if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
+        if(isLoaded)returnStruct=levelManager.loadObjects(world);
+        else if(level==1) returnStruct= levelManager.setupWorldObjectsLevel1(world);
         else if(level == 2) returnStruct= levelManager.setupWorldObjectsLevel2(world);
         else if (level == 3) returnStruct= levelManager.setupWorldObjectsLevel3(world);
 

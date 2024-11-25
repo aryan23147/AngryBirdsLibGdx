@@ -95,7 +95,7 @@ public class LevelSelectionScreen implements Screen {
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(LevelManager.isLevelSaved(1)) {
+                if(LevelManager.isLevelSaved(2)) {
                     loadWindow.toFront();
                     loadWindow.setVisible(!loadWindow.isVisible());
                     System.out.println("There is a saved game.");
@@ -108,7 +108,7 @@ public class LevelSelectionScreen implements Screen {
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(LevelManager.isLevelSaved(1)) {
+                if(LevelManager.isLevelSaved(3)) {
                     loadWindow.toFront();
                     loadWindow.setVisible(!loadWindow.isVisible());
                     System.out.println("There is a saved game.");

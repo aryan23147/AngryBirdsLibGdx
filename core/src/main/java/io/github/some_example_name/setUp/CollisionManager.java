@@ -17,6 +17,8 @@ import io.github.some_example_name.actors.pigs.MediumPig;
 import io.github.some_example_name.actors.pigs.Pig;
 import io.github.some_example_name.returnStructs.CollisionReturnStruct;
 
+import java.util.List;
+
 //import static io.github.some_example_name.screens.GameScreen.DAMAGE_MULTIPLIER;
 //import static io.github.some_example_name.GameScreen1.DAMAGE_MULTIPLIER;
 
@@ -249,7 +251,27 @@ public class CollisionManager {
         return calculatedDamage;
     }
 
-    public static float getScore(int numBirds) {
-        return totalDamage + numBirds*50;
+    public static float getScore(int numBirds, int level, List<Pig> allPigs, List<Block> allBlocks) {
+        float damageDealt = 0;
+        float totalHp1 = 105;
+        float totalHp2 = 145;
+        float totalHp3 = 400;
+        float endHp = 0;
+        for(Pig pig : allPigs){
+            endHp += pig.getHp();
+        }
+        for(Block block : allBlocks){
+            endHp += block.getHp();
+        }
+        if(level == 1){
+            damageDealt=totalHp1-endHp;
+        }
+        else if(level == 2){
+            damageDealt=totalHp2-endHp;
+        }
+        else if(level == 3){
+            damageDealt=totalHp3-endHp;
+        }
+        return damageDealt*10 + numBirds*250;
     }
 }

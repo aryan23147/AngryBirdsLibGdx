@@ -17,11 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import io.github.some_example_name.actors.blocks.Block;
+import io.github.some_example_name.actors.pigs.Pig;
 import io.github.some_example_name.screens.GameScreen;
 import io.github.some_example_name.screens.LevelSelectionScreen;
 import io.github.some_example_name.screens.Main;
 import io.github.some_example_name.screens.MainMenuScreen;
 import io.github.some_example_name.serialization.state.GameState;
+
+import java.util.List;
 
 public class WindowCreator {
     public static LevelManager levelManager;
@@ -201,9 +205,9 @@ public class WindowCreator {
 
         return loseWindow;
     }
-    public static void showScore(BitmapFont font, boolean isWon, int numBirds, int level){
+    public static void showScore(BitmapFont font, boolean isWon, int numBirds, int level, List<Pig> allPigs, List<Block> allBlocks){
         // Create the score text
-        int score = (int)CollisionManager.getScore(numBirds);
+        int score = (int)CollisionManager.getScore(numBirds, level, allPigs, allBlocks);
         String scoreText = "Your Score is: " + score;
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
@@ -232,26 +236,26 @@ public class WindowCreator {
     private static void showStars(int level, int score){
         int stars = 1;
         if(level==1){
-            if(score>=500){
+            if(score>=930){
                 stars = 3;
             }
-            else if(score >400) {
+            else if(score >600) {
                 stars = 2;
             }
         }
         if(level==2){
-            if(score>=400){
+            if(score>=1450){
                 stars = 3;
             }
-            else if(score >300) {
+            else if(score >1400) {
                 stars = 2;
             }
         }
         if(level==3){
-            if(score>=700){
+            if(score>=3300){
                 stars = 3;
             }
-            else if(score >500) {
+            else if(score >2800) {
                 stars = 2;
             }
         }

@@ -13,7 +13,7 @@ public class MediumPig extends Pig {
         System.out.println("Medium pig with hp "+hp+" is created");
     }
     public void draw(Batch batch){
-        super.damageAppearance("abs/DamagedPig.png", 40f);
+        super.damageAppearance("abs/DamagedPig.png", 30f);
         super.draw(batch);
     }
 

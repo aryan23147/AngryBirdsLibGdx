@@ -154,14 +154,14 @@ public class GameScreen implements Screen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    WindowCreator.showScore(font, true, allBirds.size(), level);
-                    // Code to execute after 2 seconds
+                    // Code to execute after 7 seconds
+                    WindowCreator.showScore(font, true, birdQueue.size, level, allPigs, allBlocks);
                     winWindow.setVisible(true);
                     winWindow.toFront();
                     Sound wonSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
                     wonSound.play();
                 }
-            }, 3f);
+            }, 5f);
         }
         else if(birdQueue.isEmpty() && slingshot.isEmpty()){
             isCompleted=true;
@@ -170,23 +170,23 @@ public class GameScreen implements Screen {
                 @Override
                 public void run() {
                     if(!allPigs.isEmpty()) {
-                        WindowCreator.showScore(font, false, allBirds.size(), level);
-                        // Code to execute after 2 seconds
+                        // Code to execute after 7 seconds
+                        WindowCreator.showScore(font, false, birdQueue.size, level, allPigs, allBlocks);
                         loseWindow.setVisible(true);
                         loseWindow.toFront();
                         Sound lostSound = Gdx.audio.newSound(Gdx.files.internal("LevelLost.mp3"));
                         lostSound.play();
                     }
                     else{
-                        WindowCreator.showScore(font, true, allBirds.size(), level);
-                        // Code to execute after 2 seconds
+                        // Code to execute after 7 seconds
+                        WindowCreator.showScore(font, true, birdQueue.size, level, allPigs, allBlocks);
                         winWindow.setVisible(true);
                         winWindow.toFront();
                         Sound wonSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
                         wonSound.play();
                     }
                 }
-            }, 7f);
+            }, 5f);
         }
         else if (slingshot.isEmpty()) {
             Bird bird = birdQueue.removeFirst();  // Get the next bird from the queue

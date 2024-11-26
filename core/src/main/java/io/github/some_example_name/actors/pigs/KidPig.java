@@ -15,7 +15,7 @@ public class KidPig extends Pig {
         System.out.println("Kid pig with hp "+hp+" is created");
     }
     public void draw(Batch batch){
-        super.damageAppearance("abs/DamagedPig.png", 15f);
+        super.damageAppearance("abs/DamagedPig.png", 20f);
         super.draw(batch);
     }
 }

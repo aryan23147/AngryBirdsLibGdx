@@ -12,7 +12,7 @@ import io.github.some_example_name.bonusStuff.Power;
 import static io.github.some_example_name.screens.GameScreen.*;
 
 public class Bird extends Character {
-    protected Sprite sprite;
+    public Sprite sprite;
     private boolean launched;
     private FixtureDef fixtureDef;
     public static float PPM = 32f;  // Pixels per meter conversion factor
@@ -46,6 +46,15 @@ public class Bird extends Character {
     }
     public Power getPower(){
         return this.power;
+    }
+    public void usePower() {
+        if (Gdx.input.isTouched()) {
+            Vector2 touchPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            touchPosition.y = Gdx.graphics.getHeight() - touchPosition.y; // Convert to screen coordinates
+            if(this.sprite.getBoundingRectangle().contains(touchPosition) && !hasUsedPower &&launched &&!inSlingshot){
+                this.activatePower();
+            }
+        }
     }
     public void setLaunched(boolean launched) {
         this.launched = launched;

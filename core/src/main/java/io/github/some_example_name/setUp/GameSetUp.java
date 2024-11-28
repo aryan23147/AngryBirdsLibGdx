@@ -102,19 +102,19 @@ public class GameSetUp {
             }
         });
 
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(!click[0]) {
-                    System.out.println("\nClicked at: ("+x+", "+y+")\n");
-                    if(x>=15 && x<=89 && y>=653 && y<=703){
-
-                    }
-                    else{slingshot.releaseBird(x,y);}
-                    click[0]=false;
-                }
-            }
-        });
+//        stage.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                if(!click[0]) {
+//                    System.out.println("\nClicked at: ("+x+", "+y+")\n");
+//                    if(x>=15 && x<=89 && y>=653 && y<=703){
+//
+//                    }
+//                    else{slingshot.releaseBird(x,y);}
+//                    click[0]=false;
+//                }
+//            }
+//        });
     }
 
 

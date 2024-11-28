@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Timer;
 import io.github.some_example_name.actors.birds.Bird;
+import io.github.some_example_name.actors.birds.BlueBird;
 import io.github.some_example_name.actors.extras.Ground;
 import io.github.some_example_name.actors.extras.Slingshot;
 import io.github.some_example_name.actors.blocks.Block;
@@ -270,8 +271,21 @@ public class GameScreen implements Screen {
         ground.draw(batch);
         BlackPower.render(batch, Gdx.graphics.getDeltaTime());
         batch.end();
-
+        slingshot.handleInput();
         update();
+        boolean h=false;
+        Bird b=null;
+        for(Bird bird:allBirds){
+            if(bird instanceof BlueBird){
+                h=true;
+                b=bird;
+                break;
+            }
+            bird.usePower();
+        }
+        if(h){
+            b.usePower();
+        }
 
         stage.act(delta);
         stage.draw();

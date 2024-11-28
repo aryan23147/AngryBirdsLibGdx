@@ -5,6 +5,7 @@ import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyle
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,6 +34,7 @@ public class WindowCreator {
     public static Window winWindow;
     public static Window loseWindow;
     private static Label scoreLabel;
+    private static Main game;
     public WindowCreator(LevelManager levelManager){
         this.levelManager=levelManager;
     }
@@ -40,6 +42,7 @@ public class WindowCreator {
     public static Window createPauseWindow(BitmapFont font, TextButton musiconoffButton, Stage stage, Main game, int level, GameScreen gameScreen){
         Texture backgroundTexture = new Texture("abs/PauseWindowBackground (3).png");
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(backgroundTexture);
+        WindowCreator.game = game;
 
         // Define custom style
         Window.WindowStyle windowStyle = new Window.WindowStyle();
@@ -61,6 +64,7 @@ public class WindowCreator {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameScreen.togglePause();
+                game.buttonPress.play();
                 game.setScreen(new GameScreen(game, level));
             }
         });
@@ -69,6 +73,7 @@ public class WindowCreator {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelSelectionScreen(game));
+                game.buttonPress.play();
                 gameScreen.togglePause();
                 levelManager.saveLevel(level, true);
                 GameState.saveGame(gameScreen);
@@ -128,6 +133,7 @@ public class WindowCreator {
         nextLevelButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 if (level<3){
                     game.setScreen(new GameScreen(game, level + 1));
                 }
@@ -140,11 +146,13 @@ public class WindowCreator {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 game.setScreen(new MainMenuScreen(game));
             }
         });
         restartButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x ,float y){
+                game.buttonPress.play();
                 game.setScreen(new GameScreen(game,level));
             }
         });
@@ -190,6 +198,7 @@ public class WindowCreator {
         restartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 game.setScreen(new GameScreen(game, level));
             }
         });
@@ -197,6 +206,7 @@ public class WindowCreator {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 game.setScreen(new MainMenuScreen(game));
             }
         });
@@ -247,12 +257,12 @@ public class WindowCreator {
             if(score>=1450){
                 stars = 3;
             }
-            else if(score >1400) {
+            else if(score >1300) {
                 stars = 2;
             }
         }
         if(level==3){
-            if(score>=3300){
+            if(score>=3250){
                 stars = 3;
             }
             else if(score >2800) {
@@ -260,7 +270,11 @@ public class WindowCreator {
             }
         }
         // Load the texture for the stars
-        Texture starsTexture = new Texture(Gdx.files.internal("abs/WinWindow"+stars+"Star.png")); // Update path as needed
+        game.backgroundMusic.pause();
+        Texture starsTexture = new Texture(Gdx.files.internal("abs/WinWindow"+stars+"Star.png"));
+        Sound winSound = Gdx.audio.newSound(Gdx.files.internal("Win"+stars+"Stars.mp3"));
+//        Sound winSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
+        winSound.play();
 
         // Create an Image actor for the stars
         Image starsImage = new Image(starsTexture);
@@ -330,6 +344,7 @@ public class WindowCreator {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GameScreen(game, level,true));
+                game.buttonPress.play();
                 System.out.println("Playing saved game");
             }
         });
@@ -339,6 +354,7 @@ public class WindowCreator {
             public void clicked(InputEvent event, float x, float y) {
                 LevelManager.saveLevel(level, false);
                 game.setScreen(new GameScreen(game,level));
+                game.buttonPress.play();
                 System.out.println("Playing new game");
             }
         });

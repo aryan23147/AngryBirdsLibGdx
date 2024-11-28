@@ -181,4 +181,8 @@ public class Bird extends Character {
     public void setSprite(Sprite sprite) {
         this.sprite=sprite;
     }
+
+    public float getRadius() {
+        return radius;
+    }
 }

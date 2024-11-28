@@ -3,15 +3,18 @@ package io.github.some_example_name.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 
 public class Main extends Game {
-    private Music backgroundMusic;
+    public Music backgroundMusic;
     private boolean isMusicPlaying;
+    public Sound buttonPress;
 
     @Override
     public void create() {
         // Load and start playing background music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+        buttonPress = Gdx.audio.newSound(Gdx.files.internal("ButtonPress1.mp3"));
         backgroundMusic.setLooping(true);
         backgroundMusic.play();
         isMusicPlaying = true;

@@ -56,19 +56,19 @@ public class GameScreen implements Screen {
     private  Window pauseWindow;
     private TextButton pauseButton;
     private TextButton winButton;
-    private Window winWindow;
+    public Window winWindow;
     private TextButton nextLevelButton;
-    private Window loseWindow;
+    public Window loseWindow;
     private final boolean isMusicPlaying;
     private TextButton musiconoffButton;
-    private Slingshot slingshot;
-    private Queue<Bird> birdQueue;
+    public Slingshot slingshot;
+    public Queue<Bird> birdQueue;
     public static List<Bird> allBirds;
     public List<Block> allBlocks;
     public static List<Pig> allPigs;
     private boolean isLoaded;
     public float totalDamage=0;
-    private boolean isCompleted = false;
+    public boolean isCompleted = false;
     public LevelManager levelManager;
     public static final float PIXELS_TO_METERS = 100f;
     public static final float DAMAGE_MULTIPLIER = 0.1f;
@@ -148,7 +148,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void checkAndLoadBird() {
+    public void checkAndLoadBird() {
         if(allPigs.isEmpty()){
             isCompleted=true;
             Timer.schedule(new Timer.Task() {
@@ -158,8 +158,6 @@ public class GameScreen implements Screen {
                     WindowCreator.showScore(font, true, birdQueue.size, level, allPigs, allBlocks);
                     winWindow.setVisible(true);
                     winWindow.toFront();
-                    Sound wonSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
-                    wonSound.play();
                 }
             }, 5f);
         }
@@ -182,8 +180,6 @@ public class GameScreen implements Screen {
                         WindowCreator.showScore(font, true, birdQueue.size, level, allPigs, allBlocks);
                         winWindow.setVisible(true);
                         winWindow.toFront();
-                        Sound wonSound = Gdx.audio.newSound(Gdx.files.internal("LevelWon.mp3"));
-                        wonSound.play();
                     }
                 }
             }, 5f);
@@ -211,10 +207,6 @@ public class GameScreen implements Screen {
                 birdsToRemove.add(bird);
             }
         }
-        for(Bird bird :birdsToRemove){
-            bird.disappear();
-            allBirds.remove(bird); // Remove from active list
-        }
         for(Pig pig:allPigs){
             if(pig.getHp()<=0){
                 pigsToRemove.add(pig);
@@ -224,6 +216,12 @@ public class GameScreen implements Screen {
             if(block.getHp()<=0){
                 blocksToRemove.add(block);
             }
+        }
+        for(Bird bird :birdsToRemove){
+            bird.disappear();
+            allBirds.remove(bird); // Remove from active list
+            Sound birdDestroyed = Gdx.audio.newSound(Gdx.files.internal("BirdDestroyed.mp3"));
+            birdDestroyed.play();
         }
         for(Pig pig:pigsToRemove){
             pig.disappear();

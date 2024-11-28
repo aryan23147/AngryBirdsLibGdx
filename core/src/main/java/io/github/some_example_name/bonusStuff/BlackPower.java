@@ -108,8 +108,8 @@ public class BlackPower implements Power {
     public static void render(SpriteBatch batch, float deltaTime) {
         if (used && alpha > 0) {
             // Update scale and alpha
-            scale += deltaTime * 5;   // Adjust growth speed
-            alpha -= deltaTime * 2;   // Adjust fade speed
+            scale += deltaTime * 4;   // Adjust growth speed
+            alpha -= deltaTime * 3;   // Adjust fade speed
 
             // Ensure the ring stays centered while scaling
             ringSprite.setScale(scale);

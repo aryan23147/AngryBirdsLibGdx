@@ -16,6 +16,7 @@ import io.github.some_example_name.actors.pigs.MediumPig;
 import io.github.some_example_name.actors.pigs.Pig;
 import io.github.some_example_name.bonusStuff.BlackPower;
 import io.github.some_example_name.bonusStuff.BluePower;
+import io.github.some_example_name.bonusStuff.Power;
 import io.github.some_example_name.bonusStuff.RedPower;
 import io.github.some_example_name.serialization.state.BirdState;
 import io.github.some_example_name.serialization.state.BlockState;
@@ -32,7 +33,7 @@ public class createFromState {
                 bird = new BlackBird(world, birdState.x, birdState.y, (BlackPower) birdState.power);
                 break;
             case "blue":
-                bird = new BlueBird(world, birdState.x, birdState.y,(BluePower) birdState.power,1.0f,20f);
+                bird = new BlueBird(world, birdState.x, birdState.y,birdState.power,birdState.radius,birdState.mass);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown bird type: " + birdState.type);

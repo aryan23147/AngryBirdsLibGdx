@@ -13,6 +13,8 @@ public class BirdState {
     public boolean hasUsedPower;
     public String type;
     public Power power;
+    public float radius;
+    public float mass;
     public BirdState(){
     }
     public BirdState(Bird bird){
@@ -30,6 +32,7 @@ public class BirdState {
         this.power=bird.getPower();
         this.isLaunched= bird.isLaunched();
         this.hasUsedPower= bird.hasUsedPower();
-
+        this.radius = bird.getRadius();
+        this.mass = bird.getMass();
     }
 }

@@ -65,6 +65,7 @@ public class LevelSelectionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.toggleMusic();
+                game.buttonPress.play();
                 musicOnOffButton.setStyle(game.isMusicPlaying() ? TextButtonStyleMusic : TextButtonStyleMute);
             }
         });
@@ -85,6 +86,7 @@ public class LevelSelectionScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
+                game.buttonPress.play();
                 if(LevelManager.isLevelSaved(1)) {
 
                     loadWindow1.toFront();
@@ -99,6 +101,7 @@ public class LevelSelectionScreen implements Screen {
         level2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 if(LevelManager.isLevelSaved(2)) {
                     loadWindow2.toFront();
                     loadWindow2.setVisible(!loadWindow2.isVisible());
@@ -112,6 +115,7 @@ public class LevelSelectionScreen implements Screen {
         level3Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 if(LevelManager.isLevelSaved(3)) {
                     loadWindow3.toFront();
                     loadWindow3.setVisible(!loadWindow3.isVisible());
@@ -125,6 +129,7 @@ public class LevelSelectionScreen implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.buttonPress.play();
                 game.setScreen(new MainMenuScreen(game));
             }
         });

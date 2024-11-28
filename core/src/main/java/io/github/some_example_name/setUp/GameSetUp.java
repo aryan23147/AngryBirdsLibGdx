@@ -24,7 +24,7 @@ import static io.github.some_example_name.setUp.TextButtonStyles.*;
 import static io.github.some_example_name.setUp.TextButtonStyles.TextButtonStyleMute;
 
 public class GameSetUp {
-    public static SetUpReturnStruct initializeGameComponents() {
+    public static SetUpReturnStruct initializeGameComponents(GameScreen gameScreen) {
         SpriteBatch batch = new SpriteBatch();
         BitmapFont font = new BitmapFont(Gdx.files.internal("font/Chewy.fnt"));
         OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth() / PIXELS_TO_METERS, Gdx.graphics.getHeight() / PIXELS_TO_METERS);
@@ -34,7 +34,7 @@ public class GameSetUp {
         World world = new World(new Vector2(0, -9.8f), false);
 //        World world = new World(new Vector2(0, -22f), false);
         Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
-        Slingshot slingshot = new Slingshot(130, 50, world);
+        Slingshot slingshot = new Slingshot(130, 50, world,gameScreen);
         return new SetUpReturnStruct(batch, font, cam, stage, world, debugRenderer, slingshot);
     }
 

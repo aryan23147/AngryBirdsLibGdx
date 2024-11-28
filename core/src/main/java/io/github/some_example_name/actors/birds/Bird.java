@@ -1,6 +1,8 @@
 package io.github.some_example_name.actors.birds;
 
 import com.badlogic.gdx.Gdx;
+
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -48,13 +50,12 @@ public class Bird extends Character {
         return this.power;
     }
     public void usePower() {
-        if (Gdx.input.isTouched()) {
-            Vector2 touchPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            touchPosition.y = Gdx.graphics.getHeight() - touchPosition.y; // Convert to screen coordinates
-            if(this.sprite.getBoundingRectangle().contains(touchPosition) && !hasUsedPower &&launched &&!inSlingshot){
-                this.activatePower();
-            }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !this.inSlingshot && this.launched) {
+            this.activatePower();
         }
+    }
+    public void setHasUsedPower(boolean val){
+        this.hasUsedPower=val;
     }
     public void setLaunched(boolean launched) {
         this.launched = launched;

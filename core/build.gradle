@@ -6,10 +6,12 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
   api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-//  testImplementation 'org.mockito:mockito-core:4.2.0'
-  // For core Mockito functionality
-  testImplementation 'org.mockito:mockito-core:5.5.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+//  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+////  testImplementation 'org.mockito:mockito-core:4.2.0'
+//  // For core Mockito functionality
+//  testImplementation 'org.mockito:mockito-core:5.5.0'
+//  testImplementation 'junit:junit:4.12'
 
   // Optional: If you are testing with JUnit 5, add this for integration
 //  testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
@@ -19,6 +21,6 @@ dependencies {
   }
 }
 
-tasks.test {
-  useJUnitPlatform() // Use this for JUnit 5
-}
+//tasks.test {
+//  useJUnitPlatform() // Use this for JUnit 5
+//}

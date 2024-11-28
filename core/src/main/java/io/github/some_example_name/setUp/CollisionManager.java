@@ -11,6 +11,7 @@ import io.github.some_example_name.actors.blocks.Block;
 import io.github.some_example_name.actors.blocks.GlassBlock;
 import io.github.some_example_name.actors.blocks.StoneBlock;
 import io.github.some_example_name.actors.blocks.WoodBlock;
+import io.github.some_example_name.actors.extras.Ground;
 import io.github.some_example_name.actors.pigs.KidPig;
 import io.github.some_example_name.actors.pigs.KingPig;
 import io.github.some_example_name.actors.pigs.MediumPig;
@@ -154,6 +155,7 @@ public class CollisionManager {
                 totalDamage+=damage;
                 System.out.println("Blocks hp reduced by " + damage); // Debugging statement
             }
+
         }
     }
 

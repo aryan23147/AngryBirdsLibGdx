@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
 //        this.totalDamage = 0;
         isMusicPlaying = game.isMusicPlaying();
         this.isLoaded=isLoaded;
-        SetUpReturnStruct return1 = GameSetUp.initializeGameComponents();
+        SetUpReturnStruct return1 = GameSetUp.initializeGameComponents(this);
         this.batch = return1.batch;
         this.font = return1.font;
         this.cam = return1.cam;
@@ -274,17 +274,17 @@ public class GameScreen implements Screen {
         slingshot.handleInput();
         update();
         boolean h=false;
-        Bird b=null;
+        Bird blueBird=null;
         for(Bird bird:allBirds){
             if(bird instanceof BlueBird){
                 h=true;
-                b=bird;
+                blueBird=bird;
                 break;
             }
             bird.usePower();
         }
         if(h){
-            b.usePower();
+            blueBird.usePower(); // Separated it with rest of birds because we had to add some birds in list for using its power and we cant iterate and add birds together
         }
 
         stage.act(delta);

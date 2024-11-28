@@ -190,6 +190,7 @@ package io.github.some_example_name.actors.extras;
 //        return this.bird.equals(bird);
 //    }
 //}
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -202,12 +203,14 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 
 import io.github.some_example_name.actors.birds.Bird;
+import io.github.some_example_name.screens.GameScreen;
 
 import static io.github.some_example_name.actors.birds.Bird.PPM;
 import static io.github.some_example_name.screens.GameScreen.*;
 
 public class Slingshot {
     private Sprite sprite;
+    private GameScreen gameScreen;
     private float x, y; // Position of the slingshot anchor
     private Bird bird;
     private Body body;
@@ -217,13 +220,14 @@ public class Slingshot {
     private float maxPullDistance = 100f; // Maximum pull distance
     private float forceScale = 0.35f; // Scale for launch force
     private ShapeRenderer shapeRenderer;
-    public Slingshot(float x, float y, World world) {
+    public Slingshot(float x, float y, World world, GameScreen gameScreen) {
         Texture texture = new Texture(Gdx.files.internal("abs/Slingshot.png"));
         this.sprite = new Sprite(texture);
         this.x = x;
         this.y = y;
         this.world = world;
         this.bird = null;
+        this.gameScreen=gameScreen;
         this.shapeRenderer=new ShapeRenderer();
         float[] slingshotVertices = new float[] {
             50 / PPM, 180 / PPM,
@@ -345,6 +349,11 @@ public class Slingshot {
     public void releaseBird(Vector2 touchRelease) {
         if (bird != null && mouseJoint != null) {
             // Remove the mouse joint and apply force to launch the bird
+            for(Bird bird: allBirds){
+                if(bird.isLaunched()){
+                    bird.setHasUsedPower(true);
+                }
+            }
             world.destroyJoint(mouseJoint);
             Vector2 launchDirection = pullStartPosition.cpy().sub(mouseJoint.getTarget());
 //            Vector2 launchDirection = mouseJoint.getTarget().cpy().sub(pullStartPosition);

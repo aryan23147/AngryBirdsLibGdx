@@ -85,8 +85,14 @@ public class BlackPower implements Power {
 
             // Apply radial blast logic
             float blastRadius = 3f;
+            Vector2 force;
             for (Body body : getNearbyBodies(world, position, blastRadius)) {
-                Vector2 force = body.getPosition().sub(position).nor().scl(50); // Adjust force multiplier
+                if(position.x>body.getPosition().x){
+                    force = position.sub(body.getPosition()).nor().scl(50); // Adjust force multiplier
+                }
+                else {
+                    force = body.getPosition().sub(position).nor().scl(50); // Adjust force multiplier
+                }
                 body.applyLinearImpulse(force, body.getWorldCenter(), true);
             }
 

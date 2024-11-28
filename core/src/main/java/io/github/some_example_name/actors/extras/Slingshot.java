@@ -264,11 +264,12 @@ public class Slingshot {
     public void draw(Batch batch) {
         sprite.setPosition(x, y);
         sprite.draw(batch);
+        batch.end();
         if (bird != null && pullStartPosition != null && mouseJoint!=null) {
 
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(1, 0, 0, 1); // Set the color of the line (red)
+            shapeRenderer.setColor(1, 0, 1, 1); // Set the color of the line (red)
 
             // Draw the line from the slingshot to the bird's current position
 //            Vector2 birdPosition = bird.getPosition();
@@ -276,6 +277,7 @@ public class Slingshot {
 //            shapeRenderer.line(mouseJoint.getTarget().x, mouseJoint.getTarget().y, (this.bird.getX()+((this.bird.sprite.getWidth())/2)), (this.bird.getY())+((this.bird.sprite.getHeight())/2));  // Convert to world coordinates
             shapeRenderer.line(mouseJoint.getTarget().x, mouseJoint.getTarget().y, this.pullStartPosition.x,this.pullStartPosition.y);
             shapeRenderer.end();
+
         }
     }
 

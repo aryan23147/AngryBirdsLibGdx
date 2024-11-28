@@ -266,11 +266,12 @@ public class GameScreen implements Screen {
         for (Block block : allBlocks){
             block.draw(batch);
         }
-
-        slingshot.draw(batch);
         ground.draw(batch);
         BlackPower.render(batch, Gdx.graphics.getDeltaTime());
-        batch.end();
+        slingshot.draw(batch);
+
+
+//        batch.end();
         slingshot.handleInput();
         update();
         boolean h=false;

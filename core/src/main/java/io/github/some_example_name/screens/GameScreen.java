@@ -130,8 +130,8 @@ public class GameScreen implements Screen {
             this.ground = returnStruct.ground;
         }
 
-        Block wallLeft = new WoodBlock(0, 50, world, 1, 720, false);
-        Block wallRight = new WoodBlock(1380, 50, world, 1, 720, false);
+        Block wallLeft = new WoodBlock(0, 50, world, 1, 1000, false);
+        Block wallRight = new WoodBlock(1380, 50, world, 1, 1000, false);
         batch.begin();
         wallLeft.draw(batch);
         wallRight.draw(batch);

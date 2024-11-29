@@ -219,6 +219,7 @@ public class Slingshot {
     private Vector2 pullStartPosition;
     private float maxPullDistance = 100f; // Maximum pull distance
     private float forceScale = 0.35f; // Scale for launch force
+//    private float forceScale = 0.5f; // Scale for launch force
     private ShapeRenderer shapeRenderer;
     public Slingshot(float x, float y, World world, GameScreen gameScreen) {
         Texture texture = new Texture(Gdx.files.internal("abs/Slingshot.png"));
@@ -296,7 +297,6 @@ public class Slingshot {
         if (Gdx.input.isTouched()) {
             Vector2 touchPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             touchPosition.y = Gdx.graphics.getHeight() - touchPosition.y; // Convert to screen coordinates
-
 
             if (bird != null && mouseJoint == null) {
                 // Start the pull
@@ -399,3 +399,4 @@ public class Slingshot {
         return this.bird != null && this.bird.equals(bird);
     }
 }
+

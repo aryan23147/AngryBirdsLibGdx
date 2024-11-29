@@ -256,6 +256,7 @@ public class GameScreen implements Screen {
             batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
         font.draw(batch, "Playing Level: " + level, 200, 400);
+        font.draw(batch, "Press SpaceBar to use power", 450, 700);
 
         for (Bird bird : allBirds) {
             bird.draw(batch);
